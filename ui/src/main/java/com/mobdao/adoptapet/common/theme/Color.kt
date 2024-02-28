@@ -1,4 +1,4 @@
-package com.mobdao.adoptapet.ui.theme
+package com.mobdao.adoptapet.common.theme
 
 import androidx.compose.ui.graphics.Color
 
