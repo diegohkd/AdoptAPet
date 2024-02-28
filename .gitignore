@@ -1,0 +1,56 @@
+# Gradle
+build/
+.gradle/
+build.properties
+modules_include_cache.json
+gradle/gitHash.gradle
+
+# Local configuration
+local.properties
+
+# OSX documents
+.DS_Store
+
+# IntelliJ
+.idea/*
+!.idea/codeStyles
+*.iws
+*.iml
+captures/
+
+# Editor temporary files
+*.swp
+
+# Script temporaries
+message.txt
+messagewriter.sh
+
+# Python compiles
+*.pyc
+
+# Node modules
+*node_modules
+
+# collected bugreports (`adb bugreport`) and logs
+bugreport-*
+
+# gradle performance logs
+replay_*.log
+
+# java memory dumps (heap space)
+/hs_err_*.log
+
+# Miscellaneous
+output/
+*.bak*
+*.class*
+**/jacoco.exec
+reports/profile
+deep-clean.kts
+
+# Profiler
+gradle-user-home/
+profile-out*/
+
+# Groovy Linter
+.groovylintrc.json
