@@ -14,5 +14,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AdoptAPet"
-include(":app")
- 
+include(":common")
+include(":data")
+include(":di")
+include(":domain")
+include(":ui")
+include(":ui:common")
