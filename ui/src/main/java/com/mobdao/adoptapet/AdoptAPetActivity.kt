@@ -7,8 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.mobdao.adoptapet.navigation.AdoptAPetNavHost
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

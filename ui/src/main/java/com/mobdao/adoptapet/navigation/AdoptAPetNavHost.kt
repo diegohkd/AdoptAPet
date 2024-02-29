@@ -14,11 +14,7 @@ fun AdoptAPetNavHost(navController: NavHostController) {
         startDestination = Destination.Home.route,
     ) {
         composable(Destination.Home.route) {
-            HomeScreen(
-                onGoToPetDetailsClicked = {
-                    navController.navigate(Destination.PetDetails.route)
-                }
-            )
+            HomeScreen()
         }
         composable(Destination.PetDetails.route) {
             PetDetailsScreen()
