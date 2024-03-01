@@ -23,33 +23,4 @@ abstract class DataModule {
 
     @Binds
     internal abstract fun bindsPetsRepository(impl: PetsRepositoryImpl): PetsRepository
-
-    companion object {
-
-        @Singleton
-        @Provides
-        fun provideAccessTokenHolder(
-            sharedPreferencesFactory: SharedPreferencesFactory
-        ): AccessTokenHolder =
-            AccessTokenHolder(sharedPreferencesFactory.createForAccessTokenHolder())
-
-        @Singleton
-        @Provides
-        fun provideAuthService(
-            retrofitServicesFactory: RetrofitServicesFactory
-        ): AuthService = retrofitServicesFactory.createAuthService()
-
-        @Singleton
-        @Provides
-        fun provideAppConfig(
-            appConfigFactory: AppConfigFactory
-        ): AppConfig = appConfigFactory.create()
-
-        @Singleton
-        @Provides
-        fun providePetFinderService(
-            retrofitServicesFactory: RetrofitServicesFactory,
-            accessTokenInterceptor: AccessTokenInterceptor,
-        ): PetFinderService = retrofitServicesFactory.createPetFinderService(accessTokenInterceptor)
-    }
 }
