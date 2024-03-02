@@ -1,4 +1,4 @@
-package com.mobdao.data.cache
+package com.mobdao.cache
 
 import android.content.SharedPreferences
 

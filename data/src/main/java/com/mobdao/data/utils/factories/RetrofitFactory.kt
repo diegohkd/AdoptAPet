@@ -1,6 +1,6 @@
 package com.mobdao.data.utils.factories
 
-import com.mobdao.data.cache.AppConfig
+import com.mobdao.common.config.AppConfig
 import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

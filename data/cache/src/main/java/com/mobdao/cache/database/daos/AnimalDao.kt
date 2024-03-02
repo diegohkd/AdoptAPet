@@ -1,10 +1,10 @@
-package com.mobdao.data.cache.database.daos
+package com.mobdao.cache.database.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.mobdao.data.cache.database.entities.Animal
+import com.mobdao.cache.database.entities.Animal
 
 @Dao
 interface AnimalDao {

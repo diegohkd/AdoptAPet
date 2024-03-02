@@ -1,13 +1,11 @@
-package com.mobdao.data.cache.di
+package com.mobdao.cache.di
 
 import android.content.Context
-import com.mobdao.data.cache.AccessTokenHolder
-import com.mobdao.data.cache.AppConfig
-import com.mobdao.data.cache.database.AppDatabase
-import com.mobdao.data.cache.database.AppDatabaseFactory
-import com.mobdao.data.cache.database.daos.AnimalDao
-import com.mobdao.data.utils.factories.AppConfigFactory
-import com.mobdao.data.utils.factories.SharedPreferencesFactory
+import com.mobdao.cache.AccessTokenHolder
+import com.mobdao.cache.database.AppDatabase
+import com.mobdao.cache.database.AppDatabaseFactory
+import com.mobdao.cache.database.daos.AnimalDao
+import com.mobdao.cache.factories.SharedPreferencesFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,12 +31,6 @@ abstract class CacheModule {
             sharedPreferencesFactory: SharedPreferencesFactory
         ): AccessTokenHolder =
             AccessTokenHolder(sharedPreferencesFactory.createForAccessTokenHolder())
-
-        @Singleton
-        @Provides
-        fun provideAppConfig(
-            appConfigFactory: AppConfigFactory
-        ): AppConfig = appConfigFactory.create()
 
         @Singleton
         @Provides

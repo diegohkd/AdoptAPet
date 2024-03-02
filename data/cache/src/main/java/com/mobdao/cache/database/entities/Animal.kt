@@ -1,4 +1,4 @@
-package com.mobdao.data.cache.database.entities
+package com.mobdao.cache.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

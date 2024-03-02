@@ -1,11 +1,11 @@
-package com.mobdao.data.cache.database
+package com.mobdao.cache.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.mobdao.data.cache.database.daos.AnimalDao
-import com.mobdao.data.cache.database.entities.Animal
-import com.mobdao.data.cache.database.type_converters.PhotoTypeConverter
+import com.mobdao.cache.database.daos.AnimalDao
+import com.mobdao.cache.database.entities.Animal
+import com.mobdao.cache.database.type_converters.PhotoTypeConverter
 
 @Database(
     entities = [Animal::class],

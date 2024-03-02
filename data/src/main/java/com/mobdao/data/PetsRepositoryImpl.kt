@@ -1,6 +1,6 @@
 package com.mobdao.data
 
-import com.mobdao.data.cache.database.daos.AnimalDao
+import com.mobdao.cache.database.daos.AnimalDao
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
 import com.mobdao.data.remote.services.PetFinderService

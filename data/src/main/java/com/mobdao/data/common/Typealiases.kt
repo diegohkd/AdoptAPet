@@ -1,9 +1,6 @@
 package com.mobdao.data.common
 
-import com.mobdao.data.cache.database.entities.Animal
-import com.mobdao.data.cache.database.entities.Photo
-
-typealias AnimalDbEntity = Animal
-typealias PhotoDbEntity = Photo
+typealias AnimalDbEntity = com.mobdao.cache.database.entities.Animal
+typealias PhotoDbEntity = com.mobdao.cache.database.entities.Photo
 
 typealias AnimalRemoteResponse = com.mobdao.data.remote.responses.Animal
