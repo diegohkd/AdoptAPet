@@ -2,7 +2,6 @@ package com.mobdao.data.utils.factories
 
 import com.mobdao.data.cache.AppConfig
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,6 +14,7 @@ import javax.inject.Singleton
 @Singleton
 class RetrofitFactory @Inject constructor(
     private val appConfig: AppConfig,
+    private val moshi: Moshi,
 ) {
 
     fun create(baseUrl: String, interceptors: List<Interceptor> = emptyList()): Retrofit {
@@ -29,13 +29,7 @@ class RetrofitFactory @Inject constructor(
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(client.build())
-            .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder()
-                        .addLast(KotlinJsonAdapterFactory())
-                        .build()
-                )
-            )
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 }
