@@ -1,4 +1,4 @@
-package com.mobdao.data.remote.responses
+package com.mobdao.remote.responses
 
 import com.squareup.moshi.Json
 

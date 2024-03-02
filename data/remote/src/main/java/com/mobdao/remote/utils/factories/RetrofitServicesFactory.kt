@@ -1,8 +1,8 @@
-package com.mobdao.data.utils.factories
+package com.mobdao.remote.utils.factories
 
-import com.mobdao.data.utils.network_interceptors.AccessTokenInterceptor
-import com.mobdao.data.remote.services.AuthService
-import com.mobdao.data.remote.services.PetFinderService
+import com.mobdao.remote.services.AuthService
+import com.mobdao.remote.services.PetFinderService
+import com.mobdao.remote.utils.factories.network_interceptors.AccessTokenInterceptor
 import javax.inject.Inject
 import javax.inject.Singleton
 

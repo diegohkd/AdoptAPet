@@ -1,4 +1,4 @@
-package com.mobdao.data.remote.responses
+package com.mobdao.remote.responses
 
 data class AnimalsResponse(
     val animals: List<Animal>

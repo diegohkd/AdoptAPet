@@ -3,9 +3,9 @@ package com.mobdao.data.utils
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
 import com.mobdao.data.common.PhotoDbEntity
-import com.mobdao.data.remote.responses.Animal
 import com.mobdao.domain_api.entitites.Pet
 import com.mobdao.domain_api.entitites.Photo
+import com.mobdao.remote.responses.Animal
 import javax.inject.Inject
 import javax.inject.Singleton
 

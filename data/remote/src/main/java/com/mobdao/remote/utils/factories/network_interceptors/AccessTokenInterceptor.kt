@@ -1,9 +1,9 @@
-package com.mobdao.data.utils.network_interceptors
+package com.mobdao.remote.utils.factories.network_interceptors
 
 import com.mobdao.cache.AccessTokenHolder
 import com.mobdao.common.config.AppConfig
 import com.mobdao.common.config.PetFinderConfig
-import com.mobdao.data.remote.services.AuthService
+import com.mobdao.remote.services.AuthService
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request

@@ -1,4 +1,4 @@
-package com.mobdao.data.utils.factories
+package com.mobdao.remote.utils.factories
 
 import com.mobdao.common.config.AppConfig
 import com.squareup.moshi.Moshi

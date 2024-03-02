@@ -1,6 +1,6 @@
-package com.mobdao.data.remote.services
+package com.mobdao.remote.services
 
-import com.mobdao.data.remote.responses.AccessTokenResponse
+import com.mobdao.remote.responses.AccessTokenResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST

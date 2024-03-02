@@ -1,6 +1,6 @@
-package com.mobdao.data.remote.services
+package com.mobdao.remote.services
 
-import com.mobdao.data.remote.responses.AnimalsResponse
+import com.mobdao.remote.responses.AnimalsResponse
 import retrofit2.http.*
 
 interface PetFinderService {

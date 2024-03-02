@@ -1,9 +1,9 @@
-package com.mobdao.data.remote.di
+package com.mobdao.remote.di
 
-import com.mobdao.data.remote.services.AuthService
-import com.mobdao.data.remote.services.PetFinderService
-import com.mobdao.data.utils.factories.RetrofitServicesFactory
-import com.mobdao.data.utils.network_interceptors.AccessTokenInterceptor
+import com.mobdao.remote.services.AuthService
+import com.mobdao.remote.services.PetFinderService
+import com.mobdao.remote.utils.factories.RetrofitServicesFactory
+import com.mobdao.remote.utils.factories.network_interceptors.AccessTokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
