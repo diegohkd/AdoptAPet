@@ -37,8 +37,6 @@ android {
 
 dependencies {
     implementation(project(":common"))
-    // TODO it is probably not ideal to have a direct dependency on cache module
-    implementation(project(":data:cache"))
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")

@@ -1,9 +1,6 @@
 package com.mobdao.remote.utils.factories.network_interceptors
 
-import com.mobdao.cache.AccessTokenHolder
-import com.mobdao.common.config.AppConfig
-import com.mobdao.common.config.PetFinderConfig
-import com.mobdao.remote.services.AuthService
+import com.mobdao.remote.AccessTokenManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -15,32 +12,24 @@ private const val AUTHORIZATION_METHOD = "Bearer"
 private const val HTTP_UNAUTHORIZED_CODE = 401
 
 class AccessTokenInterceptor @Inject constructor(
-    private val authService: AuthService,
-    appConfig: AppConfig,
-    private val accessTokenHolder: AccessTokenHolder,
+    private val accessTokenManager: AccessTokenManager,
 ) : Interceptor {
-
-    private val petFinderConfig: PetFinderConfig = appConfig.petFinderConfig
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(
             request = chain.createRequestWithAccessToken(
-                accessToken = accessTokenHolder.get().orEmpty()
+                accessToken = accessTokenManager.getAccessToken().orEmpty()
             )
         )
 
         if (response.code == HTTP_UNAUTHORIZED_CODE) {
-            val newAccessToken = runBlocking {
-                authService.getAuthToken(
-                    grantType = petFinderConfig.grantType,
-                    clientId = petFinderConfig.clientId,
-                    clientSecret = petFinderConfig.clientSecret,
-                ).accessToken
+            runBlocking {
+                accessTokenManager.refreshAccessToken()
             }
-            accessTokenHolder.save(newAccessToken)
+            val newAccessToken = accessTokenManager.getAccessToken()
             response.close()
             return chain.proceed(
-                request = chain.createRequestWithAccessToken(accessToken = newAccessToken)
+                request = chain.createRequestWithAccessToken(accessToken = newAccessToken.orEmpty())
             )
         }
         return response
