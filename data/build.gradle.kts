@@ -53,8 +53,8 @@ android {
 
 dependencies {
     implementation(project(":common"))
-    implementation(project(":data:cache"))
-    implementation(project(":data:remote"))
+    implementation(project(":data:services:cache"))
+    implementation(project(":data:services:remote"))
     implementation(project(":domain:domain-api"))
 
     implementation("androidx.core:core-ktx:1.12.0")
