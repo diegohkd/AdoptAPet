@@ -1,14 +1,24 @@
 package com.mobdao.adoptapet.navigation
 
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+
 sealed interface Destination {
 
    val route: String
 
-    object Home : Destination {
+    data object Home : Destination {
         override val route: String = "home"
     }
 
-    object PetDetails : Destination {
-        override val route: String = "pet_details"
+    data object PetDetails : Destination {
+        const val petIdArg = "pedId"
+        val arguments = listOf(
+            navArgument(petIdArg) { type = NavType.StringType }
+        )
+
+        private const val host: String = "pet_details"
+        override val route: String = "$host?$petIdArg={$petIdArg}"
+        fun buildRouteWithArgs(petId: String): String = "$host?$petIdArg=$petId"
     }
 }

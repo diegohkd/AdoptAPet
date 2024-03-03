@@ -13,10 +13,19 @@ fun AdoptAPetNavHost(navController: NavHostController) {
         navController = navController,
         startDestination = Destination.Home.route,
     ) {
-        composable(Destination.Home.route) {
-            HomeScreen()
+        composable(route = Destination.Home.route) {
+            HomeScreen(
+                onPetClicked = { petId ->
+                    navController.navigate(
+                        route = Destination.PetDetails.buildRouteWithArgs(petId)
+                    )
+                }
+            )
         }
-        composable(Destination.PetDetails.route) {
+        composable(
+            route = Destination.PetDetails.route,
+            arguments = Destination.PetDetails.arguments,
+        ) {
             PetDetailsScreen()
         }
     }

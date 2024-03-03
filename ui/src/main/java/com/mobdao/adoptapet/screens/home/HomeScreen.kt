@@ -1,6 +1,7 @@
 package com.mobdao.adoptapet.screens.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,34 +17,49 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
 import com.mobdao.adoptapet.screens.home.HomeViewModel.UiState
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    onPetClicked: (id: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
 
-    HomeContent(uiState)
+    when (val navAction = navActionEvent?.getContentIfNotHandled()) {
+        is PetClicked -> onPetClicked(navAction.petId)
+        else -> {}
+    }
+
+    HomeContent(
+        uiState = uiState,
+        onPetClicked = viewModel::onPetClicked,
+    )
 }
 
 @Composable
-private fun HomeContent(uiState: UiState) {
+private fun HomeContent(
+    uiState: UiState,
+    onPetClicked: (id: String) -> Unit = {},
+) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(uiState.pets) { pet ->
-            PetItem(pet)
+            PetItem(pet = pet, onClick = onPetClicked)
         }
     }
 }
 
 @Composable
-private fun PetItem(pet: Pet) {
+private fun PetItem(pet: Pet, onClick: (id: String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFE6E6FA))
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onClick(pet.id) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(

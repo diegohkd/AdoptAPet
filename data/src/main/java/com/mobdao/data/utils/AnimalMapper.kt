@@ -44,4 +44,18 @@ class AnimalMapper @Inject constructor() {
                 }
             )
         }
+
+    fun mapToPet(animal: AnimalDbEntity): Pet =
+        Pet(
+            id = animal.id,
+            name = animal.name,
+            photos = animal.photos.map {
+                Photo(
+                    smallUrl = it.smallUrl,
+                    mediumUrl = it.mediumUrl,
+                    largeUrl = it.largeUrl,
+                    fullUrl = it.fullUrl,
+                )
+            }
+        )
 }
