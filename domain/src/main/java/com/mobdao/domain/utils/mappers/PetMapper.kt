@@ -1,7 +1,7 @@
 package com.mobdao.domain.utils.mappers
 
-import com.mobdao.domain.models.Pet
-import com.mobdao.domain.models.Photo
+import com.mobdao.domain.common_models.Pet
+import com.mobdao.domain.common_models.Photo
 import javax.inject.Inject
 import javax.inject.Singleton
 

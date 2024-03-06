@@ -2,8 +2,10 @@ package com.mobdao.data.di
 
 import com.mobdao.common.config.AppConfig
 import com.mobdao.data.AccessTokenManagerImpl
+import com.mobdao.data.GeoLocationRepositoryImpl
 import com.mobdao.data.PetsRepositoryImpl
 import com.mobdao.data.utils.factories.AppConfigFactory
+import com.mobdao.domain_api.GeoLocationRepository
 import com.mobdao.domain_api.PetsRepository
 import com.mobdao.remote.AccessTokenManager
 import dagger.Binds
@@ -19,6 +21,11 @@ abstract class DataModule {
 
     @Binds
     internal abstract fun bindsPetsRepository(impl: PetsRepositoryImpl): PetsRepository
+
+    @Binds
+    internal abstract fun bindsGeoLocationRepository(
+        impl: GeoLocationRepositoryImpl
+    ): GeoLocationRepository
 
     @Binds
     internal abstract fun bindsAccessTokenManager(impl: AccessTokenManagerImpl): AccessTokenManager

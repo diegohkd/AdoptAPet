@@ -38,6 +38,8 @@ android {
 dependencies {
     implementation(project(":common"))
 
+    implementation(libs.jetbrains.kotlinx.kotlinxCoroutinesPlayServices)
+    implementation(libs.google.android.gms.playServicesLocation)
     implementation(libs.refrofit2.retrofit)
     implementation(libs.refrofit2.converterMoshi)
     implementation(libs.moshi.moshiKotlin)

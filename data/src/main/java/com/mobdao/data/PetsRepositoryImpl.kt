@@ -3,7 +3,7 @@ package com.mobdao.data
 import com.mobdao.cache.database.daos.AnimalDao
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
-import com.mobdao.data.utils.AnimalMapper
+import com.mobdao.data.utils.mappers.AnimalMapper
 import com.mobdao.domain_api.PetsRepository
 import com.mobdao.domain_api.entitites.Pet
 import com.mobdao.remote.services.PetFinderService

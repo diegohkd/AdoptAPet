@@ -1,4 +1,4 @@
-package com.mobdao.domain.models
+package com.mobdao.domain.common_models
 
 data class Photo(
     val smallUrl: String,

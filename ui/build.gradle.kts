@@ -57,6 +57,9 @@ dependencies {
     implementation(project(":di"))
     implementation(project(":domain"))
 
+    implementation(libs.androidx.constraintlayout.constraintlayoutCompose)
+    implementation(libs.google.accompanist.accompanistPermissions)
+    implementation(libs.google.android.gms.playServicesLocation)
     implementation(libs.androidx.core.coreKtx)
     implementation(libs.androidx.lifecycle.lifecycleRuntimeKtx)
     implementation(libs.androidx.activity.activityCompose)

@@ -1,6 +1,6 @@
 package com.mobdao.domain
 
-import com.mobdao.domain.models.Pet
+import com.mobdao.domain.common_models.Pet
 import com.mobdao.domain.utils.mappers.PetMapper
 import com.mobdao.domain_api.PetsRepository
 import kotlinx.coroutines.flow.Flow

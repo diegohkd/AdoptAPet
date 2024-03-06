@@ -4,3 +4,4 @@ typealias AnimalDbEntity = com.mobdao.cache.database.entities.Animal
 typealias PhotoDbEntity = com.mobdao.cache.database.entities.Photo
 
 typealias AnimalRemoteResponse = com.mobdao.remote.responses.Animal
+typealias AddressRemoteResponse = com.mobdao.remote.responses.Address

@@ -1,4 +1,4 @@
-package com.mobdao.data.utils
+package com.mobdao.data.utils.mappers
 
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
