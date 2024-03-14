@@ -32,4 +32,6 @@ android {
     }
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.jetbrains.kotlinx.kotlinxCoroutinesCore)
+}

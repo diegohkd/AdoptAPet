@@ -1,6 +1,5 @@
 package com.mobdao.adoptapet.screens.pet_details
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,7 +28,7 @@ class PetDetailsViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
-        val petId: String? = savedStateHandle[Destination.PetDetails.petIdArg]
+        val petId: String? = savedStateHandle[Destination.PetDetails.PET_ID_ARG]
 
         if (petId != null) {
             viewModelScope.launch {

@@ -4,10 +4,12 @@ import com.mobdao.common.config.AppConfig
 import com.mobdao.data.AccessTokenManagerImpl
 import com.mobdao.data.GeoLocationRepositoryImpl
 import com.mobdao.data.PetsRepositoryImpl
+import com.mobdao.data.SearchFilterRepositoryImpl
 import com.mobdao.data.utils.factories.AppConfigFactory
 import com.mobdao.domain_api.GeoLocationRepository
 import com.mobdao.domain_api.PetsRepository
-import com.mobdao.remote.AccessTokenManager
+import com.mobdao.domain_api.SearchFilterRepository
+import com.mobdao.remote.api.AccessTokenManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -26,6 +28,11 @@ abstract class DataModule {
     internal abstract fun bindsGeoLocationRepository(
         impl: GeoLocationRepositoryImpl
     ): GeoLocationRepository
+
+    @Binds
+    internal abstract fun bindsSearchFilterRepository(
+        impl: SearchFilterRepositoryImpl
+    ): SearchFilterRepository
 
     @Binds
     internal abstract fun bindsAccessTokenManager(impl: AccessTokenManagerImpl): AccessTokenManager

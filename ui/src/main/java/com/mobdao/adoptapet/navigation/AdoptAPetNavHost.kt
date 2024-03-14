@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.mobdao.adoptapet.screens.filter.FilterScreen
 import com.mobdao.adoptapet.screens.home.HomeScreen
 import com.mobdao.adoptapet.screens.pet_details.PetDetailsScreen
 
@@ -19,7 +20,10 @@ fun AdoptAPetNavHost(navController: NavHostController) {
                     navController.navigate(
                         route = Destination.PetDetails.buildRouteWithArgs(petId)
                     )
-                }
+                },
+                onFilterClicked = {
+                    navController.navigate(route = Destination.Filter.route)
+                },
             )
         }
         composable(
@@ -27,6 +31,13 @@ fun AdoptAPetNavHost(navController: NavHostController) {
             arguments = Destination.PetDetails.arguments,
         ) {
             PetDetailsScreen()
+        }
+        composable(route = Destination.Filter.route) {
+            FilterScreen(
+                onApplyFilterRequested = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

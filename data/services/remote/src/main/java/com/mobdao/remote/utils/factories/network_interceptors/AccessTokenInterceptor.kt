@@ -1,6 +1,6 @@
 package com.mobdao.remote.utils.factories.network_interceptors
 
-import com.mobdao.remote.AccessTokenManager
+import com.mobdao.remote.api.AccessTokenManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request

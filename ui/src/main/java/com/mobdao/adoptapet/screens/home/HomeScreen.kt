@@ -7,10 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +29,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
 import com.mobdao.adoptapet.screens.home.HomeViewModel.UiState
@@ -41,6 +39,7 @@ import com.mobdao.adoptapet.screens.home.HomeViewModel.UiState
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onPetClicked: (id: String) -> Unit,
+    onFilterClicked: () -> Unit,
 ) {
     val locationPermissionState = rememberMultiplePermissionsState(
         permissions = listOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
@@ -60,7 +59,8 @@ fun HomeScreen(
 
     when (val navAction = navActionEvent?.getContentIfNotHandled()) {
         is PetClicked -> onPetClicked(navAction.petId)
-        else -> {}
+        FilterClicked -> onFilterClicked()
+        null -> {}
     }
 
     askLocationPermissionEvent?.getContentIfNotHandled()?.let {
@@ -70,6 +70,7 @@ fun HomeScreen(
     HomeContent(
         uiState = uiState,
         onPetClicked = viewModel::onPetClicked,
+        onFilterClicked = viewModel::onFilterClicked,
     )
 }
 
@@ -77,6 +78,7 @@ fun HomeScreen(
 private fun HomeContent(
     uiState: UiState,
     onPetClicked: (id: String) -> Unit = {},
+    onFilterClicked: () -> Unit = {},
 ) {
     Scaffold(
         containerColor = Color.White
@@ -90,6 +92,7 @@ private fun HomeContent(
 
             ToolBar(
                 address = uiState.address,
+                onFilterClicked = onFilterClicked,
                 modifier = Modifier.constrainAs(toolbarRef) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
@@ -97,10 +100,12 @@ private fun HomeContent(
             )
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .constrainAs(petListRef) {
                         start.linkTo(parent.start)
                         top.linkTo(toolbarRef.bottom)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
                     }
             ) {
                 items(uiState.pets) { pet ->
@@ -119,7 +124,11 @@ private fun HomeContent(
 }
 
 @Composable
-private fun ToolBar(address: String, modifier: Modifier = Modifier) {
+private fun ToolBar(
+    address: String,
+    onFilterClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -151,19 +160,22 @@ private fun ToolBar(address: String, modifier: Modifier = Modifier) {
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        Icon(
-            painter = painterResource(id = R.drawable.filter_ic),
-            contentDescription = "",
+        IconButton(
+            onClick = onFilterClicked,
             modifier = Modifier
                 .constrainAs(filterRef) {
                     centerVerticallyTo(parent)
                     end.linkTo(parent.end)
                 }
                 .padding(end = 8.dp),
-            tint = Color.Black
-        )
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.filter_ic),
+                contentDescription = "",
+                tint = Color.Black
+            )
+        }
     }
-
 }
 
 @Composable

@@ -3,7 +3,7 @@ package com.mobdao.data
 import com.mobdao.cache.AccessTokenHolder
 import com.mobdao.common.config.AppConfig
 import com.mobdao.common.config.PetFinderConfig
-import com.mobdao.remote.AccessTokenManager
+import com.mobdao.remote.api.AccessTokenManager
 import com.mobdao.remote.services.AuthService
 import javax.inject.Inject
 import javax.inject.Singleton

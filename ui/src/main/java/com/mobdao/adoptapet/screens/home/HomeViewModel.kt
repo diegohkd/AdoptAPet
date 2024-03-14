@@ -3,9 +3,11 @@ package com.mobdao.adoptapet.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.domain.GetCurrentAddressUseCase
 import com.mobdao.domain.GetPetsUseCase
+import com.mobdao.domain.ObserveSearchFilterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +20,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getPetsUseCase: GetPetsUseCase,
     private val getCurrentAddressUseCase: GetCurrentAddressUseCase,
+    private val observeSearchFilterUseCase: ObserveSearchFilterUseCase,
 ) : ViewModel() {
 
     data class UiState(
@@ -34,6 +37,7 @@ class HomeViewModel @Inject constructor(
 
     sealed interface NavAction {
         data class PetClicked(val petId: String) : NavAction
+        data object FilterClicked : NavAction
     }
 
     private val _uiState = MutableStateFlow(UiState())
@@ -48,19 +52,23 @@ class HomeViewModel @Inject constructor(
     init {
         _uiState.value = _uiState.value.copy(progressIndicatorIsVisible = true)
         viewModelScope.launch {
-            getPetsUseCase.execute()
+            observeSearchFilterUseCase.execute()
                 .catch { it.printStackTrace() }
-                .collect { pets ->
-                    _uiState.value = _uiState.value.copy(progressIndicatorIsVisible = false)
-                    _uiState.value = _uiState.value.copy(
-                        pets = pets.map {
-                            Pet(
-                                id = it.id,
-                                name = it.name,
-                                thumbnailUrl = it.photos.firstOrNull()?.smallUrl.orEmpty()
+                .collect {
+                    getPetsUseCase.execute(it)
+                        .catch { it.printStackTrace() }
+                        .collect { pets ->
+                            _uiState.value = _uiState.value.copy(progressIndicatorIsVisible = false)
+                            _uiState.value = _uiState.value.copy(
+                                pets = pets.map {
+                                    Pet(
+                                        id = it.id,
+                                        name = it.name,
+                                        thumbnailUrl = it.photos.firstOrNull()?.smallUrl.orEmpty()
+                                    )
+                                }
                             )
                         }
-                    )
                 }
         }
     }
@@ -86,5 +94,9 @@ class HomeViewModel @Inject constructor(
 
     fun onPetClicked(id: String) {
         _navAction.value = Event(PetClicked(id))
+    }
+
+    fun onFilterClicked() {
+        _navAction.value = Event(FilterClicked)
     }
 }

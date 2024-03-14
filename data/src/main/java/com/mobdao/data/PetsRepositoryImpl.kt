@@ -6,6 +6,7 @@ import com.mobdao.data.common.AnimalRemoteResponse
 import com.mobdao.data.utils.mappers.AnimalMapper
 import com.mobdao.domain_api.PetsRepository
 import com.mobdao.domain_api.entitites.Pet
+import com.mobdao.domain_api.entitites.SearchFilter
 import com.mobdao.remote.services.PetFinderService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,8 +20,15 @@ class PetsRepositoryImpl @Inject constructor(
     private val animalMapper: AnimalMapper,
 ) : PetsRepository {
 
-    override suspend fun getPets(): List<Pet> {
-        val animals = petFinderService.getAnimals().animals
+    override suspend fun getPets(searchFilter: SearchFilter?): List<Pet> {
+        val location = searchFilter?.coordinates?.let {
+            "${it.latitude},${it.longitude}"
+        }
+        val animals = petFinderService.getAnimals(
+            pageNumber = 1,
+            location = location,
+            type = searchFilter?.petType,
+        ).animals
         saveToDatabase(animals)
         return animalMapper.mapToPet(*animals.toTypedArray())
     }

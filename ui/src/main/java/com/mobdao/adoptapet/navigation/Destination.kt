@@ -12,13 +12,17 @@ sealed interface Destination {
     }
 
     data object PetDetails : Destination {
-        const val petIdArg = "pedId"
+        const val PET_ID_ARG = "pedId"
         val arguments = listOf(
-            navArgument(petIdArg) { type = NavType.StringType }
+            navArgument(PET_ID_ARG) { type = NavType.StringType }
         )
 
-        private const val host: String = "pet_details"
-        override val route: String = "$host?$petIdArg={$petIdArg}"
-        fun buildRouteWithArgs(petId: String): String = "$host?$petIdArg=$petId"
+        private const val HOST: String = "pet_details"
+        override val route: String = "$HOST?$PET_ID_ARG={$PET_ID_ARG}"
+        fun buildRouteWithArgs(petId: String): String = "$HOST?$PET_ID_ARG=$petId"
+    }
+
+    data object Filter : Destination {
+        override val route: String = "filter"
     }
 }

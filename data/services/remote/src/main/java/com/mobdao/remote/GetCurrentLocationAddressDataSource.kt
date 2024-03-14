@@ -11,6 +11,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.mobdao.common.config.AppConfig
 import com.mobdao.remote.responses.Address
 import kotlinx.coroutines.tasks.await
 import java.io.IOException
@@ -25,13 +26,24 @@ private const val MAX_ADDRESS_RESULTS = 1
 
 // TODO is this a good name? Should it have the 'Get'?
 @Singleton
-class GetCurrentLocationAddressDataSource @Inject constructor(private val context: Context) {
+class GetCurrentLocationAddressDataSource @Inject constructor(
+    private val context: Context,
+    private val appConfig: AppConfig,
+) {
 
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
     suspend fun getCurrentLocation(): Address? {
+        // TODO remove this
+        if (appConfig.isDebugBuild) {
+            return Address(
+                addressLine = "20 W 34th St., New York, NY 10001, United States",
+                latitude = 40.74852484177265,
+                longitude = -73.98573148311264,
+            )
+        }
         val location = fusedLocationClient.getCurrentLocation(
             PRIORITY_HIGH_ACCURACY,
             CancellationTokenSource().token

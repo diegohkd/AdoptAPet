@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetCurrentAddressUseCase @Inject constructor(
-    private val geoLocationRepository: GeoLocationRepository,
+class GetCachedCurrentAddressUseCase @Inject constructor(
+    private val locationRepository: GeoLocationRepository,
     private val addressMapper: AddressMapper,
 ) {
 
     fun execute(): Flow<Address?> = flow {
-        emit(geoLocationRepository.getCurrentLocationAddress()?.let(addressMapper::map))
+        emit(locationRepository.getCachedLocationAddress()?.let(addressMapper::map))
     }
 }
