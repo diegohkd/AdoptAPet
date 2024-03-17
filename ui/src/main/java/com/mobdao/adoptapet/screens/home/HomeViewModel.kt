@@ -2,31 +2,33 @@ package com.mobdao.adoptapet.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.*
+import androidx.paging.LoadState.NotLoading
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
-import com.mobdao.domain.GetCurrentAddressUseCase
-import com.mobdao.domain.GetPetsUseCase
+import com.mobdao.domain.GetCurrentAddressAndSaveSearchFilterUseCase
 import com.mobdao.domain.ObserveSearchFilterUseCase
+import com.mobdao.domain.common_models.SearchFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val ITEMS_PER_PAGE = 20
+
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPetsUseCase: GetPetsUseCase,
-    private val getCurrentAddressUseCase: GetCurrentAddressUseCase,
     private val observeSearchFilterUseCase: ObserveSearchFilterUseCase,
+    private val getCurrentAddressAndSaveSearchFilterUseCase: GetCurrentAddressAndSaveSearchFilterUseCase,
+    private val petsPagingSourceFactory: PetsPagingSource.Factory,
 ) : ViewModel() {
 
     data class UiState(
         val progressIndicatorIsVisible: Boolean = false,
+        val petsListIsVisible: Boolean = false,
+        val nextPageProgressIndicatorIsVisible: Boolean = false,
         val address: String = "",
-        val pets: List<Pet> = emptyList()
     )
 
     data class Pet(
@@ -40,6 +42,20 @@ class HomeViewModel @Inject constructor(
         data object FilterClicked : NavAction
     }
 
+    val items: Flow<PagingData<Pet>> = Pager(
+        config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
+        pagingSourceFactory = {
+            petsPagingSourceFactory.create(
+                isReadyToLoad = isReadyToLoadPets,
+                searchFilter = searchFilter
+            ).also {
+                petsPagingSource = it
+            }
+        },
+    )
+        .flow
+        .cachedIn(viewModelScope)
+
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
@@ -49,26 +65,23 @@ class HomeViewModel @Inject constructor(
     private val _askLocationPermission = MutableStateFlow<Event<Unit>?>(null)
     val askLocationPermission: StateFlow<Event<Unit>?> = _askLocationPermission.asStateFlow()
 
+    private var isReadyToLoadPets: Boolean = false
+    private var petsPagingSource: PetsPagingSource? = null
+    private var searchFilter: SearchFilter? = null
+    private val isGettingAddress = MutableStateFlow(false)
+    private val isRefreshingPetsList = MutableStateFlow(false)
+
     init {
-        _uiState.value = _uiState.value.copy(progressIndicatorIsVisible = true)
+        handleProgressIndicatorState()
+        // TODO is it a good pattern? It's not clear what isGettingAddress will do
+        isGettingAddress.value = true
         viewModelScope.launch {
             observeSearchFilterUseCase.execute()
                 .catch { it.printStackTrace() }
-                .collect {
-                    getPetsUseCase.execute(it)
-                        .catch { it.printStackTrace() }
-                        .collect { pets ->
-                            _uiState.value = _uiState.value.copy(progressIndicatorIsVisible = false)
-                            _uiState.value = _uiState.value.copy(
-                                pets = pets.map {
-                                    Pet(
-                                        id = it.id,
-                                        name = it.name,
-                                        thumbnailUrl = it.photos.firstOrNull()?.smallUrl.orEmpty()
-                                    )
-                                }
-                            )
-                        }
+                .collect { searchFilter ->
+                    if (searchFilter == null) return@collect
+                    this@HomeViewModel.searchFilter = searchFilter
+                    petsPagingSource?.invalidate()
                 }
         }
     }
@@ -83,13 +96,44 @@ class HomeViewModel @Inject constructor(
         }
         if (areAllLocationPermissionsGranted) {
             viewModelScope.launch {
-                getCurrentAddressUseCase.execute()
+                getCurrentAddressAndSaveSearchFilterUseCase.execute()
                     .catch { it.printStackTrace() }
                     .collect {
-                        _uiState.value = _uiState.value.copy(address = it?.addressLine.orEmpty())
+                        isGettingAddress.value = false
+                        isReadyToLoadPets = true
+                        _uiState.value = _uiState.value.copy(address = it.addressLine)
                     }
             }
         }
+    }
+
+    fun onPetsListLoadStateUpdate(refreshLoadState: LoadState, appendLoadState: LoadState) {
+        when (refreshLoadState) {
+            is LoadState.Error -> {
+                /*TODO handle error */
+            }
+            LoadState.Loading -> {
+                isRefreshingPetsList.value = true
+            }
+            is NotLoading -> {
+                isRefreshingPetsList.value = false
+            }
+        }
+        when (appendLoadState) {
+            is LoadState.Error -> {
+                /*TODO handle error */
+            }
+            LoadState.Loading -> {
+                _uiState.value = _uiState.value.copy(nextPageProgressIndicatorIsVisible = true)
+            }
+            is NotLoading -> {
+                _uiState.value = _uiState.value.copy(nextPageProgressIndicatorIsVisible = false)
+            }
+        }
+
+        _uiState.value = _uiState.value.copy(
+            petsListIsVisible = refreshLoadState is NotLoading && appendLoadState is NotLoading
+        )
     }
 
     fun onPetClicked(id: String) {
@@ -98,5 +142,20 @@ class HomeViewModel @Inject constructor(
 
     fun onFilterClicked() {
         _navAction.value = Event(FilterClicked)
+    }
+
+    private fun handleProgressIndicatorState() {
+        viewModelScope.launch {
+            combine(
+                isGettingAddress,
+                isRefreshingPetsList
+            ) { isGettingAddress, isRefreshingPetsList ->
+                isGettingAddress || isRefreshingPetsList
+            }
+                .distinctUntilChanged()
+                .collect {
+                    _uiState.value = _uiState.value.copy(progressIndicatorIsVisible = it)
+                }
+        }
     }
 }

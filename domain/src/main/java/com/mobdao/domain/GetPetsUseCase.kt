@@ -19,9 +19,12 @@ class GetPetsUseCase @Inject constructor(
     private val searchFilterMapper: SearchFilterMapper
 ) {
 
-    fun execute(searchFilter: SearchFilter?): Flow<List<Pet>> = flow {
+    fun execute(pageNumber: Int, searchFilter: SearchFilter?): Flow<List<Pet>> = flow {
         emit(
-            petsRepository.getPets(searchFilter = buildSearchFilterEntity(searchFilter))
+            petsRepository.getPets(
+                pageNumber = pageNumber,
+                searchFilter = buildSearchFilterEntity(searchFilter)
+            )
                 .map(petMapper::map)
         )
     }

@@ -57,6 +57,7 @@ dependencies {
     implementation(project(":di"))
     implementation(project(":domain"))
 
+    implementation(libs.androidx.paging.pagingCompose)
     implementation(libs.androidx.constraintlayout.constraintlayoutCompose)
     implementation(libs.google.accompanist.accompanistPermissions)
     implementation(libs.google.android.gms.playServicesLocation)

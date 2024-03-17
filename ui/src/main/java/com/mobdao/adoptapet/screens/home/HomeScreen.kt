@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +22,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -33,6 +37,7 @@ import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
 import com.mobdao.adoptapet.screens.home.HomeViewModel.UiState
+import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -54,6 +59,7 @@ fun HomeScreen(
         )
     }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val petsPagingItems: LazyPagingItems<Pet> = viewModel.items.collectAsLazyPagingItems()
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
     val askLocationPermissionEvent by viewModel.askLocationPermission.collectAsStateWithLifecycle()
 
@@ -67,16 +73,24 @@ fun HomeScreen(
         locationPermissionState.launchMultiplePermissionRequest()
     }
 
+    viewModel.onPetsListLoadStateUpdate(
+        refreshLoadState = petsPagingItems.loadState.refresh,
+        appendLoadState = petsPagingItems.loadState.append,
+    )
+
     HomeContent(
         uiState = uiState,
+        petsPagingItems = petsPagingItems,
         onPetClicked = viewModel::onPetClicked,
         onFilterClicked = viewModel::onFilterClicked,
     )
 }
 
+// TODO check if passing LazyPagingItems causes extra recompositions
 @Composable
 private fun HomeContent(
     uiState: UiState,
+    petsPagingItems: LazyPagingItems<Pet>,
     onPetClicked: (id: String) -> Unit = {},
     onFilterClicked: () -> Unit = {},
 ) {
@@ -108,8 +122,17 @@ private fun HomeContent(
                         height = Dimension.fillToConstraints
                     }
             ) {
-                items(uiState.pets) { pet ->
-                    PetItem(pet = pet, onClick = onPetClicked)
+                items(petsPagingItems.itemCount) { index ->
+                    PetItem(pet = petsPagingItems[index]!!, onClick = onPetClicked)
+                }
+                if (uiState.nextPageProgressIndicatorIsVisible) {
+                    item {
+                        NextPageProgressIndicator(
+                            modifier = Modifier.constrainAs(progressIndicatorRef) {
+                                centerTo(parent)
+                            }
+                        )
+                    }
                 }
             }
             if (uiState.progressIndicatorIsVisible) {
@@ -206,6 +229,19 @@ private fun PetItem(pet: Pet, onClick: (id: String) -> Unit) {
     }
 }
 
+@Composable
+private fun NextPageProgressIndicator(modifier: Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color(0xFFE6E6FA))
+            .padding(vertical = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
 @Preview
 @Composable
 fun HomeContentPreview() {
@@ -213,24 +249,33 @@ fun HomeContentPreview() {
         HomeContent(
             uiState = UiState(
                 address = "Av Dr Esmerino Ribeiro do Valle, 680, Nova Floresta",
-                pets = listOf(
-                    Pet(
-                        id = "id-1",
-                        name = "Bibico",
-                        thumbnailUrl = "",
+            ),
+            petsPagingItems = flowOf(
+                PagingData.from(
+                    data = listOf(
+                        Pet(
+                            id = "id-1",
+                            name = "Bibico",
+                            thumbnailUrl = "",
+                        ),
+                        Pet(
+                            id = "id-2",
+                            name = "Nina",
+                            thumbnailUrl = "",
+                        ),
+                        Pet(
+                            id = "id-3",
+                            name = "Nilla",
+                            thumbnailUrl = "",
+                        )
                     ),
-                    Pet(
-                        id = "id-2",
-                        name = "Nina",
-                        thumbnailUrl = "",
+                    sourceLoadStates = LoadStates(
+                        refresh = LoadState.NotLoading(false),
+                        append = LoadState.NotLoading(false),
+                        prepend = LoadState.NotLoading(false),
                     ),
-                    Pet(
-                        id = "id-3",
-                        name = "Nilla",
-                        thumbnailUrl = "",
-                    )
                 )
-            )
+            ).collectAsLazyPagingItems()
         )
     }
 }

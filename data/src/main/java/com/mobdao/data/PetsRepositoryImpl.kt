@@ -20,12 +20,12 @@ class PetsRepositoryImpl @Inject constructor(
     private val animalMapper: AnimalMapper,
 ) : PetsRepository {
 
-    override suspend fun getPets(searchFilter: SearchFilter?): List<Pet> {
+    override suspend fun getPets(pageNumber: Int, searchFilter: SearchFilter?): List<Pet> {
         val location = searchFilter?.coordinates?.let {
             "${it.latitude},${it.longitude}"
         }
         val animals = petFinderService.getAnimals(
-            pageNumber = 1,
+            pageNumber = pageNumber,
             location = location,
             type = searchFilter?.petType,
         ).animals
