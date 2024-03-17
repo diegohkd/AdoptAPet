@@ -40,7 +40,7 @@ class PetDetailsViewModel @Inject constructor(
                     .collect {
                         _uiState.value = _uiState.value.copy(
                             petName = it.name,
-                            photoUrl = it.photos.first().largeUrl // TODO improve
+                            photoUrl = it.photos.firstOrNull()?.largeUrl.orEmpty() // TODO improve
                         )
                     }
             }

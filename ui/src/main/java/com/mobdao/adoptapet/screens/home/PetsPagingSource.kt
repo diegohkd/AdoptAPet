@@ -15,9 +15,8 @@ class PetsPagingSource private constructor(
 ) : PagingSource<Int, Pet>() {
 
     override fun getRefreshKey(state: PagingState<Int, Pet>): Int? {
-        val anchorPosition = state.anchorPosition ?: return null
-        return state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        // Force to always start from first page on refresh
+        return null
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pet> {

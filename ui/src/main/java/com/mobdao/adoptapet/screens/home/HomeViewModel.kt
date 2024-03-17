@@ -25,6 +25,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     data class UiState(
+        val processLocationPermission: Boolean = true,
         val progressIndicatorIsVisible: Boolean = false,
         val petsListIsVisible: Boolean = false,
         val nextPageProgressIndicatorIsVisible: Boolean = false,
@@ -95,6 +96,10 @@ class HomeViewModel @Inject constructor(
             _askLocationPermission.value = Event(Unit)
         }
         if (areAllLocationPermissionsGranted) {
+            // TODO improve this? This is to prevent more calls to onLocationPermissionStateUpdated
+            //  when navigating back to this screen.
+            _uiState.value = _uiState.value.copy(processLocationPermission = false)
+
             viewModelScope.launch {
                 getCurrentAddressAndSaveSearchFilterUseCase.execute()
                     .catch { it.printStackTrace() }

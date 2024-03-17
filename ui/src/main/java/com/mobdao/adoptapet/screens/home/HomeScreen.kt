@@ -46,31 +46,32 @@ fun HomeScreen(
     onPetClicked: (id: String) -> Unit,
     onFilterClicked: () -> Unit,
 ) {
-    val locationPermissionState = rememberMultiplePermissionsState(
-        permissions = listOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
-    )
-    LaunchedEffect(
-        key1 = locationPermissionState.allPermissionsGranted,
-        key2 = locationPermissionState.shouldShowRationale
-    ) {
-        viewModel.onLocationPermissionStateUpdated(
-            areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
-            shouldShowRationale = locationPermissionState.shouldShowRationale,
-        )
-    }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    if (uiState.processLocationPermission) {
+        val locationPermissionState = rememberMultiplePermissionsState(
+            permissions = listOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
+        )
+        LaunchedEffect(
+            key1 = locationPermissionState.allPermissionsGranted,
+            key2 = locationPermissionState.shouldShowRationale
+        ) {
+            viewModel.onLocationPermissionStateUpdated(
+                areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
+                shouldShowRationale = locationPermissionState.shouldShowRationale,
+            )
+        }
+        val askLocationPermissionEvent by viewModel.askLocationPermission.collectAsStateWithLifecycle()
+        askLocationPermissionEvent?.getContentIfNotHandled()?.let {
+            locationPermissionState.launchMultiplePermissionRequest()
+        }
+    }
     val petsPagingItems: LazyPagingItems<Pet> = viewModel.items.collectAsLazyPagingItems()
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
-    val askLocationPermissionEvent by viewModel.askLocationPermission.collectAsStateWithLifecycle()
 
     when (val navAction = navActionEvent?.getContentIfNotHandled()) {
         is PetClicked -> onPetClicked(navAction.petId)
         FilterClicked -> onFilterClicked()
         null -> {}
-    }
-
-    askLocationPermissionEvent?.getContentIfNotHandled()?.let {
-        locationPermissionState.launchMultiplePermissionRequest()
     }
 
     viewModel.onPetsListLoadStateUpdate(
