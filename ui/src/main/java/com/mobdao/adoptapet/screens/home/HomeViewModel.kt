@@ -9,6 +9,7 @@ import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.domain.GetCurrentAddressAndSaveSearchFilterUseCase
 import com.mobdao.domain.ObserveSearchFilterUseCase
+import com.mobdao.domain.common_models.Breeds
 import com.mobdao.domain.common_models.SearchFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -35,8 +36,14 @@ class HomeViewModel @Inject constructor(
     data class Pet(
         val id: String,
         val name: String,
+        val breeds: Breeds,
         val thumbnailUrl: String,
-    )
+    ) {
+        data class Breeds(
+            val primary: String?,
+            val secondary: String?,
+        )
+    }
 
     sealed interface NavAction {
         data class PetClicked(val petId: String) : NavAction

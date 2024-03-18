@@ -6,18 +6,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,7 +31,6 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
@@ -210,25 +212,38 @@ private fun PetItem(pet: Pet, onClick: (id: String) -> Unit) {
             .background(Color(0xFFE6E6FA))
             .padding(8.dp)
             .clickable { onClick(pet.id) },
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
             model = pet.thumbnailUrl,
             contentDescription = null,
-            modifier = Modifier.size(60.dp),
-            onState = {
-                if (it is AsyncImagePainter.State.Error) {
-                    it.result.throwable.printStackTrace()
-                }
-            },
+            modifier = Modifier
+                .size(80.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            error = painterResource(id = R.drawable.paw_ic),
             contentScale = ContentScale.Crop,
         )
-        Text(
-            text = pet.name,
-            modifier = Modifier.padding(start = 8.dp)
-        )
+        Column(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Text(
+                text = pet.name,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = pet.formattedBreeds(),
+                maxLines = 1,
+                fontSize = 12.sp,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
+
+private fun Pet.formattedBreeds(): String =
+    if (!breeds.primary.isNullOrBlank()) {
+        "${breeds.primary}" + (breeds.secondary?.let { " & $it" } ?: "")
+    } else ""
 
 @Composable
 private fun NextPageProgressIndicator(modifier: Modifier) {
@@ -257,16 +272,19 @@ fun HomeContentPreview() {
                         Pet(
                             id = "id-1",
                             name = "Bibico",
+                            breeds = Pet.Breeds("SRD", ""),
                             thumbnailUrl = "",
                         ),
                         Pet(
                             id = "id-2",
                             name = "Nina",
+                            breeds = Pet.Breeds("SRD", ""),
                             thumbnailUrl = "",
                         ),
                         Pet(
                             id = "id-3",
                             name = "Nilla",
+                            breeds = Pet.Breeds("SRD", ""),
                             thumbnailUrl = "",
                         )
                     ),

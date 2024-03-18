@@ -3,6 +3,7 @@ package com.mobdao.adoptapet.screens.home
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
+import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet.Breeds
 import com.mobdao.domain.GetPetsUseCase
 import com.mobdao.domain.common_models.SearchFilter
 import kotlinx.coroutines.flow.first
@@ -37,6 +38,10 @@ class PetsPagingSource private constructor(
                 Pet(
                     id = it.id,
                     name = it.name,
+                    breeds = Breeds(
+                        primary = it.breeds.primary,
+                        secondary = it.breeds.secondary,
+                    ),
                     thumbnailUrl = it.photos.firstOrNull()?.smallUrl.orEmpty()
                 )
             }

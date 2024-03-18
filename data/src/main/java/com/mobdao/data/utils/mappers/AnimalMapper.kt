@@ -2,7 +2,9 @@ package com.mobdao.data.utils.mappers
 
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
+import com.mobdao.data.common.BreedsDbEntity
 import com.mobdao.data.common.PhotoDbEntity
+import com.mobdao.domain_api.entitites.Breeds
 import com.mobdao.domain_api.entitites.Pet
 import com.mobdao.domain_api.entitites.Photo
 import com.mobdao.remote.responses.Animal
@@ -15,8 +17,12 @@ class AnimalMapper @Inject constructor() {
     fun mapToDbEntity(animals: List<AnimalRemoteResponse>): List<AnimalDbEntity> =
         animals.map { animal ->
             AnimalDbEntity(
-                animal.id,
-                animal.name,
+                id = animal.id,
+                name = animal.name,
+                breeds = BreedsDbEntity(
+                    primaryBreed = animal.breeds.primary,
+                    secondaryBreed = animal.breeds.secondary,
+                ),
                 animal.photos.map {
                     PhotoDbEntity(
                         smallUrl = it.small,
@@ -34,6 +40,10 @@ class AnimalMapper @Inject constructor() {
             Pet(
                 id = it.id,
                 name = it.name,
+                breeds = Breeds(
+                    primary = it.breeds.primary,
+                    secondary = it.breeds.secondary,
+                ),
                 photos = it.photos.map {
                     Photo(
                         smallUrl = it.small,
@@ -49,6 +59,10 @@ class AnimalMapper @Inject constructor() {
         Pet(
             id = animal.id,
             name = animal.name,
+            breeds = Breeds(
+                primary = animal.breeds.primaryBreed,
+                secondary = animal.breeds.secondaryBreed,
+            ),
             photos = animal.photos.map {
                 Photo(
                     smallUrl = it.smallUrl,

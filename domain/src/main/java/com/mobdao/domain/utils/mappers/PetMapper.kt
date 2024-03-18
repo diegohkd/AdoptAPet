@@ -1,5 +1,6 @@
 package com.mobdao.domain.utils.mappers
 
+import com.mobdao.domain.common_models.Breeds
 import com.mobdao.domain.common_models.Pet
 import com.mobdao.domain.common_models.Photo
 import javax.inject.Inject
@@ -12,6 +13,10 @@ class PetMapper @Inject constructor() {
         Pet(
             id = pet.id,
             name = pet.name,
+            breeds = Breeds(
+                primary = pet.breeds.primary,
+                secondary = pet.breeds.secondary,
+            ),
             photos = pet.photos.map {
                 Photo(
                     smallUrl = it.smallUrl,
