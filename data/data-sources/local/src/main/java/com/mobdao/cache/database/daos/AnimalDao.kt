@@ -7,11 +7,11 @@ import androidx.room.Query
 import com.mobdao.cache.database.entities.Animal
 
 @Dao
-interface AnimalDao {
+internal interface AnimalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg animal: Animal)
 
     @Query("SELECT * FROM animal WHERE id = :id")
-    fun getById(id: String): Animal
+    fun getById(id: String): Animal?
 }

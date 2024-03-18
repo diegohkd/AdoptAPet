@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mobdao.cache"
+    namespace = "com.mobdao.local"
     compileSdk = 34
 
     defaultConfig {

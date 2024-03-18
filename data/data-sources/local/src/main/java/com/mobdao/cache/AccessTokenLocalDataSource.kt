@@ -4,17 +4,17 @@ import android.content.SharedPreferences
 
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
 
-class AccessTokenHolder(private val sharedPreferences: SharedPreferences) {
+class AccessTokenLocalDataSource internal constructor(private val sharedPreferences: SharedPreferences) {
 
     // TODO suspend and run on UI dispatcher?
-    fun get(): String? =
+    fun getAccessToken(): String? =
         try {
             sharedPreferences.getString(ACCESS_TOKEN_KEY, null)
         } catch (e: Exception) {
             null
         }
 
-    fun save(accessToken: String?) {
+    fun saveAccessToken(accessToken: String?) {
         sharedPreferences.edit()
             .putString(ACCESS_TOKEN_KEY, accessToken)
             .apply()

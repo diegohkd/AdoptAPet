@@ -12,8 +12,7 @@ class GetCachedPetUseCase @Inject constructor(
     private val petMapper: PetMapper,
 ) {
 
-    // TODO should return Pet entity instead of a new model?
-    fun execute(petId: String): Flow<Pet> = flow {
-        emit(petMapper.map(petsRepository.getCachedPetById(petId)))
+    fun execute(petId: String): Flow<Pet?> = flow {
+        emit(petsRepository.getCachedPetById(petId)?.let(petMapper::map))
     }
 }

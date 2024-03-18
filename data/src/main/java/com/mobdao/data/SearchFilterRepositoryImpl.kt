@@ -1,6 +1,6 @@
 package com.mobdao.data
 
-import com.mobdao.cache.SearchFilterHolder
+import com.mobdao.cache.SearchFilterLocalDataSource
 import com.mobdao.data.utils.mappers.SearchFilterMapper
 import com.mobdao.domain_api.SearchFilterRepository
 import com.mobdao.domain_api.entitites.SearchFilter
@@ -10,17 +10,17 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SearchFilterRepositoryImpl @Inject constructor(
-    private val searchFilterHolder: SearchFilterHolder,
+    private val searchFilterLocalDataSource: SearchFilterLocalDataSource,
     private val searchFilterMapper: SearchFilterMapper,
 ) : SearchFilterRepository {
 
     override fun saveSearchFilter(searchFilter: SearchFilter?) {
-        searchFilterHolder.set(searchFilter?.let(searchFilterMapper::mapToCacheModel))
+        searchFilterLocalDataSource.saveSearchFilter(searchFilter?.let(searchFilterMapper::mapToCacheModel))
     }
 
     override fun observeSearchFilter(): Flow<SearchFilter?> =
-        searchFilterHolder
-            .observe()
+        searchFilterLocalDataSource
+            .observeSearchFilter()
             .map { it?.let(searchFilterMapper::mapFromCacheModel) }
             .distinctUntilChanged()
 }

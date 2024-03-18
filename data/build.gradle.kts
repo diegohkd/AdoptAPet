@@ -53,8 +53,8 @@ android {
 
 dependencies {
     implementation(project(":common"))
-    implementation(project(":data:services:cache"))
-    implementation(project(":data:services:remote"))
+    implementation(project(":data:data-sources:local"))
+    implementation(project(":data:data-sources:remote"))
     implementation(project(":domain:domain-api"))
 
     implementation(libs.google.dagger.hiltAndroid)

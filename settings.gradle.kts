@@ -16,8 +16,8 @@ dependencyResolutionManagement {
 rootProject.name = "AdoptAPet"
 include(":common")
 include(":data")
-include(":data:services:cache")
-include(":data:services:remote")
+include(":data:data-sources:local")
+include(":data:data-sources:remote")
 include(":di")
 include(":domain")
 include(":domain:domain-api")

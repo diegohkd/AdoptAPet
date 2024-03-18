@@ -12,6 +12,6 @@ import com.mobdao.cache.database.type_converters.PhotoTypeConverter
     version = 1
 )
 @TypeConverters(PhotoTypeConverter::class)
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
     abstract fun animalDao(): AnimalDao
 }

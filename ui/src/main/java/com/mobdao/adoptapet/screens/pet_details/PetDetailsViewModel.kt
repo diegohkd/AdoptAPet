@@ -37,10 +37,14 @@ class PetDetailsViewModel @Inject constructor(
                         // TODO show error message
                         it.printStackTrace()
                     }
-                    .collect {
+                    .collect { pet ->
+                        if (pet == null) {
+                            // TODO handle this scenario
+                            return@collect
+                        }
                         _uiState.value = _uiState.value.copy(
-                            petName = it.name,
-                            photoUrl = it.photos.firstOrNull()?.largeUrl.orEmpty() // TODO improve
+                            petName = pet.name,
+                            photoUrl = pet.photos.firstOrNull()?.largeUrl.orEmpty() // TODO improve
                         )
                     }
             }

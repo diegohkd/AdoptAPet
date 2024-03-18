@@ -1,6 +1,6 @@
 package com.mobdao.data
 
-import com.mobdao.cache.AccessTokenHolder
+import com.mobdao.cache.AccessTokenLocalDataSource
 import com.mobdao.common.config.AppConfig
 import com.mobdao.common.config.PetFinderConfig
 import com.mobdao.remote.api.AccessTokenManager
@@ -12,12 +12,12 @@ import javax.inject.Singleton
 internal class AccessTokenManagerImpl @Inject constructor(
     appConfig: AppConfig,
     private val authService: AuthService,
-    private val accessTokenHolder: AccessTokenHolder,
+    private val accessTokenDataSource: AccessTokenLocalDataSource,
 ): AccessTokenManager {
 
     private val petFinderConfig: PetFinderConfig = appConfig.petFinderConfig
 
-    override fun getAccessToken(): String? = accessTokenHolder.get()
+    override fun getAccessToken(): String? = accessTokenDataSource.getAccessToken()
 
     override suspend fun refreshAccessToken() {
         val accessToken: String = authService.getAuthToken(
@@ -25,6 +25,6 @@ internal class AccessTokenManagerImpl @Inject constructor(
             clientId = petFinderConfig.clientId,
             clientSecret = petFinderConfig.clientSecret,
         ).accessToken
-        accessTokenHolder.save(accessToken)
+        accessTokenDataSource.saveAccessToken(accessToken)
     }
 }

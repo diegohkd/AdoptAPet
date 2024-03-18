@@ -7,14 +7,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SearchFilterHolder @Inject constructor() {
+class SearchFilterLocalDataSource @Inject internal constructor() {
 
-    // Just caching in the memory
+    // In-memory caching
     private val searchFilter = MutableStateFlow<SearchFilter?>(null)
 
-    fun set(searchFilter: SearchFilter?) {
+    fun saveSearchFilter(searchFilter: SearchFilter?) {
         this.searchFilter.value = searchFilter
     }
 
-    fun observe(): StateFlow<SearchFilter?> = searchFilter
+    fun observeSearchFilter(): StateFlow<SearchFilter?> = searchFilter
 }

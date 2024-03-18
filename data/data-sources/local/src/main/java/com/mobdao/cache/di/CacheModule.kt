@@ -1,7 +1,7 @@
 package com.mobdao.cache.di
 
 import android.content.Context
-import com.mobdao.cache.AccessTokenHolder
+import com.mobdao.cache.AccessTokenLocalDataSource
 import com.mobdao.cache.database.AppDatabase
 import com.mobdao.cache.database.AppDatabaseFactory
 import com.mobdao.cache.database.daos.AnimalDao
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class CacheModule {
+internal abstract class CacheModule {
 
     companion object {
 
@@ -29,8 +29,8 @@ abstract class CacheModule {
         @Provides
         fun provideAccessTokenHolder(
             sharedPreferencesFactory: SharedPreferencesFactory
-        ): AccessTokenHolder =
-            AccessTokenHolder(sharedPreferencesFactory.createForAccessTokenHolder())
+        ): AccessTokenLocalDataSource =
+            AccessTokenLocalDataSource(sharedPreferencesFactory.createForAccessTokenHolder())
 
         @Singleton
         @Provides
