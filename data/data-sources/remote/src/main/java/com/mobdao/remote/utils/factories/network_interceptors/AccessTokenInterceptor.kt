@@ -11,7 +11,7 @@ private const val HTTP_AUTHORIZATION_HEADER_NAME = "Authorization"
 private const val AUTHORIZATION_METHOD = "Bearer"
 private const val HTTP_UNAUTHORIZED_CODE = 401
 
-class AccessTokenInterceptor @Inject constructor(
+internal class AccessTokenInterceptor @Inject constructor(
     private val accessTokenManager: AccessTokenManager,
 ) : Interceptor {
 

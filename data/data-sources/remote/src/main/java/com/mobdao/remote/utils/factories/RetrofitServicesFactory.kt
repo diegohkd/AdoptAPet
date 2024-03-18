@@ -9,7 +9,7 @@ import javax.inject.Singleton
 private const val PET_FINDER_BASE_URL = "https://api.petfinder.com/v2/"
 
 @Singleton
-class RetrofitServicesFactory @Inject constructor(
+internal class RetrofitServicesFactory @Inject constructor(
     private val retrofitFactory: RetrofitFactory,
 ) {
 

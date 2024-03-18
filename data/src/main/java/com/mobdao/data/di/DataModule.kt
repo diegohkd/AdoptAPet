@@ -1,7 +1,7 @@
 package com.mobdao.data.di
 
 import com.mobdao.common.config.AppConfig
-import com.mobdao.data.AccessTokenManagerImpl
+import com.mobdao.data.utils.AccessTokenManagerImpl
 import com.mobdao.data.GeoLocationRepositoryImpl
 import com.mobdao.data.PetsRepositoryImpl
 import com.mobdao.data.SearchFilterRepositoryImpl

@@ -1,24 +1,24 @@
 package com.mobdao.data
 
-import com.mobdao.cache.GeoLocationAddressLocalDataSource
+import com.mobdao.cache.GeoLocationLocalDataSource
 import com.mobdao.data.utils.mappers.AddressMapper
 import com.mobdao.domain_api.GeoLocationRepository
 import com.mobdao.domain_api.entitites.Address
-import com.mobdao.remote.GetCurrentLocationAddressDataSource
+import com.mobdao.remote.GeoLocationDataSource
 import javax.inject.Inject
 
 class GeoLocationRepositoryImpl @Inject constructor(
-    private val getCurrentLocationAddressDataSource: GetCurrentLocationAddressDataSource,
+    private val geoLocationDataSource: GeoLocationDataSource,
     private val addressMapper: AddressMapper,
-    private val geoLocationAddressLocalDataSource: GeoLocationAddressLocalDataSource,
+    private val geoLocationLocalDataSource: GeoLocationLocalDataSource,
 ) : GeoLocationRepository {
 
     override suspend fun getCurrentLocationAddress(): Address? {
-        val address = getCurrentLocationAddressDataSource.getCurrentLocation()
-        geoLocationAddressLocalDataSource.saveCurrentAddress(address = address?.let(addressMapper::mapToCache))
+        val address = geoLocationDataSource.getCurrentAddress()
+        geoLocationLocalDataSource.saveCurrentAddress(address = address?.let(addressMapper::mapToCache))
         return address?.let(addressMapper::mapToEntity)
     }
 
     override fun getCachedLocationAddress(): Address? =
-        geoLocationAddressLocalDataSource.getCurrentAddress()?.let(addressMapper::mapToEntity)
+        geoLocationLocalDataSource.getCurrentAddress()?.let(addressMapper::mapToEntity)
 }

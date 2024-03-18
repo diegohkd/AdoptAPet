@@ -24,9 +24,8 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val MAX_ADDRESS_RESULTS = 1
 
-// TODO is this a good name? Should it have the 'Get'?
 @Singleton
-class GetCurrentLocationAddressDataSource @Inject constructor(
+class GeoLocationDataSource @Inject constructor(
     private val context: Context,
     private val appConfig: AppConfig,
 ) {
@@ -35,7 +34,7 @@ class GetCurrentLocationAddressDataSource @Inject constructor(
         LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
-    suspend fun getCurrentLocation(): Address? {
+    suspend fun getCurrentAddress(): Address? {
         // TODO remove this
         if (appConfig.isDebugBuild) {
             return Address(

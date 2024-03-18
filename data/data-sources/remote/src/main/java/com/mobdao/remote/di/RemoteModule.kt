@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class RemoteModule {
+internal abstract class RemoteModule {
 
     companion object {
 

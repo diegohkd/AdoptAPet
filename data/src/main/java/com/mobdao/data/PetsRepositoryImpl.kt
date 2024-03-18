@@ -7,14 +7,15 @@ import com.mobdao.data.utils.mappers.AnimalMapper
 import com.mobdao.domain_api.PetsRepository
 import com.mobdao.domain_api.entitites.Pet
 import com.mobdao.domain_api.entitites.SearchFilter
-import com.mobdao.remote.services.PetFinderService
+import com.mobdao.remote.AnimalRemoteDataSource
+import com.mobdao.remote.responses.Animal
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class PetsRepositoryImpl @Inject constructor(
+    private val animalRemoteDataSource: AnimalRemoteDataSource,
     private val animalLocalDataSource: AnimalLocalDataSource,
-    private val petFinderService: PetFinderService,
     private val animalMapper: AnimalMapper,
 ) : PetsRepository {
 
@@ -22,11 +23,12 @@ class PetsRepositoryImpl @Inject constructor(
         val location = searchFilter?.coordinates?.let {
             "${it.latitude},${it.longitude}"
         }
-        val animals = petFinderService.getAnimals(
+
+        val animals: List<Animal> = animalRemoteDataSource.getAnimals(
             pageNumber = pageNumber,
-            location = location,
-            type = searchFilter?.petType,
-        ).animals
+            formattedLocationCoordinates = location,
+            animalType = searchFilter?.petType
+        )
         saveToDatabase(animals)
         return animalMapper.mapToPet(*animals.toTypedArray())
     }

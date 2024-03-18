@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GeoLocationAddressLocalDataSource @Inject internal constructor() {
+class GeoLocationLocalDataSource @Inject internal constructor() {
 
     // In-memory caching
     private var currentAddress: Address? = null

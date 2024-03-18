@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 // TODO maybe create different factory depending on the buildType
 @Singleton
-class RetrofitFactory @Inject constructor(
+internal class RetrofitFactory @Inject constructor(
     private val appConfig: AppConfig,
     private val moshi: Moshi,
 ) {

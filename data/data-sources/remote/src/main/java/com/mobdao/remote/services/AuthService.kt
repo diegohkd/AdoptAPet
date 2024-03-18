@@ -5,10 +5,10 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface AuthService {
+internal interface AuthService {
     @FormUrlEncoded
     @POST("oauth2/token")
-    suspend fun getAuthToken(
+    suspend fun getAccessToken(
         @Field("grant_type")
         grantType: String,
         @Field("client_id")

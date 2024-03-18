@@ -4,7 +4,7 @@ import com.mobdao.remote.responses.AnimalsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface PetFinderService {
+internal interface PetFinderService {
 
     @GET("animals")
     suspend fun getAnimals(
