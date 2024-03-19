@@ -8,6 +8,7 @@ import com.mobdao.domain_api.PetsRepository
 import com.mobdao.domain_api.entitites.Pet
 import com.mobdao.domain_api.entitites.SearchFilter
 import com.mobdao.remote.AnimalRemoteDataSource
+import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
 import com.mobdao.remote.responses.Animal
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,13 +21,9 @@ class PetsRepositoryImpl @Inject constructor(
 ) : PetsRepository {
 
     override suspend fun getPets(pageNumber: Int, searchFilter: SearchFilter?): List<Pet> {
-        val location = searchFilter?.coordinates?.let {
-            "${it.latitude},${it.longitude}"
-        }
-
         val animals: List<Animal> = animalRemoteDataSource.getAnimals(
             pageNumber = pageNumber,
-            formattedLocationCoordinates = location,
+            locationCoordinates = searchFilter?.coordinates?.toServiceModel(),
             animalType = searchFilter?.petType
         )
         saveToDatabase(animals)
@@ -40,4 +37,10 @@ class PetsRepositoryImpl @Inject constructor(
         val animalsDbEntities: List<AnimalDbEntity> = animals.let(animalMapper::mapToDbEntity)
         animalLocalDataSource.saveAnimals(animalsDbEntities)
     }
+
+    private fun SearchFilter.Coordinates.toServiceModel(): GeoCoordinates =
+        GeoCoordinates(
+            latitude = latitude,
+            longitude = longitude
+        )
 }

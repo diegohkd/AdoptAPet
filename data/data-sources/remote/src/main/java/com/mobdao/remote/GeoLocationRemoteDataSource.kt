@@ -25,7 +25,7 @@ import kotlin.coroutines.suspendCoroutine
 private const val MAX_ADDRESS_RESULTS = 1
 
 @Singleton
-class GeoLocationDataSource @Inject constructor(
+class GeoLocationRemoteDataSource @Inject constructor(
     private val context: Context,
     private val appConfig: AppConfig,
 ) {
