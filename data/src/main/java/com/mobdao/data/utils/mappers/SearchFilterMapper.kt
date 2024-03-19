@@ -1,7 +1,8 @@
 package com.mobdao.data.utils.mappers
 
-import com.mobdao.cache.models.SearchFilter.Coordinates
+import com.mobdao.data.common.AddressCache
 import com.mobdao.data.common.SearchFilterCache
+import com.mobdao.domain_api.entitites.Address
 import com.mobdao.domain_api.entitites.SearchFilter
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,8 +12,9 @@ class SearchFilterMapper @Inject constructor() {
 
     fun mapToCacheModel(searchFilter: SearchFilter): SearchFilterCache =
         SearchFilterCache(
-            coordinates = searchFilter.coordinates?.let {
-                Coordinates(
+            address = searchFilter.address.let {
+                AddressCache(
+                    addressLine = it.addressLine,
                     latitude = it.latitude,
                     longitude = it.longitude,
                 )
@@ -22,8 +24,9 @@ class SearchFilterMapper @Inject constructor() {
 
     fun mapFromCacheModel(searchFilterCache: SearchFilterCache): SearchFilter =
         SearchFilter(
-            coordinates = searchFilterCache.coordinates?.let {
-                SearchFilter.Coordinates(
+            address = searchFilterCache.address.let {
+                Address(
+                    addressLine = it.addressLine,
                     latitude = it.latitude,
                     longitude = it.longitude,
                 )

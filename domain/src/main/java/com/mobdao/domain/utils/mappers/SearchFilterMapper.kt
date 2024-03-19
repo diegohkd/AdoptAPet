@@ -1,7 +1,7 @@
 package com.mobdao.domain.utils.mappers
 
+import com.mobdao.domain.common_models.Address
 import com.mobdao.domain.common_models.SearchFilter
-import com.mobdao.domain_api.entitites.SearchFilter.Coordinates
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,8 +10,9 @@ class SearchFilterMapper @Inject constructor() {
 
     fun mapToEntity(searchFilter: SearchFilter): SearchFilterEntity =
         SearchFilterEntity(
-            coordinates = searchFilter.coordinates?.let {
-                Coordinates(
+            address = searchFilter.address.let {
+                AddressEntity(
+                    addressLine = it.addressLine,
                     latitude = it.latitude,
                     longitude = it.longitude,
                 )
@@ -21,8 +22,9 @@ class SearchFilterMapper @Inject constructor() {
 
     fun mapFromEntity(searchFilterEntity: SearchFilterEntity): SearchFilter =
         SearchFilter(
-            coordinates = searchFilterEntity.coordinates?.let {
-                SearchFilter.Coordinates(
+            address = searchFilterEntity.address.let {
+                Address(
+                    addressLine = it.addressLine,
                     latitude = it.latitude,
                     longitude = it.longitude,
                 )

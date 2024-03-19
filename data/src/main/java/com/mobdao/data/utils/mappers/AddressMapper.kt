@@ -2,7 +2,7 @@ package com.mobdao.data.utils.mappers
 
 import com.mobdao.data.common.AddressCache
 import com.mobdao.domain_api.entitites.Address
-import com.mobdao.remote.responses.ReverseGeocodeResult
+import com.mobdao.remote.responses.GeocodeResult
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,8 +18,8 @@ class AddressMapper @Inject constructor() {
             )
         }
 
-    fun mapToEntity(reverseGeocodeResult: ReverseGeocodeResult): Address =
-        with(reverseGeocodeResult) {
+    fun mapToEntity(geocodeResult: GeocodeResult): Address =
+        with(geocodeResult) {
             Address(
                 addressLine = formatted,
                 latitude = lat,

@@ -8,7 +8,7 @@ import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.mobdao.common.config.AppConfig
 import com.mobdao.remote.responses.GeoCoordinates
-import com.mobdao.remote.responses.ReverseGeocodeResponse
+import com.mobdao.remote.responses.GeocodeResponse
 import com.mobdao.remote.services.GeoapifyService
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -28,13 +28,6 @@ class GeoLocationRemoteDataSource @Inject internal constructor(
 
     @SuppressLint("MissingPermission")
     suspend fun getCurrentLocationCoordinates(): GeoCoordinates {
-        // TODO remove this
-        if (appConfig.isDebugBuild) {
-            return GeoCoordinates(
-                latitude = 40.74852484177265,
-                longitude = -73.98573148311264,
-            )
-        }
         val location = fusedLocationClient.getCurrentLocation(
             PRIORITY_HIGH_ACCURACY,
             CancellationTokenSource().token
@@ -45,11 +38,18 @@ class GeoLocationRemoteDataSource @Inject internal constructor(
         )
     }
 
-    suspend fun getLocationAddress(geoCoordinates: GeoCoordinates): ReverseGeocodeResponse =
+    suspend fun getLocationAddress(geoCoordinates: GeoCoordinates): GeocodeResponse =
         geoapifyService.reverseGeocode(
             apiKey = appConfig.geoapifyConfig.apiKey,
             latitude = geoCoordinates.latitude,
             longitude = geoCoordinates.longitude,
+            format = REVERSE_GEOCODE_RESPONSE_FORMAT
+        )
+
+    suspend fun autocompleteLocation(location: String): GeocodeResponse =
+        geoapifyService.autocomplete(
+            apiKey = appConfig.geoapifyConfig.apiKey,
+            text = location,
             format = REVERSE_GEOCODE_RESPONSE_FORMAT
         )
 }

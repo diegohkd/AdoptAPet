@@ -88,6 +88,9 @@ class HomeViewModel @Inject constructor(
                 .catch { it.printStackTrace() }
                 .collect { searchFilter ->
                     if (searchFilter == null) return@collect
+                    _uiState.update {
+                        it.copy(address = searchFilter.address?.addressLine.toString())
+                    }
                     this@HomeViewModel.searchFilter = searchFilter
                     petsPagingSource?.invalidate()
                 }
@@ -109,7 +112,9 @@ class HomeViewModel @Inject constructor(
 
             viewModelScope.launch {
                 getCurrentAddressAndSaveSearchFilterUseCase.execute()
-                    .catch { it.printStackTrace() }
+                    .catch {
+                        it.printStackTrace()
+                    }
                     .collect {
                         isGettingAddress.value = false
                         isReadyToLoadPets = true

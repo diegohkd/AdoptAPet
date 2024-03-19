@@ -6,4 +6,6 @@ interface GeoLocationRepository {
     suspend fun getCurrentLocationAddress(): Address?
     // TODO maybe improve this. It might be better to return a Flow
     fun getCachedLocationAddress(): Address?
+
+    suspend fun autocompleteLocation(location: String): List<Address>
 }

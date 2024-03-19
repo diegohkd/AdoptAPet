@@ -1,11 +1,6 @@
 package com.mobdao.cache.models
 
 data class SearchFilter(
-    val coordinates: Coordinates?,
+    val address: Address,
     val petType: String?,
-) {
-    data class Coordinates(
-        val latitude: Double,
-        val longitude: Double,
-    )
-}
+)

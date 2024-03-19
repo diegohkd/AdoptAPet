@@ -6,7 +6,6 @@ import com.mobdao.domain.utils.mappers.AddressMapper
 import com.mobdao.domain_api.GeoLocationRepository
 import com.mobdao.domain_api.SearchFilterRepository
 import com.mobdao.domain_api.entitites.SearchFilter
-import com.mobdao.domain_api.entitites.SearchFilter.Coordinates
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -21,12 +20,7 @@ class GetCurrentAddressAndSaveSearchFilterUseCase @Inject constructor(
         // TODO throw a different exception
         val address: AddressEntity =
             geoLocationRepository.getCurrentLocationAddress() ?: throw Exception()
-        val searchFilter = SearchFilter(
-            coordinates = Coordinates(
-                latitude = address.latitude,
-                longitude = address.longitude
-            )
-        )
+        val searchFilter = SearchFilter(address = address)
         emit(addressMapper.map(address))
         searchFilterRepository.saveSearchFilter(searchFilter)
     }

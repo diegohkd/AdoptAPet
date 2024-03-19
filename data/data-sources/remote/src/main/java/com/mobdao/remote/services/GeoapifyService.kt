@@ -1,6 +1,6 @@
 package com.mobdao.remote.services
 
-import com.mobdao.remote.responses.ReverseGeocodeResponse
+import com.mobdao.remote.responses.GeocodeResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -16,5 +16,15 @@ internal interface GeoapifyService {
         longitude: Double,
         @Query("format")
         format: String? = null,
-    ): ReverseGeocodeResponse
+    ): GeocodeResponse
+
+    @GET("geocode/autocomplete")
+    suspend fun autocomplete(
+        @Query("apiKey")
+        apiKey: String,
+        @Query("text")
+        text: String,
+        @Query("format")
+        format: String? = null,
+    ): GeocodeResponse
 }

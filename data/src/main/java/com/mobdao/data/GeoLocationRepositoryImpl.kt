@@ -32,4 +32,9 @@ class GeoLocationRepositoryImpl @Inject constructor(
 
     override fun getCachedLocationAddress(): Address? =
         geoLocationLocalDataSource.getCurrentAddress()?.let(addressMapper::mapToEntity)
+
+    override suspend fun autocompleteLocation(location: String): List<Address> =
+        geoLocationRemoteDataSource.autocompleteLocation(location)
+            .results
+            .map(addressMapper::mapToEntity)
 }
