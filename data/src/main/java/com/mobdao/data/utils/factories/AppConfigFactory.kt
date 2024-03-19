@@ -1,6 +1,7 @@
 package com.mobdao.data.utils.factories
 
 import com.mobdao.common.config.AppConfig
+import com.mobdao.common.config.GeoapifyConfig
 import com.mobdao.common.config.PetFinderConfig
 import com.mobdao.data.BuildConfig
 import javax.inject.Inject
@@ -20,5 +21,7 @@ class AppConfigFactory @Inject constructor() {
                     clientId = BuildConfig.PET_FINDER_CLIENT_ID,
                     clientSecret = BuildConfig.PET_FINDER_CLIENT_SECRET,
                 )
+            override val geoapifyConfig: GeoapifyConfig =
+                GeoapifyConfig(apiKey = BuildConfig.GEOAPIFY_API_KEY)
         }
 }

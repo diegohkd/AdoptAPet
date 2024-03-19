@@ -26,7 +26,15 @@ android {
         buildConfigField(
             type = "String",
             name = "PET_FINDER_CLIENT_SECRET",
-            value = gradleLocalProperties(rootDir, providers).getProperty("PET_FINDER_CLIENT_SECRET")
+            value = gradleLocalProperties(
+                rootDir,
+                providers
+            ).getProperty("PET_FINDER_CLIENT_SECRET")
+        )
+        buildConfigField(
+            type = "String",
+            name = "GEOAPIFY_API_KEY",
+            value = gradleLocalProperties(rootDir, providers).getProperty("GEOAPIFY_API_KEY")
         )
     }
 

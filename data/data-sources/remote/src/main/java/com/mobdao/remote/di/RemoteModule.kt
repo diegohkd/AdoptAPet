@@ -1,6 +1,7 @@
 package com.mobdao.remote.di
 
 import com.mobdao.remote.services.AuthService
+import com.mobdao.remote.services.GeoapifyService
 import com.mobdao.remote.services.PetFinderService
 import com.mobdao.remote.utils.factories.RetrofitServicesFactory
 import com.mobdao.remote.utils.factories.network_interceptors.AccessTokenInterceptor
@@ -28,5 +29,12 @@ internal abstract class RemoteModule {
             retrofitServicesFactory: RetrofitServicesFactory,
             accessTokenInterceptor: AccessTokenInterceptor,
         ): PetFinderService = retrofitServicesFactory.createPetFinderService(accessTokenInterceptor)
+
+        @Singleton
+        @Provides
+        fun provideGeoapifyService(
+            retrofitServicesFactory: RetrofitServicesFactory,
+            accessTokenInterceptor: AccessTokenInterceptor,
+        ): GeoapifyService = retrofitServicesFactory.createGeoapifyService(accessTokenInterceptor)
     }
 }
