@@ -18,6 +18,10 @@ class SearchFilterRepositoryImpl @Inject constructor(
         searchFilterLocalDataSource.saveSearchFilter(searchFilter?.let(searchFilterMapper::mapToCacheModel))
     }
 
+    override fun getSearchFilter(): SearchFilter? =
+        searchFilterLocalDataSource.getSearchFilter()
+            ?.let(searchFilterMapper::mapFromCacheModel)
+
     override fun observeSearchFilter(): Flow<SearchFilter?> =
         searchFilterLocalDataSource
             .observeSearchFilter()

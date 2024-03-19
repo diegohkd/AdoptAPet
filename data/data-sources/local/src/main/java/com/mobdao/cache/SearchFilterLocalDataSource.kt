@@ -16,5 +16,7 @@ class SearchFilterLocalDataSource @Inject internal constructor() {
         this.searchFilter.value = searchFilter
     }
 
+    fun getSearchFilter(): SearchFilter? = searchFilter.value
+
     fun observeSearchFilter(): StateFlow<SearchFilter?> = searchFilter
 }

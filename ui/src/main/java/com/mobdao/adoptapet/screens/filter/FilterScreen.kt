@@ -4,11 +4,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.ApplyClicked
@@ -35,6 +39,8 @@ fun FilterScreen(
         onSearchQueryChange = viewModel::onLocationSearchQueryChanged,
         onLocationSearchActiveChange = viewModel::onLocationSearchActiveChange,
         onAutocompleteAddressSelected = viewModel::onAddressSelected,
+        onCurrentLocationClicked = viewModel::onCurrentLocationClicked,
+        onClearLocationSearchClicked = viewModel::onClearLocationSearchClicked,
         onPetTypeSelected = viewModel::onPetTypeSelected,
         onApplyClicked = viewModel::onApplyClicked,
     )
@@ -48,6 +54,8 @@ private fun FilterContent(
     onSearchQueryChange: (String) -> Unit,
     onLocationSearchActiveChange: (Boolean) -> Unit,
     onAutocompleteAddressSelected: (index: Int) -> Unit,
+    onCurrentLocationClicked: () -> Unit,
+    onClearLocationSearchClicked: () -> Unit,
     onPetTypeSelected: (String) -> Unit,
     onApplyClicked: () -> Unit,
 ) {
@@ -63,6 +71,8 @@ private fun FilterContent(
             onSearchQueryChange = onSearchQueryChange,
             onLocationSearchActiveChange = onLocationSearchActiveChange,
             onAutocompleteAddressSelected = onAutocompleteAddressSelected,
+            onCurrentLocationClicked = onCurrentLocationClicked,
+            onClearClicked = onClearLocationSearchClicked,
         )
         Text(text = "Type")
         ExposedDropdownMenuBox(
@@ -116,6 +126,8 @@ private fun LocationSearchBar(
     autocompleteAddresses: List<String>,
     onSearchQueryChange: (String) -> Unit,
     onAutocompleteAddressSelected: (index: Int) -> Unit,
+    onCurrentLocationClicked: () -> Unit,
+    onClearClicked: () -> Unit,
 ) {
     SearchBar(
         query = searchQuery,
@@ -126,9 +138,31 @@ private fun LocationSearchBar(
         modifier = Modifier.fillMaxWidth(),
         placeholder = {
             Text(text = "Location") // TODO do not hardcode it
-        }
+        },
+        trailingIcon = {
+            if (searchQuery.isNotEmpty()) {
+                IconButton(onClick = onClearClicked) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        contentDescription = "Clear search" // TODO do not hardcode it
+                    )
+                }
+            }
+        },
     ) {
         LazyColumn {
+            item {
+                Text(
+                    text = "Current location",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .clickable(onClick = onCurrentLocationClicked),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                )
+            }
             if (loading) {
                 item {
                     Box(
