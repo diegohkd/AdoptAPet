@@ -13,10 +13,12 @@ import com.mobdao.domain.SaveSearchFilterUseCase
 import com.mobdao.domain.common_models.Address
 import com.mobdao.domain.common_models.SearchFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class FilterViewModel @Inject constructor(
     private val saveSearchFilterUseCase: SaveSearchFilterUseCase,
@@ -30,8 +32,8 @@ class FilterViewModel @Inject constructor(
 
     data class UiState(
         val locationSearchModeIsActive: Boolean = false,
-        // TODO create another model for Address
-        val locationAutocompleteAddresses: List<Address> = emptyList()
+        val locationProgressIndicatorIsVisible: Boolean = false,
+        val locationAutocompleteAddresses: List<String> = emptyList()
     )
 
     private val _navAction = MutableStateFlow<Event<NavAction>?>(null)
@@ -40,14 +42,22 @@ class FilterViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    // Cannot use StateFlow as it causes inconsistency issues
-    var searchQuery by mutableStateOf("")
+
+    // Cannot use StateFlow for the public state as it causes inconsistency issues
+    private val locationSearchQueryObservable = MutableSharedFlow<String>()
+    var locationSearchQuery: String by mutableStateOf("")
         private set
 
     private var petType: String = ""
     private var address: Address? = null
+    private var locationSearchAddresses: List<Address> = emptyList()
 
     init {
+        // TODO add current location option
+        // TODO move everything in the init to functions?
+        // TODO update UI with current filter applied
+        // TODO add state to the property names that are not in the UiState?
+
         // TODO disable applying filter until address is returned?
         viewModelScope.launch {
             getCachedCurrentAddressUseCase.execute()
@@ -56,34 +66,49 @@ class FilterViewModel @Inject constructor(
                     address = it
                 }
         }
+        viewModelScope.launch {
+            locationSearchQueryObservable
+                .distinctUntilChanged()
+                .onEach { locationSearchQuery = it }
+                .debounce(1000)
+                .collect { searchQuery ->
+                    getAutocompleteLocationOptionsUseCase.execute(searchQuery)
+                        .onStart {
+                            _uiState.update {
+                                it.copy(locationProgressIndicatorIsVisible = true)
+                            }
+                        }
+                        .onCompletion {
+                            _uiState.update {
+                                it.copy(locationProgressIndicatorIsVisible = false)
+                            }
+                        }
+                        .catch { it.printStackTrace() } // TODO show error state
+                        .collect { addresses ->
+                            locationSearchAddresses = addresses
+                            _uiState.update {
+                                it.copy(locationAutocompleteAddresses = addresses.map { it.addressLine })
+                            }
+                        }
+                }
+        }
     }
 
-    fun onSearchQueryChanged(newQuery: String) {
-        searchQuery = newQuery
+    fun onLocationSearchQueryChanged(newQuery: String) {
+        viewModelScope.launch {
+            locationSearchQueryObservable.emit(newQuery)
+        }
     }
 
     fun onLocationSearchActiveChange(isActive: Boolean) {
         _uiState.update { it.copy(locationSearchModeIsActive = isActive) }
     }
 
-    fun onAutocompleteAddressSelected(index: Int) {
-        val address = _uiState.value.locationAutocompleteAddresses[index]
+    fun onAddressSelected(index: Int) {
+        val address = locationSearchAddresses[index]
         this.address = address
         _uiState.update { it.copy(locationSearchModeIsActive = false) }
-        searchQuery = address.addressLine
-    }
-
-    // TODO search as location is typed with debounce included
-    fun onSearch(searchQuery: String) {
-        viewModelScope.launch {
-            getAutocompleteLocationOptionsUseCase.execute(searchQuery)
-                .catch { it.printStackTrace() }
-                .collect { addresses ->
-                    _uiState.update {
-                        it.copy(locationAutocompleteAddresses = addresses)
-                    }
-                }
-        }
+        locationSearchQuery = address.addressLine
     }
 
     fun onPetTypeSelected(type: String) {
@@ -98,7 +123,7 @@ class FilterViewModel @Inject constructor(
                     petType = petType
                 )
             )
-                .catch { it.printStackTrace() }
+                .catch { it.printStackTrace() } // TODO improve
                 .collect {
                     _navAction.value = Event(ApplyClicked)
                 }

@@ -1,23 +1,18 @@
 package com.mobdao.adoptapet.screens.filter
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.ApplyClicked
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState
-import com.mobdao.domain.common_models.Address
 
 private val petTypes = listOf("Dog", "Cat", "Rabbit")
 
@@ -35,12 +30,11 @@ fun FilterScreen(
     }
 
     FilterContent(
-        searchQuery = viewModel.searchQuery,
-        onSearch = viewModel::onSearch,
+        searchQuery = viewModel.locationSearchQuery,
         uiState = uiState,
-        onSearchQueryChange = viewModel::onSearchQueryChanged,
+        onSearchQueryChange = viewModel::onLocationSearchQueryChanged,
         onLocationSearchActiveChange = viewModel::onLocationSearchActiveChange,
-        onAutocompleteAddressSelected = viewModel::onAutocompleteAddressSelected,
+        onAutocompleteAddressSelected = viewModel::onAddressSelected,
         onPetTypeSelected = viewModel::onPetTypeSelected,
         onApplyClicked = viewModel::onApplyClicked,
     )
@@ -50,7 +44,6 @@ fun FilterScreen(
 @Composable
 private fun FilterContent(
     searchQuery: String,
-    onSearch: (String) -> Unit,
     uiState: UiState,
     onSearchQueryChange: (String) -> Unit,
     onLocationSearchActiveChange: (Boolean) -> Unit,
@@ -65,7 +58,7 @@ private fun FilterContent(
         LocationSearchBar(
             searchQuery = searchQuery,
             active = uiState.locationSearchModeIsActive,
-            onSearch = onSearch,
+            loading = uiState.locationProgressIndicatorIsVisible,
             autocompleteAddresses = uiState.locationAutocompleteAddresses,
             onSearchQueryChange = onSearchQueryChange,
             onLocationSearchActiveChange = onLocationSearchActiveChange,
@@ -118,29 +111,41 @@ private fun FilterContent(
 private fun LocationSearchBar(
     searchQuery: String,
     active: Boolean,
-    onSearch: (String) -> Unit,
+    loading: Boolean,
     onLocationSearchActiveChange: (Boolean) -> Unit,
-    autocompleteAddresses: List<Address>,
+    autocompleteAddresses: List<String>,
     onSearchQueryChange: (String) -> Unit,
     onAutocompleteAddressSelected: (index: Int) -> Unit,
 ) {
     SearchBar(
         query = searchQuery,
         onQueryChange = onSearchQueryChange,
-        onSearch = onSearch,
+        onSearch = { /* no-op*/ },
         active = active,
         onActiveChange = onLocationSearchActiveChange,
         modifier = Modifier.fillMaxWidth(),
-        shape = RectangleShape,
         placeholder = {
-            Text(text = "Location")
+            Text(text = "Location") // TODO do not hardcode it
         }
     ) {
         LazyColumn {
+            if (loading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
             itemsIndexed(autocompleteAddresses) { index, address ->
                 Text(
-                    text = address.addressLine,
-                    modifier = Modifier.padding(8.dp)
+                    text = address,
+                    modifier = Modifier
+                        .padding(8.dp)
                         .clickable { onAutocompleteAddressSelected(index) },
                 )
             }

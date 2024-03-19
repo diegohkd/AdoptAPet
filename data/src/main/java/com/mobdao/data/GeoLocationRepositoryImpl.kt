@@ -34,7 +34,11 @@ class GeoLocationRepositoryImpl @Inject constructor(
         geoLocationLocalDataSource.getCurrentAddress()?.let(addressMapper::mapToEntity)
 
     override suspend fun autocompleteLocation(location: String): List<Address> =
-        geoLocationRemoteDataSource.autocompleteLocation(location)
-            .results
-            .map(addressMapper::mapToEntity)
+        if (location.isBlank()) {
+            emptyList()
+        } else {
+            geoLocationRemoteDataSource.autocompleteLocation(location)
+                .results
+                .map(addressMapper::mapToEntity)
+        }
 }
