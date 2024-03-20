@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -79,6 +80,7 @@ fun HomeScreen(
     viewModel.onPetsListLoadStateUpdate(
         refreshLoadState = petsPagingItems.loadState.refresh,
         appendLoadState = petsPagingItems.loadState.append,
+        itemsCount = petsPagingItems.itemCount
     )
 
     HomeContent(
@@ -86,6 +88,7 @@ fun HomeScreen(
         petsPagingItems = petsPagingItems,
         onPetClicked = viewModel::onPetClicked,
         onFilterClicked = viewModel::onFilterClicked,
+        onRequestLocationPermissionClicked = viewModel::onRequestLocationPermissionClicked
     )
 }
 
@@ -96,6 +99,7 @@ private fun HomeContent(
     petsPagingItems: LazyPagingItems<Pet>,
     onPetClicked: (id: String) -> Unit = {},
     onFilterClicked: () -> Unit = {},
+    onRequestLocationPermissionClicked: () -> Unit = {},
 ) {
     Scaffold(
         containerColor = Color.White
@@ -105,7 +109,13 @@ private fun HomeContent(
                 .padding(top = it.calculateTopPadding())
                 .fillMaxSize()
         ) {
-            val (toolbarRef, petListRef, progressIndicatorRef) = createRefs()
+            val (
+                locationPermissionPlaceholderRef,
+                toolbarRef,
+                petListRef,
+                progressIndicatorRef,
+                emptyListPlaceholderRef,
+            ) = createRefs()
 
             ToolBar(
                 address = uiState.address,
@@ -143,6 +153,33 @@ private fun HomeContent(
                     modifier = Modifier.constrainAs(progressIndicatorRef) {
                         centerTo(parent)
                     }
+                )
+            }
+            if (uiState.locationPlaceholderIsVisible) {
+                PermissionRequestPlaceholder(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .constrainAs(locationPermissionPlaceholderRef) {
+                            start.linkTo(parent.start)
+                            top.linkTo(toolbarRef.bottom)
+                            bottom.linkTo(parent.bottom)
+                            height = Dimension.fillToConstraints
+                        },
+                    onRequestLocationPermissionClicked = onRequestLocationPermissionClicked,
+                    onFilterClicked = onFilterClicked,
+                )
+            }
+            if (uiState.emptyListPlaceholderIsVisible) {
+                EmptyListPlaceholder(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .constrainAs(emptyListPlaceholderRef) {
+                            start.linkTo(parent.start)
+                            top.linkTo(toolbarRef.bottom)
+                            bottom.linkTo(parent.bottom)
+                            height = Dimension.fillToConstraints
+                        },
+                    onFilterClicked = onFilterClicked,
                 )
             }
         }
@@ -240,11 +277,6 @@ private fun PetItem(pet: Pet, onClick: (id: String) -> Unit) {
     }
 }
 
-private fun Pet.formattedBreeds(): String =
-    if (!breeds.primary.isNullOrBlank()) {
-        "${breeds.primary}" + (breeds.secondary?.let { " & $it" } ?: "")
-    } else ""
-
 @Composable
 private fun NextPageProgressIndicator(modifier: Modifier) {
     Box(
@@ -255,6 +287,58 @@ private fun NextPageProgressIndicator(modifier: Modifier) {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun PermissionRequestPlaceholder(
+    modifier: Modifier,
+    onRequestLocationPermissionClicked: () -> Unit,
+    onFilterClicked: () -> Unit,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = "No pets found. \nAllow location permission or change your filters and try again.",
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+        )
+        Button(
+            onClick = onRequestLocationPermissionClicked,
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Text(text = "Allow location permission")
+        }
+        Button(
+            onClick = onFilterClicked,
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Text(text = "Update filters")
+        }
+    }
+}
+
+@Composable
+private fun EmptyListPlaceholder(modifier: Modifier, onFilterClicked: () -> Unit) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = "No pets found. \nChange your filters and try again.",
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+        )
+        Button(
+            onClick = onFilterClicked,
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Text(text = "Update filters")
+        }
     }
 }
 
@@ -298,3 +382,8 @@ fun HomeContentPreview() {
         )
     }
 }
+
+private fun Pet.formattedBreeds(): String =
+    if (!breeds.primary.isNullOrBlank()) {
+        "${breeds.primary}" + (breeds.secondary?.let { " & $it" } ?: "")
+    } else ""

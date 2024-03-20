@@ -27,10 +27,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     data class UiState(
+        val locationPlaceholderIsVisible: Boolean = true,
         val processLocationPermission: Boolean = true,
         val progressIndicatorIsVisible: Boolean = false,
-        val petsListIsVisible: Boolean = false,
         val nextPageProgressIndicatorIsVisible: Boolean = false,
+        val emptyListPlaceholderIsVisible: Boolean = false,
         val address: String = "",
     )
 
@@ -74,6 +75,7 @@ class HomeViewModel @Inject constructor(
     private val _askLocationPermission = MutableStateFlow<Event<Unit>?>(null)
     val askLocationPermission: StateFlow<Event<Unit>?> = _askLocationPermission.asStateFlow()
 
+    private var hasLocationPermission = false
     private var isReadyToLoadPets: Boolean = false
     private var petsPagingSource: PetsPagingSource? = null
     private var searchFilter: SearchFilter? = null
@@ -82,13 +84,12 @@ class HomeViewModel @Inject constructor(
 
     init {
         handleProgressIndicatorState()
-        // TODO is it a good pattern? It's not clear what isGettingAddress will do
-        isGettingAddress.value = true
         viewModelScope.launch {
             observeSearchFilterUseCase.execute()
                 .catchAndLogException()
                 .collect { searchFilter ->
                     if (searchFilter == null) return@collect
+                    isReadyToLoadPets = true
                     _uiState.update {
                         it.copy(address = searchFilter.address.addressLine)
                     }
@@ -102,15 +103,19 @@ class HomeViewModel @Inject constructor(
         areAllLocationPermissionsGranted: Boolean,
         shouldShowRationale: Boolean,
     ) {
-        // TODO handle more cases
-        if (!areAllLocationPermissionsGranted && !shouldShowRationale) {
-            _askLocationPermission.value = Event(Unit)
-        }
         if (areAllLocationPermissionsGranted) {
-            // TODO improve this? This is to prevent more calls to onLocationPermissionStateUpdated
-            //  when navigating back to this screen.
+            hasLocationPermission = true
             _uiState.value = _uiState.value.copy(processLocationPermission = false)
+            _uiState.update {
+                it.copy(
+                    locationPlaceholderIsVisible = false,
+                    // TODO improve this? This is to prevent more calls to onLocationPermissionStateUpdated
+                    //  when navigating back to this screen.
+                    processLocationPermission = false
+                )
+            }
 
+            isGettingAddress.value = true
             viewModelScope.launch {
                 getCurrentAddressAndSaveSearchFilterUseCase.execute()
                     .catchAndLogException()
@@ -123,7 +128,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onPetsListLoadStateUpdate(refreshLoadState: LoadState, appendLoadState: LoadState) {
+    fun onPetsListLoadStateUpdate(
+        refreshLoadState: LoadState,
+        appendLoadState: LoadState,
+        itemsCount: Int
+    ) {
         when (refreshLoadState) {
             is LoadState.Error -> {
                 /*TODO handle error */
@@ -146,10 +155,15 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(nextPageProgressIndicatorIsVisible = false)
             }
         }
-
-        _uiState.value = _uiState.value.copy(
-            petsListIsVisible = refreshLoadState is NotLoading && appendLoadState is NotLoading
-        )
+        val noPetsFound = refreshLoadState is NotLoading &&
+                appendLoadState.endOfPaginationReached &&
+                itemsCount == 0
+        _uiState.update {
+            it.copy(
+                locationPlaceholderIsVisible = noPetsFound && !hasLocationPermission,
+                emptyListPlaceholderIsVisible = noPetsFound && hasLocationPermission && isReadyToLoadPets
+            )
+        }
     }
 
     fun onPetClicked(id: String) {
@@ -158,6 +172,10 @@ class HomeViewModel @Inject constructor(
 
     fun onFilterClicked() {
         _navAction.value = Event(FilterClicked)
+    }
+
+    fun onRequestLocationPermissionClicked() {
+        _askLocationPermission.value = Event(Unit)
     }
 
     private fun handleProgressIndicatorState() {
