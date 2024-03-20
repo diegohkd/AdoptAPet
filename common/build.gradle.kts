@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    api(libs.jakewharton.timber.timber)
     implementation(libs.refrofit2.converterMoshi)
     implementation(libs.moshi.moshiKotlin)
     implementation(libs.moshi.moshiKotlinCodegen)

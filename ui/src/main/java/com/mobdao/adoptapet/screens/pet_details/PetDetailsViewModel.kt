@@ -4,12 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.navigation.Destination
+import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.GetCachedPetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,9 +33,8 @@ class PetDetailsViewModel @Inject constructor(
         if (petId != null) {
             viewModelScope.launch {
                 getCachedPetUseCase.execute(petId)
-                    .catch {
+                    .catchAndLogException {
                         // TODO show error message
-                        it.printStackTrace()
                     }
                     .collect { pet ->
                         if (pet == null) {

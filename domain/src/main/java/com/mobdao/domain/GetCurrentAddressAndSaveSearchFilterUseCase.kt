@@ -3,8 +3,8 @@ package com.mobdao.domain
 import com.mobdao.domain.common_models.Address
 import com.mobdao.domain.utils.mappers.AddressEntity
 import com.mobdao.domain.utils.mappers.AddressMapper
-import com.mobdao.domain_api.GeoLocationRepository
-import com.mobdao.domain_api.SearchFilterRepository
+import com.mobdao.domain_api.repositories.GeoLocationRepository
+import com.mobdao.domain_api.repositories.SearchFilterRepository
 import com.mobdao.domain_api.entitites.SearchFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

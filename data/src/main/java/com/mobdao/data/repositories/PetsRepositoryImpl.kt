@@ -1,10 +1,10 @@
-package com.mobdao.data
+package com.mobdao.data.repositories
 
 import com.mobdao.cache.AnimalLocalDataSource
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
 import com.mobdao.data.utils.mappers.AnimalMapper
-import com.mobdao.domain_api.PetsRepository
+import com.mobdao.domain_api.repositories.PetsRepository
 import com.mobdao.domain_api.entitites.Address
 import com.mobdao.domain_api.entitites.Pet
 import com.mobdao.domain_api.entitites.SearchFilter

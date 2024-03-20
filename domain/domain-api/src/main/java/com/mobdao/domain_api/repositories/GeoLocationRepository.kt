@@ -1,4 +1,4 @@
-package com.mobdao.domain_api
+package com.mobdao.domain_api.repositories
 
 import com.mobdao.domain_api.entitites.Address
 

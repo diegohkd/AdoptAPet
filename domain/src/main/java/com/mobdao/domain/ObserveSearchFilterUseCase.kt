@@ -2,7 +2,7 @@ package com.mobdao.domain
 
 import com.mobdao.domain.common_models.SearchFilter
 import com.mobdao.domain.utils.mappers.SearchFilterMapper
-import com.mobdao.domain_api.SearchFilterRepository
+import com.mobdao.domain_api.repositories.SearchFilterRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

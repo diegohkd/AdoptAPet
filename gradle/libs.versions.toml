@@ -23,6 +23,7 @@ navigation-compose = "2.7.7"
 pagingCompose = "3.2.1"
 playServicesLocation = "21.1.0"
 retrofit2 = "2.9.0"
+timber = "5.0.1"
 
 # plugins
 androidGradlePlugin = "8.3.0"
@@ -55,6 +56,7 @@ google-accompanist-accompanistPermissions = { group = "com.google.accompanist", 
 google-android-gms-playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 google-dagger-hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt-android" }
 google-dagger-hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt-android-compiler" }
+jakewharton-timber-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 jetbrains-kotlinx-kotlinxCoroutinesPlayServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 moshi-moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshiKotlin" }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.ApplyClicked
+import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.GetAutocompleteLocationOptionsUseCase
 import com.mobdao.domain.GetCachedCurrentAddressUseCase
 import com.mobdao.domain.GetSearchFilterUseCase
@@ -62,7 +63,7 @@ class FilterViewModel @Inject constructor(
 
         viewModelScope.launch {
             getSearchFilterUseCase.execute()
-                .catch { it.printStackTrace() } // TODO Improve this
+                .catchAndLogException() // TODO Improve this
                 .collect { searchFilter ->
                     address = searchFilter?.address
                     locationSearchQuery = address?.addressLine.orEmpty()
@@ -84,7 +85,7 @@ class FilterViewModel @Inject constructor(
                                 it.copy(locationProgressIndicatorIsVisible = false)
                             }
                         }
-                        .catch { it.printStackTrace() } // TODO show error state
+                        .catchAndLogException() // TODO show error state
                         .collect { addresses ->
                             locationSearchAddresses = addresses
                             _uiState.update {
@@ -98,7 +99,7 @@ class FilterViewModel @Inject constructor(
     fun onCurrentLocationClicked() {
         viewModelScope.launch {
             getCachedCurrentAddressUseCase.execute()
-                .catch { it.printStackTrace() }
+                .catchAndLogException()
                 .collect {
                     // TODO Improve this.
                     if (it == null) return@collect
@@ -150,7 +151,7 @@ class FilterViewModel @Inject constructor(
                     petType = petType
                 )
             )
-                .catch { it.printStackTrace() } // TODO improve
+                .catchAndLogException() // TODO improve
                 .collect {
                     _navAction.value = Event(ApplyClicked)
                 }

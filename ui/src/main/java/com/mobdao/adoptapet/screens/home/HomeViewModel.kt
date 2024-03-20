@@ -7,6 +7,7 @@ import androidx.paging.LoadState.NotLoading
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
+import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.GetCurrentAddressAndSaveSearchFilterUseCase
 import com.mobdao.domain.ObserveSearchFilterUseCase
 import com.mobdao.domain.common_models.Breeds
@@ -85,11 +86,11 @@ class HomeViewModel @Inject constructor(
         isGettingAddress.value = true
         viewModelScope.launch {
             observeSearchFilterUseCase.execute()
-                .catch { it.printStackTrace() }
+                .catchAndLogException()
                 .collect { searchFilter ->
                     if (searchFilter == null) return@collect
                     _uiState.update {
-                        it.copy(address = searchFilter.address?.addressLine.toString())
+                        it.copy(address = searchFilter.address.addressLine)
                     }
                     this@HomeViewModel.searchFilter = searchFilter
                     petsPagingSource?.invalidate()
@@ -112,9 +113,7 @@ class HomeViewModel @Inject constructor(
 
             viewModelScope.launch {
                 getCurrentAddressAndSaveSearchFilterUseCase.execute()
-                    .catch {
-                        it.printStackTrace()
-                    }
+                    .catchAndLogException()
                     .collect {
                         isGettingAddress.value = false
                         isReadyToLoadPets = true

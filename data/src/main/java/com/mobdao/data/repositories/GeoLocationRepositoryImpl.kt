@@ -1,8 +1,8 @@
-package com.mobdao.data
+package com.mobdao.data.repositories
 
 import com.mobdao.cache.GeoLocationLocalDataSource
 import com.mobdao.data.utils.mappers.AddressMapper
-import com.mobdao.domain_api.GeoLocationRepository
+import com.mobdao.domain_api.repositories.GeoLocationRepository
 import com.mobdao.domain_api.entitites.Address
 import com.mobdao.remote.GeoLocationRemoteDataSource
 import com.mobdao.remote.responses.GeoCoordinates
