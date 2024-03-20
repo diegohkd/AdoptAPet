@@ -7,6 +7,7 @@ import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet.Breeds
 import com.mobdao.domain.GetPetsUseCase
 import com.mobdao.domain.common_models.SearchFilter
 import kotlinx.coroutines.flow.first
+import timber.log.Timber
 import javax.inject.Inject
 
 class PetsPagingSource private constructor(
@@ -30,26 +31,30 @@ class PetsPagingSource private constructor(
         }
         val pageNumber: Int = params.key ?: 1
         // TODO handle page size
-        // TODO handle errors
-        val pets: List<Pet> = getPetsUseCase
-            .execute(pageNumber = pageNumber, searchFilter = searchFilter)
-            .first()
-            .map {
-                Pet(
-                    id = it.id,
-                    name = it.name,
-                    breeds = Breeds(
-                        primary = it.breeds.primary,
-                        secondary = it.breeds.secondary,
-                    ),
-                    thumbnailUrl = it.photos.firstOrNull()?.smallUrl.orEmpty()
-                )
-            }
-        return LoadResult.Page(
-            data = pets,
-            prevKey = if (pageNumber == 1) null else pageNumber - 1,
-            nextKey = if (pets.isEmpty()) null else pageNumber + 1,
-        )
+        return try {
+            val pets: List<Pet> = getPetsUseCase
+                .execute(pageNumber = pageNumber, searchFilter = searchFilter)
+                .first()
+                .map {
+                    Pet(
+                        id = it.id,
+                        name = it.name,
+                        breeds = Breeds(
+                            primary = it.breeds.primary,
+                            secondary = it.breeds.secondary,
+                        ),
+                        thumbnailUrl = it.photos.firstOrNull()?.smallUrl.orEmpty()
+                    )
+                }
+            LoadResult.Page(
+                data = pets,
+                prevKey = if (pageNumber == 1) null else pageNumber - 1,
+                nextKey = if (pets.isEmpty()) null else pageNumber + 1,
+            )
+        } catch (exception: Exception) {
+            Timber.e(exception)
+            LoadResult.Error(exception)
+        }
     }
 
     class Factory @Inject constructor(private val getPetsUseCase: GetPetsUseCase) {

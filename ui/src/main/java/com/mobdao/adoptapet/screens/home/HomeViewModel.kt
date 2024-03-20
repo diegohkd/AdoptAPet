@@ -3,7 +3,7 @@ package com.mobdao.adoptapet.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import androidx.paging.LoadState.NotLoading
+import androidx.paging.LoadState.*
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
@@ -32,6 +32,7 @@ class HomeViewModel @Inject constructor(
         val progressIndicatorIsVisible: Boolean = false,
         val nextPageProgressIndicatorIsVisible: Boolean = false,
         val emptyListPlaceholderIsVisible: Boolean = false,
+        val genericErrorDialogIsVisible: Boolean = false,
         val address: String = "",
     )
 
@@ -86,7 +87,9 @@ class HomeViewModel @Inject constructor(
         handleProgressIndicatorState()
         viewModelScope.launch {
             observeSearchFilterUseCase.execute()
-                .catchAndLogException()
+                .catchAndLogException {
+                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                }
                 .collect { searchFilter ->
                     if (searchFilter == null) return@collect
                     isReadyToLoadPets = true
@@ -99,10 +102,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onLocationPermissionStateUpdated(
-        areAllLocationPermissionsGranted: Boolean,
-        shouldShowRationale: Boolean,
-    ) {
+    fun onLocationPermissionStateUpdated(areAllLocationPermissionsGranted: Boolean) {
         if (areAllLocationPermissionsGranted) {
             hasLocationPermission = true
             _uiState.value = _uiState.value.copy(processLocationPermission = false)
@@ -118,10 +118,12 @@ class HomeViewModel @Inject constructor(
             isGettingAddress.value = true
             viewModelScope.launch {
                 getCurrentAddressAndSaveSearchFilterUseCase.execute()
-                    .catchAndLogException()
+                    .catchAndLogException {
+                        isGettingAddress.value = false
+                        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                    }
                     .collect {
                         isGettingAddress.value = false
-                        isReadyToLoadPets = true
                         _uiState.value = _uiState.value.copy(address = it.addressLine)
                     }
             }
@@ -134,26 +136,23 @@ class HomeViewModel @Inject constructor(
         itemsCount: Int
     ) {
         when (refreshLoadState) {
-            is LoadState.Error -> {
-                /*TODO handle error */
-            }
-            LoadState.Loading -> {
-                isRefreshingPetsList.value = true
-            }
-            is NotLoading -> {
+            is Error -> {
                 isRefreshingPetsList.value = false
+                _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
             }
+            Loading -> isRefreshingPetsList.value = true
+            is NotLoading -> isRefreshingPetsList.value = false
         }
         when (appendLoadState) {
-            is LoadState.Error -> {
-                /*TODO handle error */
-            }
-            LoadState.Loading -> {
-                _uiState.value = _uiState.value.copy(nextPageProgressIndicatorIsVisible = true)
-            }
-            is NotLoading -> {
-                _uiState.value = _uiState.value.copy(nextPageProgressIndicatorIsVisible = false)
-            }
+            is Error ->
+                _uiState.update {
+                    it.copy(
+                        nextPageProgressIndicatorIsVisible = false,
+                        genericErrorDialogIsVisible = true,
+                    )
+                }
+            Loading -> _uiState.update { it.copy(nextPageProgressIndicatorIsVisible = true) }
+            is NotLoading -> _uiState.update { it.copy(nextPageProgressIndicatorIsVisible = false) }
         }
         val noPetsFound = refreshLoadState is NotLoading &&
                 appendLoadState.endOfPaginationReached &&
@@ -176,6 +175,10 @@ class HomeViewModel @Inject constructor(
 
     fun onRequestLocationPermissionClicked() {
         _askLocationPermission.value = Event(Unit)
+    }
+
+    fun onDismissGenericErrorDialog() {
+        _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
     }
 
     private fun handleProgressIndicatorState() {

@@ -54,13 +54,9 @@ fun HomeScreen(
         val locationPermissionState = rememberMultiplePermissionsState(
             permissions = listOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
         )
-        LaunchedEffect(
-            key1 = locationPermissionState.allPermissionsGranted,
-            key2 = locationPermissionState.shouldShowRationale
-        ) {
+        LaunchedEffect(locationPermissionState.allPermissionsGranted) {
             viewModel.onLocationPermissionStateUpdated(
                 areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
-                shouldShowRationale = locationPermissionState.shouldShowRationale,
             )
         }
         val askLocationPermissionEvent by viewModel.askLocationPermission.collectAsStateWithLifecycle()
@@ -77,18 +73,25 @@ fun HomeScreen(
         null -> {}
     }
 
-    viewModel.onPetsListLoadStateUpdate(
-        refreshLoadState = petsPagingItems.loadState.refresh,
-        appendLoadState = petsPagingItems.loadState.append,
-        itemsCount = petsPagingItems.itemCount
-    )
+    LaunchedEffect(
+        petsPagingItems.loadState.refresh,
+        petsPagingItems.loadState.append,
+        petsPagingItems.itemCount,
+    ) {
+        viewModel.onPetsListLoadStateUpdate(
+            refreshLoadState = petsPagingItems.loadState.refresh,
+            appendLoadState = petsPagingItems.loadState.append,
+            itemsCount = petsPagingItems.itemCount
+        )
+    }
 
     HomeContent(
         uiState = uiState,
         petsPagingItems = petsPagingItems,
         onPetClicked = viewModel::onPetClicked,
         onFilterClicked = viewModel::onFilterClicked,
-        onRequestLocationPermissionClicked = viewModel::onRequestLocationPermissionClicked
+        onRequestLocationPermissionClicked = viewModel::onRequestLocationPermissionClicked,
+        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog
     )
 }
 
@@ -100,6 +103,7 @@ private fun HomeContent(
     onPetClicked: (id: String) -> Unit = {},
     onFilterClicked: () -> Unit = {},
     onRequestLocationPermissionClicked: () -> Unit = {},
+    onDismissGenericErrorDialog: () -> Unit = {},
 ) {
     Scaffold(
         containerColor = Color.White
@@ -183,6 +187,20 @@ private fun HomeContent(
                 )
             }
         }
+    }
+
+    if (uiState.genericErrorDialogIsVisible) {
+        AlertDialog(
+            onDismissRequest = onDismissGenericErrorDialog,
+            confirmButton = {
+                Button(onClick = onDismissGenericErrorDialog) {
+                    Text(text = "Ok") // TODO do not hardcode
+                }
+            },
+            text = {
+                Text(text = "Oops, something went wrong.") // TODO do not hardcode
+            }
+        )
     }
 }
 
