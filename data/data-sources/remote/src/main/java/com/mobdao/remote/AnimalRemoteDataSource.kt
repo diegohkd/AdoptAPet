@@ -14,7 +14,6 @@ class AnimalRemoteDataSource @Inject internal constructor(
 
     suspend fun getAnimals(
         pageNumber: Int,
-        // TODO create value-object
         locationCoordinates: GeoCoordinates?,
         animalType: String?
     ): List<Animal> {

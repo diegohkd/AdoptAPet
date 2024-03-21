@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.ApplyClicked
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState
@@ -100,9 +102,7 @@ private fun FilterContent(
         ) {
             TextField(
                 value = uiState.petType,
-                onValueChange = {
-//                    selectedOptionText = it
-                },
+                onValueChange = { /*no-op*/ },
                 modifier = Modifier.menuAnchor(),
                 readOnly = true,
             )
@@ -117,7 +117,6 @@ private fun FilterContent(
                         text = { Text(it) },
                         onClick = {
                             isTypeDropdownExpanded = false
-//                            selectedOptionText = it
                             onPetTypeSelected(it)
                         }
                     )
@@ -159,7 +158,7 @@ private fun LocationSearchBar(
         onActiveChange = onLocationSearchActiveChange,
         modifier = Modifier.fillMaxWidth(),
         placeholder = {
-            Text(text = "Location") // TODO do not hardcode it
+            Text(text = stringResource(R.string.location))
         },
         trailingIcon = {
             if (searchQuery.isNotEmpty()) {
@@ -167,7 +166,7 @@ private fun LocationSearchBar(
                     Icon(
                         imageVector = Icons.Default.Close,
                         tint = MaterialTheme.colorScheme.onSurface,
-                        contentDescription = "Clear search" // TODO do not hardcode it
+                        contentDescription = ""
                     )
                 }
             }

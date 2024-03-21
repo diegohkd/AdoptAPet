@@ -6,7 +6,6 @@ private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
 
 class AccessTokenLocalDataSource internal constructor(private val sharedPreferences: SharedPreferences) {
 
-    // TODO suspend and run on UI dispatcher?
     fun getAccessToken(): String? =
         try {
             sharedPreferences.getString(ACCESS_TOKEN_KEY, null)
