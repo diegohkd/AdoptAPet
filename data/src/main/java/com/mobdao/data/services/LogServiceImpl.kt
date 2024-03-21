@@ -1,7 +1,7 @@
 package com.mobdao.data.services
 
 import com.mobdao.common.config.AppConfig
-import com.mobdao.domain_api.services.LogService
+import com.mobdao.domain.api.services.LogService
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

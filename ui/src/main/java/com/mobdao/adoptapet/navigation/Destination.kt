@@ -5,7 +5,7 @@ import androidx.navigation.navArgument
 
 sealed interface Destination {
 
-   val route: String
+    val route: String
 
     data object Home : Destination {
         override val route: String = "home"

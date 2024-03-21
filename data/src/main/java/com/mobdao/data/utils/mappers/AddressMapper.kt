@@ -1,7 +1,7 @@
 package com.mobdao.data.utils.mappers
 
 import com.mobdao.data.common.AddressCache
-import com.mobdao.domain_api.entitites.Address
+import com.mobdao.domain.api.entitites.Address
 import com.mobdao.remote.responses.GeocodeResult
 import javax.inject.Inject
 import javax.inject.Singleton

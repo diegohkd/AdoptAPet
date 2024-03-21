@@ -10,7 +10,7 @@ import com.mobdao.cache.database.entities.Animal
 internal interface AnimalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg animal: Animal)
+    suspend fun insertAll(animal: List<Animal>)
 
     @Query("SELECT * FROM animal WHERE id = :id")
     fun getById(id: String): Animal?

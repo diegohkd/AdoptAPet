@@ -35,7 +35,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:domain-api"))
+    implementation(project(":domain:api"))
+    implementation(project(":common"))
 
     implementation(libs.google.dagger.hiltAndroid)
     kapt(libs.google.dagger.hiltAndroidCompiler)

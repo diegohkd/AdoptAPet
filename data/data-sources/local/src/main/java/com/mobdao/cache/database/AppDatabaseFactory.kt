@@ -2,7 +2,7 @@ package com.mobdao.cache.database
 
 import android.content.Context
 import androidx.room.Room
-import com.mobdao.cache.database.type_converters.PhotoTypeConverter
+import com.mobdao.cache.database.typeconverters.PhotoTypeConverter
 import javax.inject.Inject
 import javax.inject.Singleton
 

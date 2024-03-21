@@ -12,13 +12,15 @@ import com.mobdao.domain.GetAutocompleteLocationOptionsUseCase
 import com.mobdao.domain.GetCachedCurrentAddressUseCase
 import com.mobdao.domain.GetSearchFilterUseCase
 import com.mobdao.domain.SaveSearchFilterUseCase
-import com.mobdao.domain.common_models.Address
-import com.mobdao.domain.common_models.SearchFilter
+import com.mobdao.domain.models.Address
+import com.mobdao.domain.models.SearchFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val LOCATION_SEARCH_DEBOUNCE = 1000L
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -77,7 +79,7 @@ class FilterViewModel @Inject constructor(
         viewModelScope.launch {
             locationSearchQueryObservable
                 .onEach { locationSearchQuery = it }
-                .debounce(1000)
+                .debounce(LOCATION_SEARCH_DEBOUNCE)
                 .collect { searchQuery ->
                     getAutocompleteLocationOptionsUseCase.execute(searchQuery)
                         .onStart {

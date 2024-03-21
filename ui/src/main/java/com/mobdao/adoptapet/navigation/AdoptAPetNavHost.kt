@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mobdao.adoptapet.screens.filter.FilterScreen
 import com.mobdao.adoptapet.screens.home.HomeScreen
-import com.mobdao.adoptapet.screens.pet_details.PetDetailsScreen
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsScreen
 
 @Composable
 fun AdoptAPetNavHost(navController: NavHostController) {

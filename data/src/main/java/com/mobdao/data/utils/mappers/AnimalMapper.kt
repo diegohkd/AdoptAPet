@@ -4,9 +4,9 @@ import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
 import com.mobdao.data.common.BreedsDbEntity
 import com.mobdao.data.common.PhotoDbEntity
-import com.mobdao.domain_api.entitites.Breeds
-import com.mobdao.domain_api.entitites.Pet
-import com.mobdao.domain_api.entitites.Photo
+import com.mobdao.domain.api.entitites.Breeds
+import com.mobdao.domain.api.entitites.Pet
+import com.mobdao.domain.api.entitites.Photo
 import com.mobdao.remote.responses.Animal
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,8 +34,7 @@ class AnimalMapper @Inject constructor() {
             )
         }
 
-
-    fun mapToPet(vararg animals: Animal): List<Pet> =
+    fun mapToPet(animals: List<Animal>): List<Pet> =
         animals.map {
             Pet(
                 id = it.id,

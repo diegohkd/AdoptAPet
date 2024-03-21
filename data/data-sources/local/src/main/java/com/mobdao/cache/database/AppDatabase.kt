@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.mobdao.cache.database.daos.AnimalDao
 import com.mobdao.cache.database.entities.Animal
-import com.mobdao.cache.database.type_converters.PhotoTypeConverter
+import com.mobdao.cache.database.typeconverters.PhotoTypeConverter
 
 @Database(
     entities = [Animal::class],

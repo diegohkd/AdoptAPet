@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet.Breeds
 import com.mobdao.domain.GetPetsUseCase
-import com.mobdao.domain.common_models.SearchFilter
+import com.mobdao.domain.models.SearchFilter
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import javax.inject.Inject

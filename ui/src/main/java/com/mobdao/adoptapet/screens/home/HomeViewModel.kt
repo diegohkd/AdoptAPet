@@ -10,8 +10,7 @@ import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.GetCurrentAddressAndSaveSearchFilterUseCase
 import com.mobdao.domain.ObserveSearchFilterUseCase
-import com.mobdao.domain.common_models.Breeds
-import com.mobdao.domain.common_models.SearchFilter
+import com.mobdao.domain.models.SearchFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -155,8 +154,8 @@ class HomeViewModel @Inject constructor(
             is NotLoading -> _uiState.update { it.copy(nextPageProgressIndicatorIsVisible = false) }
         }
         val noPetsFound = refreshLoadState is NotLoading &&
-                appendLoadState.endOfPaginationReached &&
-                itemsCount == 0
+            appendLoadState.endOfPaginationReached &&
+            itemsCount == 0
         _uiState.update {
             it.copy(
                 locationPlaceholderIsVisible = noPetsFound && !hasLocationPermission,

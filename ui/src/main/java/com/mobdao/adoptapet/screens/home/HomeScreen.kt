@@ -36,6 +36,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
+import com.mobdao.adoptapet.common.theme.PetItemBackground
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
@@ -255,7 +256,7 @@ private fun PetItem(pet: Pet, onClick: (id: String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFE6E6FA))
+            .background(PetItemBackground)
             .padding(8.dp)
             .clickable { onClick(pet.id) },
     ) {
@@ -291,7 +292,7 @@ private fun NextPageProgressIndicator(modifier: Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color(0xFFE6E6FA))
+            .background(PetItemBackground)
             .padding(vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -395,4 +396,6 @@ fun HomeContentPreview() {
 private fun Pet.formattedBreeds(): String =
     if (!breeds.primary.isNullOrBlank()) {
         "${breeds.primary}" + (breeds.secondary?.let { " & $it" } ?: "")
-    } else ""
+    } else {
+        ""
+    }

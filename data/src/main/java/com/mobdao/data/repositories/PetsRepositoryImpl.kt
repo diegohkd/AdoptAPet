@@ -4,10 +4,10 @@ import com.mobdao.cache.AnimalLocalDataSource
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.common.AnimalRemoteResponse
 import com.mobdao.data.utils.mappers.AnimalMapper
-import com.mobdao.domain_api.repositories.PetsRepository
-import com.mobdao.domain_api.entitites.Address
-import com.mobdao.domain_api.entitites.Pet
-import com.mobdao.domain_api.entitites.SearchFilter
+import com.mobdao.domain.api.entitites.Address
+import com.mobdao.domain.api.entitites.Pet
+import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.api.repositories.PetsRepository
 import com.mobdao.remote.AnimalRemoteDataSource
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
 import com.mobdao.remote.responses.Animal
@@ -28,7 +28,7 @@ class PetsRepositoryImpl @Inject constructor(
             animalType = searchFilter?.petType
         )
         saveToDatabase(animals)
-        return animalMapper.mapToPet(*animals.toTypedArray())
+        return animalMapper.mapToPet(animals)
     }
 
     override suspend fun getCachedPetById(petId: String): Pet? =

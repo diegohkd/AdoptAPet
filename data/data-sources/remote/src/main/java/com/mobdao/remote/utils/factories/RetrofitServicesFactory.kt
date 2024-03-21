@@ -3,7 +3,7 @@ package com.mobdao.remote.utils.factories
 import com.mobdao.remote.services.AuthService
 import com.mobdao.remote.services.GeoapifyService
 import com.mobdao.remote.services.PetFinderService
-import com.mobdao.remote.utils.factories.network_interceptors.AccessTokenInterceptor
+import com.mobdao.remote.utils.factories.networkinterceptors.AccessTokenInterceptor
 import javax.inject.Inject
 import javax.inject.Singleton
 

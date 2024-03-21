@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class AnimalLocalDataSource @Inject internal constructor(private val animalDao: AnimalDao) {
 
     suspend fun saveAnimals(animals: List<Animal>) {
-        animalDao.insertAll(*animals.toTypedArray())
+        animalDao.insertAll(animals)
     }
 
     suspend fun getAnimalById(animalId: String): Animal? =

@@ -26,8 +26,9 @@ retrofit2 = "2.9.0"
 timber = "5.0.1"
 
 # plugins
-androidGradlePlugin = "8.3.0"
+androidGradlePlugin = "8.2.0"
 androidLibraryPlugin = "8.3.0"
+detekt = "1.23.5"
 hiltPlugin = "2.51"
 kotlinPlugin = "1.9.22"
 kotlinSymbomProcessing = "1.9.22-1.0.17"
@@ -51,6 +52,7 @@ androidx-paging-pagingCompose = { group = "androidx.paging", name = "paging-comp
 androidx-room-roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 androidx-room-roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+arturbosch-detekt-detektFormatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 coilKt-coilCompose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 google-accompanist-accompanistPermissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 google-android-gms-playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
@@ -69,8 +71,8 @@ okhttp3-loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-i
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidLibraryPlugin" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltPlugin" }
+arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinSymbomProcessing" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
-kotlin-kapt = { id = "kotlin-kapt", version = "" }
 
 [bundles]

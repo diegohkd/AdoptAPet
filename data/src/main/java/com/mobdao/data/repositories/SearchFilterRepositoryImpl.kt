@@ -2,8 +2,8 @@ package com.mobdao.data.repositories
 
 import com.mobdao.cache.SearchFilterLocalDataSource
 import com.mobdao.data.utils.mappers.SearchFilterMapper
-import com.mobdao.domain_api.repositories.SearchFilterRepository
-import com.mobdao.domain_api.entitites.SearchFilter
+import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.api.repositories.SearchFilterRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
