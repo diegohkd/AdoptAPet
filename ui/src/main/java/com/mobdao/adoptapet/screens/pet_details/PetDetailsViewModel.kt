@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +23,7 @@ class PetDetailsViewModel @Inject constructor(
     data class UiState(
         val petName: String = "",
         val photoUrl: String = "",
+        val genericErrorDialogIsVisible: Boolean = false,
     )
 
     private val _uiState = MutableStateFlow(UiState())
@@ -34,11 +36,11 @@ class PetDetailsViewModel @Inject constructor(
             viewModelScope.launch {
                 getCachedPetUseCase.execute(petId)
                     .catchAndLogException {
-                        // TODO show error message
+                        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
                     }
                     .collect { pet ->
                         if (pet == null) {
-                            // TODO handle this scenario
+                            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
                             return@collect
                         }
                         _uiState.value = _uiState.value.copy(
@@ -48,7 +50,11 @@ class PetDetailsViewModel @Inject constructor(
                     }
             }
         } else {
-            // TODO show error message or pop back-stack
+            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
         }
+    }
+
+    fun onDismissGenericErrorDialog() {
+        _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
     }
 }

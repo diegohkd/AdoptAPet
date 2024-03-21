@@ -17,10 +17,13 @@ class GetCurrentAddressAndSaveSearchFilterUseCase @Inject constructor(
 ) {
 
     fun execute(): Flow<Address> = flow {
+        val currentSearchFilter = searchFilterRepository.getSearchFilter()
         // TODO throw a different exception
         val address: AddressEntity =
             geoLocationRepository.getCurrentLocationAddress() ?: throw Exception()
-        val searchFilter = SearchFilter(address = address)
+        val searchFilter: SearchFilter = currentSearchFilter
+            ?.copy(address = address)
+            ?: SearchFilter(address = address)
         emit(addressMapper.map(address))
         searchFilterRepository.saveSearchFilter(searchFilter)
     }

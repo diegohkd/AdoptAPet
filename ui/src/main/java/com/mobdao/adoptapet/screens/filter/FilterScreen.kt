@@ -1,5 +1,7 @@
 package com.mobdao.adoptapet.screens.filter
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,11 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.ApplyClicked
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState
 
 private val petTypes = listOf("Dog", "Cat", "Rabbit")
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun FilterScreen(
     onApplyFilterRequested: () -> Unit,
@@ -27,6 +33,15 @@ fun FilterScreen(
 ) {
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val locationPermissionState = rememberMultiplePermissionsState(
+        permissions = listOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
+    )
+    LaunchedEffect(locationPermissionState.allPermissionsGranted) {
+        viewModel.onLocationPermissionStateUpdated(
+            areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
+        )
+    }
 
     when (navActionEvent?.getContentIfNotHandled()) {
         is ApplyClicked -> onApplyFilterRequested()
@@ -43,6 +58,7 @@ fun FilterScreen(
         onClearLocationSearchClicked = viewModel::onClearLocationSearchClicked,
         onPetTypeSelected = viewModel::onPetTypeSelected,
         onApplyClicked = viewModel::onApplyClicked,
+        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
     )
 }
 
@@ -58,9 +74,9 @@ private fun FilterContent(
     onClearLocationSearchClicked: () -> Unit,
     onPetTypeSelected: (String) -> Unit,
     onApplyClicked: () -> Unit,
+    onDismissGenericErrorDialog: () -> Unit,
 ) {
     var isTypeDropdownExpanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize()) {
         LocationSearchBar(
@@ -68,6 +84,7 @@ private fun FilterContent(
             active = uiState.locationSearchModeIsActive,
             loading = uiState.locationProgressIndicatorIsVisible,
             autocompleteAddresses = uiState.locationAutocompleteAddresses,
+            showCurrentLocationItem = uiState.isSelectingCurrentLocationEnabled,
             onSearchQueryChange = onSearchQueryChange,
             onLocationSearchActiveChange = onLocationSearchActiveChange,
             onAutocompleteAddressSelected = onAutocompleteAddressSelected,
@@ -82,9 +99,9 @@ private fun FilterContent(
             },
         ) {
             TextField(
-                value = selectedOptionText,
+                value = uiState.petType,
                 onValueChange = {
-                    selectedOptionText = it
+//                    selectedOptionText = it
                 },
                 modifier = Modifier.menuAnchor(),
                 readOnly = true,
@@ -100,7 +117,7 @@ private fun FilterContent(
                         text = { Text(it) },
                         onClick = {
                             isTypeDropdownExpanded = false
-                            selectedOptionText = it
+//                            selectedOptionText = it
                             onPetTypeSelected(it)
                         }
                     )
@@ -114,6 +131,10 @@ private fun FilterContent(
             Text(text = "Apply")
         }
     }
+
+    if (uiState.genericErrorDialogIsVisible) {
+        GenericErrorDialog(onDismissGenericErrorDialog = onDismissGenericErrorDialog)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,6 +143,7 @@ private fun LocationSearchBar(
     searchQuery: String,
     active: Boolean,
     loading: Boolean,
+    showCurrentLocationItem: Boolean,
     onLocationSearchActiveChange: (Boolean) -> Unit,
     autocompleteAddresses: List<String>,
     onSearchQueryChange: (String) -> Unit,
@@ -152,16 +174,18 @@ private fun LocationSearchBar(
         },
     ) {
         LazyColumn {
-            item {
-                Text(
-                    text = "Current location",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable(onClick = onCurrentLocationClicked),
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Center,
-                )
+            if (showCurrentLocationItem) {
+                item {
+                    Text(
+                        text = "Current location",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable(onClick = onCurrentLocationClicked),
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
             if (loading) {
                 item {

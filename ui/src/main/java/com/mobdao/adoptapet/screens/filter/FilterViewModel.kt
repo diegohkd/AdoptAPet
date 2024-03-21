@@ -35,8 +35,11 @@ class FilterViewModel @Inject constructor(
 
     data class UiState(
         val locationSearchModeIsActive: Boolean = false,
+        val isSelectingCurrentLocationEnabled: Boolean = false,
         val locationProgressIndicatorIsVisible: Boolean = false,
-        val locationAutocompleteAddresses: List<String> = emptyList()
+        val locationAutocompleteAddresses: List<String> = emptyList(),
+        val petType: String = "",
+        val genericErrorDialogIsVisible: Boolean = false,
     )
 
     private val _navAction = MutableStateFlow<Event<NavAction>?>(null)
@@ -50,23 +53,25 @@ class FilterViewModel @Inject constructor(
     var locationSearchQuery: String by mutableStateOf("")
         private set
 
-    private var petType: String = ""
+    private var petType: String? = null
     private var address: Address? = null
     private var locationSearchAddresses: List<Address> = emptyList()
 
     init {
-        // TODO add current location option
         // TODO move everything in the init to functions?
-        // TODO update UI with current filter applied
         // TODO add state to the property names that are not in the UiState?
         // TODO disable applying filter until address is returned?
 
         viewModelScope.launch {
             getSearchFilterUseCase.execute()
-                .catchAndLogException() // TODO Improve this
+                .catchAndLogException {
+                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                }
                 .collect { searchFilter ->
                     address = searchFilter?.address
+                    petType = searchFilter?.petType
                     locationSearchQuery = address?.addressLine.orEmpty()
+                    _uiState.update { it.copy(petType = searchFilter?.petType.orEmpty()) }
                 }
         }
         viewModelScope.launch {
@@ -85,7 +90,9 @@ class FilterViewModel @Inject constructor(
                                 it.copy(locationProgressIndicatorIsVisible = false)
                             }
                         }
-                        .catchAndLogException() // TODO show error state
+                        .catchAndLogException {
+                            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                        }
                         .collect { addresses ->
                             locationSearchAddresses = addresses
                             _uiState.update {
@@ -96,13 +103,23 @@ class FilterViewModel @Inject constructor(
         }
     }
 
+    fun onLocationPermissionStateUpdated(areAllLocationPermissionsGranted: Boolean) {
+        _uiState.update {
+            it.copy(isSelectingCurrentLocationEnabled = areAllLocationPermissionsGranted)
+        }
+    }
+
     fun onCurrentLocationClicked() {
         viewModelScope.launch {
             getCachedCurrentAddressUseCase.execute()
-                .catchAndLogException()
+                .catchAndLogException {
+                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                }
                 .collect {
-                    // TODO Improve this.
-                    if (it == null) return@collect
+                    if (it == null) {
+                        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                        return@collect
+                    }
                     locationSearchQuery = it.addressLine
                     _uiState.update {
                         it.copy(
@@ -140,21 +157,33 @@ class FilterViewModel @Inject constructor(
     }
 
     fun onPetTypeSelected(type: String) {
+        _uiState.update { it.copy(petType = type) }
         petType = type
     }
 
     fun onApplyClicked() {
+        val address = address ?: run {
+            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+            return
+        }
+
         viewModelScope.launch {
             saveSearchFilterUseCase.execute(
                 filter = SearchFilter(
-                    address = address ?: return@launch, // TODO Improve
+                    address = address,
                     petType = petType
                 )
             )
-                .catchAndLogException() // TODO improve
+                .catchAndLogException {
+                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                }
                 .collect {
                     _navAction.value = Event(ApplyClicked)
                 }
         }
+    }
+
+    fun onDismissGenericErrorDialog() {
+        _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
     }
 }

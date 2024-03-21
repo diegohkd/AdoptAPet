@@ -12,18 +12,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.screens.pet_details.PetDetailsViewModel.UiState
 
 @Composable
 fun PetDetailsScreen(viewModel: PetDetailsViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    PetDetailsContent(uiState = uiState)
+    PetDetailsContent(
+        uiState = uiState,
+        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
+    )
 }
 
-// TODO check best way to handle null Pet
 @Composable
-private fun PetDetailsContent(uiState: UiState) {
+private fun PetDetailsContent(
+    uiState: UiState,
+    onDismissGenericErrorDialog: () -> Unit = {},
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -45,5 +51,9 @@ private fun PetDetailsContent(uiState: UiState) {
             modifier = Modifier.padding(start = 8.dp),
             fontSize = 32.sp
         )
+    }
+
+    if (uiState.genericErrorDialogIsVisible) {
+        GenericErrorDialog(onDismissGenericErrorDialog = onDismissGenericErrorDialog)
     }
 }

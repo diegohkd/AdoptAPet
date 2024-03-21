@@ -36,6 +36,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
+import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
@@ -190,17 +191,7 @@ private fun HomeContent(
     }
 
     if (uiState.genericErrorDialogIsVisible) {
-        AlertDialog(
-            onDismissRequest = onDismissGenericErrorDialog,
-            confirmButton = {
-                Button(onClick = onDismissGenericErrorDialog) {
-                    Text(text = "Ok") // TODO do not hardcode
-                }
-            },
-            text = {
-                Text(text = "Oops, something went wrong.") // TODO do not hardcode
-            }
-        )
+        GenericErrorDialog(onDismissGenericErrorDialog = onDismissGenericErrorDialog)
     }
 }
 
