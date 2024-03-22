@@ -158,7 +158,7 @@ class HomeViewModel @Inject constructor(
             itemsCount == 0
         _uiState.update {
             it.copy(
-                locationPlaceholderIsVisible = noPetsFound && !hasLocationPermission,
+                locationPlaceholderIsVisible = noPetsFound && !hasLocationPermission && !isReadyToLoadPets,
                 emptyListPlaceholderIsVisible = noPetsFound && hasLocationPermission && isReadyToLoadPets
             )
         }
