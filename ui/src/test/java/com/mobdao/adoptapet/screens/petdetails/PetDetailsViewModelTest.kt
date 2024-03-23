@@ -4,9 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_ID_ARG
 import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
 import com.mobdao.common.testutils.MainDispatcherRule
+import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
+import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
 import com.mobdao.domain.GetCachedPetUseCase
 import com.mobdao.domain.models.Pet
-import com.mobdao.domain.models.Photo
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,13 +24,10 @@ class PetDetailsViewModelTest {
     var mainCoroutineRule = MainDispatcherRule()
 
     private val petId: String = "pet-id"
-    private val petPhoto: Photo = mockk {
-        every { largeUrl } returns "largeUrl"
-    }
-    private val pet: Pet = mockk {
-        every { name } returns "name"
-        every { photos } returns listOf(petPhoto)
-    }
+    private val pet: Pet = PetMockFactory.create(
+        name = "name",
+        photos = listOf(PhotoMockFactory.create(largeUrl = "largeUrl"))
+    )
 
     private val savedStateHandle: SavedStateHandle = mockk {
         every { get<String>(PET_ID_ARG) } returns petId

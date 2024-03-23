@@ -34,5 +34,6 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":domain"))
     api(libs.bundles.unitTest)
 }

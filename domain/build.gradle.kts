@@ -40,4 +40,6 @@ dependencies {
 
     implementation(libs.google.dagger.hiltAndroid)
     kapt(libs.google.dagger.hiltAndroidCompiler)
+
+    testImplementation(project(":common:test-utils"))
 }
