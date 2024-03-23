@@ -11,12 +11,13 @@ androidx-room = "2.6.1"
 accompanistPermissions = "0.32.0"
 coil-compose = "2.6.0"
 constraintlayoutCompose = "1.0.1"
+coroutines = "1.8.0"
 hilt-android = "2.51"
 hilt-android-compiler = "2.51"
-kotlinxCoroutinesCore = "1.8.0"
-kotlinxCoroutinesPlayServices = "1.8.0"
+junit = "4.13.2"
 navigation-lifecycleRuntimeCompose = "2.7.0"
 logging-interceptor = "4.12.0"
+mockk = "1.13.10"
 moshiKotlin = "1.15.1"
 moshiKotlinCodegen = "1.15.1"
 navigation-compose = "2.7.7"
@@ -59,8 +60,11 @@ google-android-gms-playServicesLocation = { group = "com.google.android.gms", na
 google-dagger-hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt-android" }
 google-dagger-hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt-android-compiler" }
 jakewharton-timber-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-jetbrains-kotlinx-kotlinxCoroutinesPlayServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+jetbrains-kotlinx-kotlinxCoroutinesPlayServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
+jetbrains-kotlinx-kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockk-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 moshi-moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshiKotlin" }
 moshi-moshiKotlinCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
 refrofit2-converterMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit2" }
@@ -76,3 +80,4 @@ google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinSym
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
 
 [bundles]
+unitTest = ["junit-junit", "mockk-mockk", "jetbrains-kotlinx-kotlinxCoroutinesTest"]

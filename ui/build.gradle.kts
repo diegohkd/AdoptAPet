@@ -77,4 +77,6 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.uiTooling)
     debugImplementation(libs.androidx.compose.ui.uiTestManifest)
+
+    testImplementation(project(":common:test-utils"))
 }
