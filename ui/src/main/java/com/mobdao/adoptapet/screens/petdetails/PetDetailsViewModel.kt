@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.navigation.Destination
+import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_ID_ARG
 import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.GetCachedPetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +31,7 @@ class PetDetailsViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
-        val petId: String? = savedStateHandle[Destination.PetDetails.PET_ID_ARG]
+        val petId: String? = savedStateHandle[PET_ID_ARG]
 
         if (petId != null) {
             viewModelScope.launch {
