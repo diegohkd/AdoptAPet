@@ -2,32 +2,32 @@ package com.mobdao.adoptapet.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.LoadState
 import androidx.paging.LoadState.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
+import com.mobdao.adoptapet.screens.home.petspaging.PetsPager
 import com.mobdao.common.kotlin.catchAndLogException
-import com.mobdao.domain.GetCurrentAddressAndSaveSearchFilterUseCase
 import com.mobdao.domain.ObserveSearchFilterUseCase
-import com.mobdao.domain.models.SearchFilter
+import com.mobdao.domain.UpdateCachedPetsFilterWithCurrentLocationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val ITEMS_PER_PAGE = 20
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val observeSearchFilterUseCase: ObserveSearchFilterUseCase,
-    private val getCurrentAddressAndSaveSearchFilterUseCase: GetCurrentAddressAndSaveSearchFilterUseCase,
-    private val petsPagingSourceFactory: PetsPagingSource.Factory,
+    private val updateCachedPetsFilterWithCurrentLocationUseCase: UpdateCachedPetsFilterWithCurrentLocationUseCase,
+    private val petsPager: PetsPager,
 ) : ViewModel() {
 
     data class UiState(
         val locationPlaceholderIsVisible: Boolean = true,
-        val processLocationPermission: Boolean = true,
+        val observeLocationPermissionState: Boolean = true,
         val progressIndicatorIsVisible: Boolean = false,
         val nextPageProgressIndicatorIsVisible: Boolean = false,
         val emptyListPlaceholderIsVisible: Boolean = false,
@@ -52,19 +52,7 @@ class HomeViewModel @Inject constructor(
         data object FilterClicked : NavAction
     }
 
-    val items: Flow<PagingData<Pet>> = Pager(
-        config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
-        pagingSourceFactory = {
-            petsPagingSourceFactory.create(
-                isReadyToLoad = isReadyToLoadPets,
-                searchFilter = searchFilter
-            ).also {
-                petsPagingSource = it
-            }
-        },
-    )
-        .flow
-        .cachedIn(viewModelScope)
+    val items: Flow<PagingData<Pet>> = petsPager.items.cachedIn(viewModelScope)
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -76,10 +64,7 @@ class HomeViewModel @Inject constructor(
     val askLocationPermission: StateFlow<Event<Unit>?> = _askLocationPermission.asStateFlow()
 
     private var hasLocationPermission = false
-    private var isReadyToLoadPets: Boolean = false
-    private var petsPagingSource: PetsPagingSource? = null
-    private var searchFilter: SearchFilter? = null
-    private val isGettingAddress = MutableStateFlow(false)
+    private val isUpdatingFilterWithCurrentLocation = MutableStateFlow(false)
     private val isRefreshingPetsList = MutableStateFlow(false)
 
     init {
@@ -87,16 +72,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             observeSearchFilterUseCase.execute()
                 .catchAndLogException {
-                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                    updateUiState(genericErrorDialogIsVisible = true)
                 }
                 .collect { searchFilter ->
                     if (searchFilter == null) return@collect
-                    isReadyToLoadPets = true
-                    _uiState.update {
-                        it.copy(address = searchFilter.address.addressLine)
-                    }
-                    this@HomeViewModel.searchFilter = searchFilter
-                    petsPagingSource?.invalidate()
+                    updateUiState(address = searchFilter.address.addressLine)
+                    petsPager.setFilterAndRefresh(searchFilter)
                 }
         }
     }
@@ -104,26 +85,20 @@ class HomeViewModel @Inject constructor(
     fun onLocationPermissionStateUpdated(areAllLocationPermissionsGranted: Boolean) {
         if (areAllLocationPermissionsGranted) {
             hasLocationPermission = true
-            _uiState.value = _uiState.value.copy(processLocationPermission = false)
-            _uiState.update {
-                it.copy(
-                    locationPlaceholderIsVisible = false,
-                    // TODO improve this? This is to prevent more calls to onLocationPermissionStateUpdated
-                    //  when navigating back to this screen.
-                    processLocationPermission = false
-                )
-            }
+            updateUiState(
+                locationPlaceholderIsVisible = false,
+                observeLocationPermissionState = false,
+            )
 
-            isGettingAddress.value = true
+            isUpdatingFilterWithCurrentLocation.value = true
             viewModelScope.launch {
-                getCurrentAddressAndSaveSearchFilterUseCase.execute()
+                updateCachedPetsFilterWithCurrentLocationUseCase.execute()
                     .catchAndLogException {
-                        isGettingAddress.value = false
-                        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                        isUpdatingFilterWithCurrentLocation.value = false
+                        updateUiState(genericErrorDialogIsVisible = true)
                     }
                     .collect {
-                        isGettingAddress.value = false
-                        _uiState.value = _uiState.value.copy(address = it.addressLine)
+                        isUpdatingFilterWithCurrentLocation.value = false
                     }
             }
         }
@@ -134,34 +109,24 @@ class HomeViewModel @Inject constructor(
         appendLoadState: LoadState,
         itemsCount: Int
     ) {
-        when (refreshLoadState) {
-            is Error -> {
-                isRefreshingPetsList.value = false
-                _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-            }
-            Loading -> isRefreshingPetsList.value = true
-            is NotLoading -> isRefreshingPetsList.value = false
-        }
-        when (appendLoadState) {
-            is Error ->
-                _uiState.update {
-                    it.copy(
-                        nextPageProgressIndicatorIsVisible = false,
-                        genericErrorDialogIsVisible = true,
-                    )
-                }
-            Loading -> _uiState.update { it.copy(nextPageProgressIndicatorIsVisible = true) }
-            is NotLoading -> _uiState.update { it.copy(nextPageProgressIndicatorIsVisible = false) }
-        }
         val noPetsFound = refreshLoadState is NotLoading &&
-            appendLoadState.endOfPaginationReached &&
-            itemsCount == 0
-        _uiState.update {
-            it.copy(
-                locationPlaceholderIsVisible = noPetsFound && !hasLocationPermission && !isReadyToLoadPets,
-                emptyListPlaceholderIsVisible = noPetsFound && hasLocationPermission && isReadyToLoadPets
-            )
+                appendLoadState.endOfPaginationReached &&
+                itemsCount == 0
+        isRefreshingPetsList.value = when (refreshLoadState) {
+            Loading -> true
+            is Error, is NotLoading -> false
         }
+        updateUiState(
+            locationPlaceholderIsVisible = noPetsFound && !hasLocationPermission &&
+                    !petsPager.isReady(),
+            emptyListPlaceholderIsVisible = noPetsFound && hasLocationPermission
+                    && petsPager.isReady(),
+            genericErrorDialogIsVisible = refreshLoadState is Error || appendLoadState is Error,
+            nextPageProgressIndicatorIsVisible = when (appendLoadState) {
+                Loading -> true
+                is Error, is NotLoading -> false
+            }
+        )
     }
 
     fun onPetClicked(id: String) {
@@ -177,21 +142,49 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onDismissGenericErrorDialog() {
-        _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
+        updateUiState(genericErrorDialogIsVisible = false)
     }
 
     private fun handleProgressIndicatorState() {
         viewModelScope.launch {
             combine(
-                isGettingAddress,
+                isUpdatingFilterWithCurrentLocation,
                 isRefreshingPetsList
             ) { isGettingAddress, isRefreshingPetsList ->
                 isGettingAddress || isRefreshingPetsList
             }
                 .distinctUntilChanged()
-                .collect {
-                    _uiState.value = _uiState.value.copy(progressIndicatorIsVisible = it)
+                .collect { progressIndicatorIsVisible ->
+                    updateUiState(progressIndicatorIsVisible = progressIndicatorIsVisible)
                 }
+        }
+    }
+
+    private fun updateUiState(
+        locationPlaceholderIsVisible: Boolean? = null,
+        observeLocationPermissionState: Boolean? = null,
+        progressIndicatorIsVisible: Boolean? = null,
+        nextPageProgressIndicatorIsVisible: Boolean? = null,
+        emptyListPlaceholderIsVisible: Boolean? = null,
+        genericErrorDialogIsVisible: Boolean? = null,
+        address: String? = null,
+    ) {
+        _uiState.update {
+            it.copy(
+                locationPlaceholderIsVisible = locationPlaceholderIsVisible
+                    ?: it.locationPlaceholderIsVisible,
+                observeLocationPermissionState = observeLocationPermissionState
+                    ?: it.observeLocationPermissionState,
+                progressIndicatorIsVisible = progressIndicatorIsVisible
+                    ?: it.progressIndicatorIsVisible,
+                nextPageProgressIndicatorIsVisible = nextPageProgressIndicatorIsVisible
+                    ?: it.nextPageProgressIndicatorIsVisible,
+                emptyListPlaceholderIsVisible = emptyListPlaceholderIsVisible
+                    ?: it.emptyListPlaceholderIsVisible,
+                genericErrorDialogIsVisible = genericErrorDialogIsVisible
+                    ?: it.genericErrorDialogIsVisible,
+                address = address ?: it.address,
+            )
         }
     }
 }

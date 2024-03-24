@@ -1,45 +1,46 @@
-package com.mobdao.adoptapet.screens.home
+package com.mobdao.adoptapet.screens.home.petspaging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
-import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet.Breeds
+import com.mobdao.adoptapet.screens.home.HomeViewModel
 import com.mobdao.domain.GetPetsUseCase
 import com.mobdao.domain.models.SearchFilter
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
+
+private const val DEFAULT_INITIAL_PAGE_NUMBER = 1
 
 class PetsPagingSource private constructor(
-    private val isReadyToLoad: Boolean,
     private val getPetsUseCase: GetPetsUseCase,
     private val searchFilter: SearchFilter?,
-) : PagingSource<Int, Pet>() {
+) : PagingSource<Int, HomeViewModel.Pet>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Pet>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, HomeViewModel.Pet>): Int? {
         // Force to always start from first page on refresh
         return null
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pet> {
-        if (!isReadyToLoad) {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, HomeViewModel.Pet> {
+        if (searchFilter == null) {
             return LoadResult.Page(
                 data = emptyList(),
                 prevKey = null,
                 nextKey = null,
             )
         }
-        val pageNumber: Int = params.key ?: 1
+        val pageNumber: Int = params.key ?: DEFAULT_INITIAL_PAGE_NUMBER
         // TODO handle page size
         return try {
-            val pets: List<Pet> = getPetsUseCase
+            val pets: List<HomeViewModel.Pet> = getPetsUseCase
                 .execute(pageNumber = pageNumber, searchFilter = searchFilter)
                 .first()
                 .map {
-                    Pet(
+                    HomeViewModel.Pet(
                         id = it.id,
                         name = it.name,
-                        breeds = Breeds(
+                        breeds = HomeViewModel.Pet.Breeds(
                             primary = it.breeds.primary,
                             secondary = it.breeds.secondary,
                         ),
@@ -57,12 +58,10 @@ class PetsPagingSource private constructor(
         }
     }
 
+    @Singleton
     class Factory @Inject constructor(private val getPetsUseCase: GetPetsUseCase) {
 
-        fun create(
-            isReadyToLoad: Boolean,
-            searchFilter: SearchFilter?
-        ): PetsPagingSource =
-            PetsPagingSource(isReadyToLoad, getPetsUseCase, searchFilter)
+        fun create(searchFilter: SearchFilter?): PetsPagingSource =
+            PetsPagingSource(getPetsUseCase, searchFilter)
     }
 }

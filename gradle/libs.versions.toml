@@ -15,6 +15,7 @@ coroutines = "1.8.0"
 hilt-android = "2.51"
 hilt-android-compiler = "2.51"
 junit = "4.13.2"
+junitParams = "1.1.1"
 navigation-lifecycleRuntimeCompose = "2.7.0"
 logging-interceptor = "4.12.0"
 mockk = "1.13.10"
@@ -64,6 +65,7 @@ jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", nam
 jetbrains-kotlinx-kotlinxCoroutinesPlayServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 jetbrains-kotlinx-kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junit" }
+pragmatists-jUnitParams = { group = "pl.pragmatists", name = "JUnitParams", version.ref = "junitParams" }
 mockk-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 moshi-moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshiKotlin" }
 moshi-moshiKotlinCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
@@ -80,4 +82,9 @@ google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinSym
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
 
 [bundles]
-unitTest = ["junit-junit", "mockk-mockk", "jetbrains-kotlinx-kotlinxCoroutinesTest"]
+unitTest = [
+    "junit-junit",
+    "mockk-mockk",
+    "jetbrains-kotlinx-kotlinxCoroutinesTest",
+    "pragmatists-jUnitParams"
+]

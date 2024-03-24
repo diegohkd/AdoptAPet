@@ -52,7 +52,7 @@ fun HomeScreen(
     onFilterClicked: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    if (uiState.processLocationPermission) {
+    if (uiState.observeLocationPermissionState) {
         val locationPermissionState = rememberMultiplePermissionsState(
             permissions = listOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
         )
