@@ -34,7 +34,7 @@ fun AdoptAPetNavHost(navController: NavHostController) {
         }
         composable(route = Destination.Filter.route) {
             FilterScreen(
-                onApplyFilterRequested = {
+                onFilterApplied = {
                     navController.popBackStack()
                 }
             )
