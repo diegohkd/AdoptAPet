@@ -1,6 +1,6 @@
 package com.mobdao.data.utils.mappers
 
-import com.mobdao.data.common.AddressCache
+import com.mobdao.data.common.AddressDbEntity
 import com.mobdao.domain.api.entitites.Address
 import com.mobdao.remote.responses.GeocodeResult
 import javax.inject.Inject
@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class AddressMapper @Inject constructor() {
 
-    fun mapToEntity(address: AddressCache): Address =
+    fun mapToEntity(address: AddressDbEntity): Address =
         with(address) {
             Address(
                 addressLine = addressLine,
@@ -27,12 +27,12 @@ class AddressMapper @Inject constructor() {
             )
         }
 
-    fun mapToCache(address: Address): AddressCache =
+    fun mapToDbEntity(address: Address): AddressDbEntity =
         with(address) {
-            AddressCache(
-                addressLine = addressLine,
+            AddressDbEntity(
                 latitude = latitude,
                 longitude = longitude,
+                addressLine = addressLine,
             )
         }
 }

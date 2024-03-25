@@ -5,12 +5,14 @@ import com.mobdao.data.repositories.GeoLocationRepositoryImpl
 import com.mobdao.data.repositories.PetsRepositoryImpl
 import com.mobdao.data.repositories.SearchFilterRepositoryImpl
 import com.mobdao.data.services.LogServiceImpl
+import com.mobdao.data.services.OnboardingServiceImpl
 import com.mobdao.data.utils.AccessTokenManagerImpl
 import com.mobdao.data.utils.factories.AppConfigFactory
 import com.mobdao.domain.api.repositories.GeoLocationRepository
 import com.mobdao.domain.api.repositories.PetsRepository
 import com.mobdao.domain.api.repositories.SearchFilterRepository
 import com.mobdao.domain.api.services.LogService
+import com.mobdao.domain.api.services.OnboardingService
 import com.mobdao.remote.api.AccessTokenManager
 import dagger.Binds
 import dagger.Module
@@ -25,6 +27,9 @@ abstract class DataModule {
 
     @Binds
     internal abstract fun bindsLogService(impl: LogServiceImpl): LogService
+
+    @Binds
+    internal abstract fun bindsOnboardingService(impl: OnboardingServiceImpl): OnboardingService
 
     @Binds
     internal abstract fun bindsPetsRepository(impl: PetsRepositoryImpl): PetsRepository

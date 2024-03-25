@@ -9,7 +9,7 @@ import com.mobdao.adoptapet.utils.PetDomain
 import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
-import com.mobdao.domain.GetPetsUseCase
+import com.mobdao.domain.usecases.pets.GetPetsUseCase
 import com.mobdao.domain.models.SearchFilter
 import io.mockk.every
 import io.mockk.mockk

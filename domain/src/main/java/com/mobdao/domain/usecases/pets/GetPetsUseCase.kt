@@ -1,4 +1,4 @@
-package com.mobdao.domain
+package com.mobdao.domain.usecases.pets
 
 import com.mobdao.domain.api.repositories.PetsRepository
 import com.mobdao.domain.models.Pet

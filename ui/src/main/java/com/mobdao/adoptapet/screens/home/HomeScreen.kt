@@ -1,7 +1,5 @@
 package com.mobdao.adoptapet.screens.home
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,8 +30,6 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.common.theme.PetItemBackground
@@ -44,7 +40,6 @@ import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
 import com.mobdao.adoptapet.screens.home.HomeViewModel.UiState
 import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
@@ -52,20 +47,6 @@ fun HomeScreen(
     onFilterClicked: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    if (uiState.observeLocationPermissionState) {
-        val locationPermissionState = rememberMultiplePermissionsState(
-            permissions = listOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
-        )
-        LaunchedEffect(locationPermissionState.allPermissionsGranted) {
-            viewModel.onLocationPermissionStateUpdated(
-                areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
-            )
-        }
-        val askLocationPermissionEvent by viewModel.askLocationPermission.collectAsStateWithLifecycle()
-        askLocationPermissionEvent?.getContentIfNotHandled()?.let {
-            locationPermissionState.launchMultiplePermissionRequest()
-        }
-    }
     val petsPagingItems: LazyPagingItems<Pet> = viewModel.items.collectAsLazyPagingItems()
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
 
@@ -87,24 +68,22 @@ fun HomeScreen(
         )
     }
 
-    HomeContent(
+    UiContent(
         uiState = uiState,
         petsPagingItems = petsPagingItems,
         onPetClicked = viewModel::onPetClicked,
         onFilterClicked = viewModel::onFilterClicked,
-        onRequestLocationPermissionClicked = viewModel::onRequestLocationPermissionClicked,
         onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog
     )
 }
 
 // TODO check if passing LazyPagingItems causes extra recompositions
 @Composable
-private fun HomeContent(
+private fun UiContent(
     uiState: UiState,
     petsPagingItems: LazyPagingItems<Pet>,
     onPetClicked: (id: String) -> Unit = {},
     onFilterClicked: () -> Unit = {},
-    onRequestLocationPermissionClicked: () -> Unit = {},
     onDismissGenericErrorDialog: () -> Unit = {},
 ) {
     Scaffold(
@@ -116,7 +95,6 @@ private fun HomeContent(
                 .fillMaxSize()
         ) {
             val (
-                locationPermissionPlaceholderRef,
                 toolbarRef,
                 petListRef,
                 progressIndicatorRef,
@@ -159,20 +137,6 @@ private fun HomeContent(
                     modifier = Modifier.constrainAs(progressIndicatorRef) {
                         centerTo(parent)
                     }
-                )
-            }
-            if (uiState.locationPlaceholderIsVisible) {
-                PermissionRequestPlaceholder(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .constrainAs(locationPermissionPlaceholderRef) {
-                            start.linkTo(parent.start)
-                            top.linkTo(toolbarRef.bottom)
-                            bottom.linkTo(parent.bottom)
-                            height = Dimension.fillToConstraints
-                        },
-                    onRequestLocationPermissionClicked = onRequestLocationPermissionClicked,
-                    onFilterClicked = onFilterClicked,
                 )
             }
             if (uiState.emptyListPlaceholderIsVisible) {
@@ -301,37 +265,6 @@ private fun NextPageProgressIndicator(modifier: Modifier) {
 }
 
 @Composable
-private fun PermissionRequestPlaceholder(
-    modifier: Modifier,
-    onRequestLocationPermissionClicked: () -> Unit,
-    onFilterClicked: () -> Unit,
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = "No pets found. \nAllow location permission or change your filters and try again.",
-            fontSize = 18.sp,
-            textAlign = TextAlign.Center,
-        )
-        Button(
-            onClick = onRequestLocationPermissionClicked,
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text(text = "Allow location permission")
-        }
-        Button(
-            onClick = onFilterClicked,
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text(text = "Update filters")
-        }
-    }
-}
-
-@Composable
 private fun EmptyListPlaceholder(modifier: Modifier, onFilterClicked: () -> Unit) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -356,7 +289,7 @@ private fun EmptyListPlaceholder(modifier: Modifier, onFilterClicked: () -> Unit
 @Composable
 fun HomeContentPreview() {
     AdoptAPetTheme {
-        HomeContent(
+        UiContent(
             uiState = UiState(
                 address = "Av Dr Esmerino Ribeiro do Valle, 680, Nova Floresta",
             ),

@@ -1,4 +1,4 @@
-package com.mobdao.domain
+package com.mobdao.domain.usecases.location
 
 import com.mobdao.common.exceptions.CurrentLocationNotFoundException
 import com.mobdao.domain.api.repositories.GeoLocationRepository

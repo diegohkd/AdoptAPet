@@ -15,4 +15,13 @@ class AddressMapper @Inject constructor() {
                 longitude = longitude,
             )
         }
+
+    fun map(address: Address): AddressEntity =
+        with(address) {
+            AddressEntity(
+                addressLine = addressLine,
+                latitude = latitude,
+                longitude = longitude,
+            )
+        }
 }

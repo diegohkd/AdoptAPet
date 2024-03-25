@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,84 +28,12 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
 import com.mobdao.domain.models.Address
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LocationSearchBar(
-    searchQuery: String,
-    active: Boolean,
-    loading: Boolean,
-    showCurrentLocationItem: Boolean,
-    onLocationSearchActiveChange: (Boolean) -> Unit,
-    autocompleteAddresses: List<String>,
-    onSearchQueryChange: (String) -> Unit,
-    onAutocompleteAddressSelected: (index: Int) -> Unit,
-    onCurrentLocationClicked: () -> Unit,
-    onClearClicked: () -> Unit,
-) {
-    SearchBar(
-        query = searchQuery,
-        onQueryChange = onSearchQueryChange,
-        onSearch = { /* no-op*/ },
-        active = active,
-        onActiveChange = onLocationSearchActiveChange,
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = {
-            Text(text = stringResource(R.string.location))
-        },
-        trailingIcon = {
-            if (searchQuery.isNotEmpty()) {
-                IconButton(onClick = onClearClicked) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        contentDescription = ""
-                    )
-                }
-            }
-        },
-    ) {
-        LazyColumn {
-            if (showCurrentLocationItem) {
-                item {
-                    Text(
-                        text = "Current location",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable(onClick = onCurrentLocationClicked),
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-            if (loading) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
-            itemsIndexed(autocompleteAddresses) { index, address ->
-                Text(
-                    text = address,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable { onAutocompleteAddressSelected(index) },
-                )
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationSearchBar(
+    modifier: Modifier = Modifier,
     selectedAddress: String = "",
+    paddingHorizontal: Dp = 0.dp,
     onAddressSelected: (Address) -> Unit,
     onError: (Throwable?) -> Unit, // TODO is it ok to pass throwable?
     viewModel: LocationSearchBarViewModel = hiltViewModel(),
@@ -136,6 +65,8 @@ fun LocationSearchBar(
     }
 
     UiContent(
+        paddingHorizontal = paddingHorizontal,
+        modifier = modifier,
         searchQuery = viewModel.locationSearchQuery,
         active = uiState.locationSearchModeIsActive,
         loading = uiState.locationProgressIndicatorIsVisible,
@@ -151,6 +82,8 @@ fun LocationSearchBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UiContent(
+    paddingHorizontal: Dp,
+    modifier: Modifier = Modifier,
     searchQuery: String,
     active: Boolean,
     loading: Boolean,
@@ -167,7 +100,9 @@ private fun UiContent(
         onSearch = { /* no-op*/ },
         active = active,
         onActiveChange = onLocationSearchActiveChange,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = if (active) 0.dp else paddingHorizontal),
         placeholder = {
             Text(text = stringResource(R.string.location))
         },

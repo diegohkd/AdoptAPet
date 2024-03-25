@@ -1,18 +1,18 @@
-package com.mobdao.domain
+package com.mobdao.domain.usecases.filter
 
 import com.mobdao.domain.api.repositories.SearchFilterRepository
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.utils.mappers.SearchFilterMapper
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class ObserveSearchFilterUseCase @Inject constructor(
+class GetSearchFilterUseCase @Inject constructor(
     private val searchFilterRepository: SearchFilterRepository,
     private val searchFilterMapper: SearchFilterMapper,
 ) {
 
-    fun execute(): Flow<SearchFilter?> =
-        searchFilterRepository.observeSearchFilter()
-            .map { it?.let(searchFilterMapper::mapFromEntity) }
+    fun execute(): Flow<SearchFilter?> = flow {
+        emit(searchFilterRepository.getSearchFilter()?.let(searchFilterMapper::mapFromEntity))
+    }
 }

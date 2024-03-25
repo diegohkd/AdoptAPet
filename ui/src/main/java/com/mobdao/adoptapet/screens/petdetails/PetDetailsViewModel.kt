@@ -3,10 +3,9 @@ package com.mobdao.adoptapet.screens.petdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mobdao.adoptapet.navigation.Destination
 import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_ID_ARG
 import com.mobdao.common.kotlin.catchAndLogException
-import com.mobdao.domain.GetCachedPetUseCase
+import com.mobdao.domain.usecases.pets.GetCachedPetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

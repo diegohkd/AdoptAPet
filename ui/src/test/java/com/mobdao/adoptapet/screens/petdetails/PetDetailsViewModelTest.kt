@@ -6,7 +6,7 @@ import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
-import com.mobdao.domain.GetCachedPetUseCase
+import com.mobdao.domain.usecases.pets.GetCachedPetUseCase
 import com.mobdao.domain.models.Pet
 import io.mockk.every
 import io.mockk.mockk

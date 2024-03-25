@@ -19,18 +19,13 @@ class GeoLocationRepositoryImpl @Inject constructor(
             geoLocationRemoteDataSource.getCurrentLocationCoordinates()
         val reverseGeocodeResponse =
             geoLocationRemoteDataSource.getLocationAddress(geoCoordinates = currentGeoCoordinates)
-        val address = reverseGeocodeResponse
+        return reverseGeocodeResponse
             .results
             .firstOrNull()
             ?.let(addressMapper::mapToEntity)
-
-        geoLocationLocalDataSource.saveCurrentAddress(
-            address = address?.let(addressMapper::mapToCache)
-        )
-        return address
     }
 
-    override fun getCachedLocationAddress(): Address? =
+    override suspend fun getCachedCurrentLocationAddress(): Address? =
         geoLocationLocalDataSource.getCurrentAddress()?.let(addressMapper::mapToEntity)
 
     override suspend fun autocompleteLocation(location: String): List<Address> =
@@ -41,4 +36,8 @@ class GeoLocationRepositoryImpl @Inject constructor(
                 .results
                 .map(addressMapper::mapToEntity)
         }
+
+    override suspend fun cacheCurrentLocationAddress(address: Address) {
+        geoLocationLocalDataSource.saveCurrentAddress(addressMapper.mapToDbEntity(address))
+    }
 }

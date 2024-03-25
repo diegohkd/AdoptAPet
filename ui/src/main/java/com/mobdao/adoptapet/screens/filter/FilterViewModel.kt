@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.FilterApplied
 import com.mobdao.common.kotlin.catchAndLogException
-import com.mobdao.domain.GetSearchFilterUseCase
-import com.mobdao.domain.SaveSearchFilterUseCase
+import com.mobdao.domain.usecases.filter.GetSearchFilterUseCase
+import com.mobdao.domain.usecases.filter.SaveSearchFilterUseCase
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.models.SearchFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,7 +44,6 @@ class FilterViewModel @Inject constructor(
     private var address: Address? = null
 
     init {
-        // TODO move everything in the init to functions?
         // TODO add state to the property names that are not in the UiState?
         // TODO disable applying filter until address is returned?
 

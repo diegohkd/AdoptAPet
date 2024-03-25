@@ -2,8 +2,10 @@ package com.mobdao.cache.di
 
 import android.content.Context
 import com.mobdao.cache.AccessTokenLocalDataSource
+import com.mobdao.cache.OnboardingLocalDataSource
 import com.mobdao.cache.database.AppDatabase
 import com.mobdao.cache.database.AppDatabaseFactory
+import com.mobdao.cache.database.daos.AddressDao
 import com.mobdao.cache.database.daos.AnimalDao
 import com.mobdao.cache.factories.SharedPreferencesFactory
 import dagger.Module
@@ -27,10 +29,21 @@ internal abstract class CacheModule {
 
         @Singleton
         @Provides
-        fun provideAccessTokenHolder(
+        fun provideAccessTokenLocalDataSource(
             sharedPreferencesFactory: SharedPreferencesFactory
         ): AccessTokenLocalDataSource =
-            AccessTokenLocalDataSource(sharedPreferencesFactory.createForAccessTokenHolder())
+            AccessTokenLocalDataSource(sharedPreferencesFactory.createForAccessTokenDataSource())
+
+        @Singleton
+        @Provides
+        fun provideOnboardingLocalDataSource(
+            sharedPreferencesFactory: SharedPreferencesFactory
+        ): OnboardingLocalDataSource =
+            OnboardingLocalDataSource(sharedPreferencesFactory.createForOnboardingDataSource())
+
+        @Singleton
+        @Provides
+        fun provideAddressDao(appDatabase: AppDatabase): AddressDao = appDatabase.addressDao()
 
         @Singleton
         @Provides

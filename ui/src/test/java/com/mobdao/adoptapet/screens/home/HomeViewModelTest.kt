@@ -4,8 +4,7 @@ import com.mobdao.adoptapet.screens.home.petspaging.PetsPager
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.domain.ObserveSearchFilterUseCase
-import com.mobdao.domain.UpdateCachedPetsFilterWithCurrentLocationUseCase
+import com.mobdao.domain.usecases.filter.ObserveSearchFilterUseCase
 import com.mobdao.domain.models.SearchFilter
 import io.mockk.every
 import io.mockk.justRun

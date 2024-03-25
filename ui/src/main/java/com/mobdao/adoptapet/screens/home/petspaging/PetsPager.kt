@@ -9,6 +9,7 @@ import com.mobdao.domain.models.SearchFilter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
@@ -23,6 +24,7 @@ class PetsPager @Inject constructor(
     private val searchFilter = MutableStateFlow<SearchFilter?>(null)
 
     val items: Flow<PagingData<Pet>> = searchFilter
+        .filterNotNull()
         .flatMapLatest { searchFilter ->
             pagerFactory.create(
                 config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
@@ -35,6 +37,4 @@ class PetsPager @Inject constructor(
     fun setFilterAndRefresh(searchFilter: SearchFilter) {
         this.searchFilter.value = searchFilter
     }
-
-    fun isReady(): Boolean = searchFilter.value != null
 }

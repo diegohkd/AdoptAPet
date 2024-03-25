@@ -6,8 +6,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBar
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.FilterApplied
@@ -29,7 +31,7 @@ fun FilterScreen(
         null -> {}
     }
 
-    FilterContent(
+    UiContent(
         uiState = uiState,
         onFailedToGetAddress = viewModel::onFailedToGetAddress,
         onAddressSelected = viewModel::onAddressSelected,
@@ -41,7 +43,7 @@ fun FilterScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun FilterContent(
+private fun UiContent(
     uiState: UiState,
     onFailedToGetAddress: (Throwable?) -> Unit,
     onAddressSelected: (Address) -> Unit,
@@ -91,7 +93,7 @@ private fun FilterContent(
             onClick = onApplyClicked,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "Apply")
+            Text(text = stringResource(R.string.apply))
         }
     }
 

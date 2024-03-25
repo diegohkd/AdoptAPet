@@ -1,4 +1,4 @@
-package com.mobdao.domain
+package com.mobdao.domain.usecases.location
 
 import com.mobdao.domain.api.repositories.GeoLocationRepository
 import com.mobdao.domain.models.Address

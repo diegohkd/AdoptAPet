@@ -5,14 +5,21 @@ import android.content.SharedPreferences
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val ACCESS_TOKEN_HOLDER_PREFERENCES_KEY = "ACCESS_TOKEN_HOLDER_PREFERENCES_KEY"
+private const val ACCESS_TOKEN_PREFERENCES_KEY = "ACCESS_TOKEN_PREFERENCES_KEY"
+private const val ONBOARDING_PREFERENCES_KEY = "ONBOARDING_PREFERENCES_KEY"
 
 @Singleton
 internal class SharedPreferencesFactory @Inject constructor(private val context: Context) {
 
-    fun createForAccessTokenHolder(): SharedPreferences =
+    fun createForAccessTokenDataSource(): SharedPreferences =
+        create(ACCESS_TOKEN_PREFERENCES_KEY)
+
+    fun createForOnboardingDataSource(): SharedPreferences =
+        create(ONBOARDING_PREFERENCES_KEY)
+
+    private fun create(key: String): SharedPreferences =
         context.getSharedPreferences(
-            ACCESS_TOKEN_HOLDER_PREFERENCES_KEY,
+            key,
             Context.MODE_PRIVATE
         )
 }

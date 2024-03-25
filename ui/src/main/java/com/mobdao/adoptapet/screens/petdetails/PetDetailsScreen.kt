@@ -19,14 +19,14 @@ import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
 fun PetDetailsScreen(viewModel: PetDetailsViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    PetDetailsContent(
+    UiContent(
         uiState = uiState,
         onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
     )
 }
 
 @Composable
-private fun PetDetailsContent(
+private fun UiContent(
     uiState: UiState,
     onDismissGenericErrorDialog: () -> Unit = {},
 ) {

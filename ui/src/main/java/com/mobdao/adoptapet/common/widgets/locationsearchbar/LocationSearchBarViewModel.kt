@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
-import com.mobdao.domain.GetAutocompleteLocationOptionsUseCase
-import com.mobdao.domain.GetCurrentLocationUseCase
+import com.mobdao.domain.usecases.location.GetAutocompleteLocationOptionsUseCase
+import com.mobdao.domain.usecases.location.GetCurrentLocationUseCase
 import com.mobdao.domain.models.Address
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -16,6 +16,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val LOCATION_SEARCH_DEBOUNCE = 1000L
+
+// TODO fix: if first click on clear and then current location, current location is not fetched
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -145,6 +147,7 @@ class LocationSearchBarViewModel @Inject constructor(
                     }
                     locationSearchAddresses = emptyList()
                     address = it
+                    _addressSelected.value = Event(it)
                 }
         }
     }
