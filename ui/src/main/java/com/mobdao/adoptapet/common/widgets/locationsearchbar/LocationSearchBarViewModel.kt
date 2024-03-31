@@ -6,18 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
+import com.mobdao.domain.models.Address
 import com.mobdao.domain.usecases.location.GetAutocompleteLocationOptionsUseCase
 import com.mobdao.domain.usecases.location.GetCurrentLocationUseCase
-import com.mobdao.domain.models.Address
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val LOCATION_SEARCH_DEBOUNCE = 1000L
-
-// TODO fix: if first click on clear and then current location, current location is not fetched
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -28,22 +28,24 @@ class LocationSearchBarViewModel @Inject constructor(
 
     data class UiState(
         val selectedAddress: Address? = null,
-        val locationSearchModeIsActive: Boolean = false,
-        val locationProgressIndicatorIsVisible: Boolean = false,
+        val searchModeIsActive: Boolean = false,
+        val progressIndicatorIsVisible: Boolean = false,
         val locationAutocompleteAddresses: List<String> = emptyList(),
     )
+
+    data class SelectedAddressHolder(val address: Address?)
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _addressSelected = MutableStateFlow<Event<Address>?>(null)
-    val addressSelected: StateFlow<Event<Address>?> = _addressSelected.asStateFlow()
+    private val _addressSelected = MutableStateFlow<Event<SelectedAddressHolder?>?>(null)
+    val addressSelected: StateFlow<Event<SelectedAddressHolder?>?> = _addressSelected.asStateFlow()
 
     private val _errorEncountered = MutableStateFlow<Event<Throwable?>?>(null)
     val errorEncountered: StateFlow<Event<Throwable?>?> = _errorEncountered.asStateFlow()
 
-    private val _askLocationPermission = MutableStateFlow<Event<Unit>?>(null)
-    val askLocationPermission: StateFlow<Event<Unit>?> = _askLocationPermission.asStateFlow()
+    private val _requestLocationPermission = MutableStateFlow<Event<Unit>?>(null)
+    val requestLocationPermission = _requestLocationPermission.asStateFlow()
 
     // Cannot use StateFlow for the public state as it causes inconsistency issues
     var locationSearchQuery: String by mutableStateOf("")
@@ -54,38 +56,14 @@ class LocationSearchBarViewModel @Inject constructor(
     private var address: Address? = null
     private var locationSearchAddresses: List<Address> = emptyList()
     private val locationSearchQueryObservable = MutableSharedFlow<String>()
+    private var autocompleteLocationJob: Job? = null
+    private var currentLocationJob: Job? = null
 
     init {
-        viewModelScope.launch {
-            locationSearchQueryObservable
-                .onEach { locationSearchQuery = it }
-                .debounce(LOCATION_SEARCH_DEBOUNCE)
-                .collect { searchQuery ->
-                    getAutocompleteLocationOptionsUseCase.execute(searchQuery)
-                        .onStart {
-                            _uiState.update {
-                                it.copy(locationProgressIndicatorIsVisible = true)
-                            }
-                        }
-                        .onCompletion {
-                            _uiState.update {
-                                it.copy(locationProgressIndicatorIsVisible = false)
-                            }
-                        }
-                        .catch {
-                            _errorEncountered.value = Event(it)
-                        }
-                        .collect { addresses ->
-                            locationSearchAddresses = addresses
-                            _uiState.update {
-                                it.copy(locationAutocompleteAddresses = addresses.map { it.addressLine })
-                            }
-                        }
-                }
-        }
+        getAutocompleteOptionsOnSearchQueryChanged()
     }
 
-    fun onSelectedAddressUpdated(address: String) {
+    fun init(address: String) {
         locationSearchQuery = address
     }
 
@@ -101,54 +79,101 @@ class LocationSearchBarViewModel @Inject constructor(
             updateAddressWithCurrentLocation()
         } else {
             hasRequestedLocationPermission = true
-            _askLocationPermission.value = Event(Unit)
+            _requestLocationPermission.value = Event(Unit)
         }
     }
 
     fun onLocationSearchQueryChanged(newQuery: String) {
+        locationSearchQuery = newQuery
         viewModelScope.launch {
             locationSearchQueryObservable.emit(newQuery)
         }
     }
 
-    fun onLocationSearchActiveChange(isActive: Boolean) {
-        _uiState.update { it.copy(locationSearchModeIsActive = isActive) }
+    fun onSearchModeActiveChange(isActive: Boolean) {
+        _uiState.update { it.copy(searchModeIsActive = isActive) }
     }
 
     fun onAddressItemClicked(index: Int) {
+        autocompleteLocationJob?.cancelChildren()
         val address = locationSearchAddresses[index]
+        clearCurrentSearchResults()
+        _uiState.update { it.copy(searchModeIsActive = false) }
+
         this.address = address
-        _addressSelected.value = Event(address)
-        _uiState.update { it.copy(locationSearchModeIsActive = false) }
+        locationSearchQuery = address.addressLine
+        _addressSelected.value = Event(SelectedAddressHolder(address))
     }
 
     fun onClearLocationSearchClicked() {
+        autocompleteLocationJob?.cancel()
+        locationSearchQuery = ""
+        address = null
+        _addressSelected.value = Event(SelectedAddressHolder(address = null))
+        clearCurrentSearchResults()
+    }
+
+    private fun getAutocompleteOptionsOnSearchQueryChanged() {
         viewModelScope.launch {
-            locationSearchQueryObservable.emit("")
+            locationSearchQueryObservable
+                .debounce(LOCATION_SEARCH_DEBOUNCE)
+                .collect { searchQuery ->
+                    getAutocompleteOptions(searchQuery)
+                }
+        }
+    }
+
+    private fun getAutocompleteOptions(searchQuery: String) {
+        currentLocationJob?.cancel()
+        autocompleteLocationJob = viewModelScope.launch {
+            getAutocompleteLocationOptionsUseCase.execute(searchQuery)
+                .onStart {
+                    _uiState.update {
+                        it.copy(progressIndicatorIsVisible = true)
+                    }
+                }
+                .onCompletion {
+                    _uiState.update {
+                        it.copy(progressIndicatorIsVisible = false)
+                    }
+                }
+                .catch {
+                    _errorEncountered.value = Event(it)
+                }
+                .collect { addresses ->
+                    locationSearchAddresses = addresses
+                    _uiState.update {
+                        it.copy(locationAutocompleteAddresses = addresses.map { it.addressLine })
+                    }
+                }
         }
     }
 
     private fun updateAddressWithCurrentLocation() {
-        _uiState.update { it.copy(locationProgressIndicatorIsVisible = true) }
-        viewModelScope.launch {
+        _uiState.update { it.copy(progressIndicatorIsVisible = true) }
+        currentLocationJob = viewModelScope.launch {
             getCurrentLocationUseCase.execute()
                 .catch {
-                    _uiState.update { it.copy(locationProgressIndicatorIsVisible = false) }
+                    _uiState.update { it.copy(progressIndicatorIsVisible = false) }
                     _errorEncountered.value = Event(it)
                 }
-                .collect {
-                    _uiState.update { it.copy(locationProgressIndicatorIsVisible = false) }
-                    locationSearchQuery = it.addressLine
+                .collect { address ->
                     _uiState.update {
                         it.copy(
-                            locationSearchModeIsActive = false,
-                            locationAutocompleteAddresses = emptyList()
+                            progressIndicatorIsVisible = false,
+                            searchModeIsActive = false,
                         )
                     }
-                    locationSearchAddresses = emptyList()
-                    address = it
-                    _addressSelected.value = Event(it)
+                    clearCurrentSearchResults()
+                    locationSearchQuery = address.addressLine
+                    this@LocationSearchBarViewModel.address = address
+                    _addressSelected.value = Event(SelectedAddressHolder(address))
                 }
         }
+    }
+
+    private fun clearCurrentSearchResults() {
+        locationSearchAddresses = emptyList()
+        _uiState.update { it.copy(locationAutocompleteAddresses = emptyList()) }
     }
 }

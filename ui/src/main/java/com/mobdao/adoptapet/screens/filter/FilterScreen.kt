@@ -33,8 +33,8 @@ fun FilterScreen(
 
     UiContent(
         uiState = uiState,
-        onFailedToGetAddress = viewModel::onFailedToGetAddress,
-        onAddressSelected = viewModel::onAddressSelected,
+        onFailedToGetAddress = viewModel::onFailedToSearchAddress,
+        onAddressSelected = viewModel::onSearchedAddressSelected,
         onPetTypeSelected = viewModel::onPetTypeSelected,
         onApplyClicked = viewModel::onApplyClicked,
         onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
@@ -46,7 +46,7 @@ fun FilterScreen(
 private fun UiContent(
     uiState: UiState,
     onFailedToGetAddress: (Throwable?) -> Unit,
-    onAddressSelected: (Address) -> Unit,
+    onAddressSelected: (Address?) -> Unit,
     onPetTypeSelected: (String) -> Unit,
     onApplyClicked: () -> Unit,
     onDismissGenericErrorDialog: () -> Unit,
@@ -55,7 +55,7 @@ private fun UiContent(
 
     Column(modifier = Modifier.fillMaxSize()) {
         LocationSearchBar(
-            selectedAddress = uiState.selectedAddress,
+            initialAddress = uiState.initialAddress,
             onAddressSelected = onAddressSelected,
             onError = onFailedToGetAddress,
         )
@@ -91,7 +91,8 @@ private fun UiContent(
         }
         Button(
             onClick = onApplyClicked,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            enabled = uiState.isApplyButtonEnabled,
         ) {
             Text(text = stringResource(R.string.apply))
         }

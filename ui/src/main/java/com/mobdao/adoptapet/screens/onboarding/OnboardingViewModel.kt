@@ -16,8 +16,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO disable next button if location is not selected
-
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val completedOnboardingUseCase: CompleteOnboardingUseCase,
@@ -29,6 +27,7 @@ class OnboardingViewModel @Inject constructor(
 
     data class UiState(
         val selectedAddress: String = "",
+        val nextButtonIsEnabled: Boolean = false,
         val genericErrorDialogIsVisible: Boolean = false,
     )
 
@@ -38,27 +37,24 @@ class OnboardingViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private var address: Address? = null
+    private val address = MutableStateFlow<Address?>(null)
+
+    init {
+        handleNextButtonEnabledState()
+    }
 
     fun onFailedToGetAddress(throwable: Throwable?) {
         throwable?.let(Timber::e)
         _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
     }
 
-    fun onAddressSelected(address: Address) {
-        this.address = address
-        _uiState.update { it.copy(selectedAddress = address.addressLine) }
+    fun onAddressSelected(address: Address?) {
+        this.address.value = address
     }
 
     fun onNextClicked() {
-        val address = address
-
-        if (address == null) {
-            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-            return
-        }
         viewModelScope.launch {
-            completedOnboardingUseCase.execute(address)
+            completedOnboardingUseCase.execute(address.value!!)
                 .catchAndLogException {
                     _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
                 }
@@ -70,5 +66,16 @@ class OnboardingViewModel @Inject constructor(
 
     fun onDismissGenericErrorDialog() {
         _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
+    }
+
+    private fun handleNextButtonEnabledState() {
+        viewModelScope.launch {
+            address
+                .collect { address ->
+                    _uiState.update {
+                        it.copy(nextButtonIsEnabled = address != null)
+                    }
+                }
+        }
     }
 }

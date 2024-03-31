@@ -9,7 +9,7 @@ object SearchFilterMockFactory {
 
     fun create(
         address: Address = AddressMockFactory.create(),
-        petType: String = "petType",
+        petType: String? = "petType",
     ): SearchFilter =
         mockk {
             every { this@mockk.address } returns address

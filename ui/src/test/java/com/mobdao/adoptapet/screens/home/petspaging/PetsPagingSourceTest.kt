@@ -9,8 +9,8 @@ import com.mobdao.adoptapet.utils.PetDomain
 import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
-import com.mobdao.domain.usecases.pets.GetPetsUseCase
 import com.mobdao.domain.models.SearchFilter
+import com.mobdao.domain.usecases.pets.GetPetsUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -52,25 +52,6 @@ class PetsPagingSourceTest {
 
         // then
         assertNull(result)
-    }
-
-    @Test
-    fun `given search filter is null when load then empty page is returned`() = runTest {
-        // given
-        val tested = createTested(searchFilter = null)
-
-        // when
-        val result: LoadResult<Int, Pet> = tested.load(params = mockk())
-
-        // then
-        assertEquals(
-            result,
-            Page(
-                data = emptyList(),
-                prevKey = null,
-                nextKey = null,
-            )
-        )
     }
 
     @Test
@@ -202,7 +183,7 @@ class PetsPagingSourceTest {
             )
         }
 
-    private fun createTested(searchFilter: SearchFilter?) =
+    private fun createTested(searchFilter: SearchFilter) =
         PetsPagingSource.Factory(getPetsUseCase = getPetsUseCase)
             .create(searchFilter = searchFilter)
 }

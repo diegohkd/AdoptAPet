@@ -46,7 +46,7 @@ fun OnboardingScreen(
 @Composable
 private fun UiContent(
     uiState: UiState,
-    onAddressSelected: (Address) -> Unit,
+    onAddressSelected: (Address?) -> Unit,
     onFailedToGetAddress: (Throwable?) -> Unit,
     onNextClicked: () -> Unit,
     onDismissGenericErrorDialog: () -> Unit,
@@ -68,7 +68,7 @@ private fun UiContent(
                 centerHorizontallyTo(parent)
                 linkTo(top = parent.top, bottom = parent.bottom, bias = 0.5f)
             },
-            selectedAddress = uiState.selectedAddress,
+            initialAddress = uiState.selectedAddress,
             paddingHorizontal = 16.dp,
             onAddressSelected = onAddressSelected,
             onError = onFailedToGetAddress,
@@ -81,6 +81,7 @@ private fun UiContent(
                     centerHorizontallyTo(parent)
                     bottom.linkTo(parent.bottom)
                 },
+            enabled = uiState.nextButtonIsEnabled
         ) {
             Text(text = stringResource(R.string.next))
         }

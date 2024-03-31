@@ -61,24 +61,8 @@ class HomeViewModel @Inject constructor(
     val navAction: StateFlow<Event<NavAction>?> = _navAction.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            createAndCachePetsFilterWithCachedLocationUseCase.execute()
-                .catchAndLogException {
-                    updateUiState(genericErrorDialogIsVisible = true)
-                }
-                .firstOrNull()
-        }
-        viewModelScope.launch {
-            observeSearchFilterUseCase.execute()
-                .catchAndLogException {
-                    updateUiState(genericErrorDialogIsVisible = true)
-                }
-                .collect { searchFilter ->
-                    if (searchFilter == null) return@collect
-                    updateUiState(address = searchFilter.address.addressLine)
-                    petsPager.setFilterAndRefresh(searchFilter)
-                }
-        }
+        createAndCachePetsFilterWithCachedLocation()
+        observeAndApplySearchFilter()
     }
 
     fun onPetsListLoadStateUpdate(
@@ -91,8 +75,8 @@ class HomeViewModel @Inject constructor(
                     appendLoadState.endOfPaginationReached &&
                     itemsCount == 0,
             genericErrorDialogIsVisible = refreshLoadState is Error || appendLoadState is Error,
+            progressIndicatorIsVisible = refreshLoadState.isLoading(),
             nextPageProgressIndicatorIsVisible = appendLoadState.isLoading(),
-            progressIndicatorIsVisible = refreshLoadState.isLoading()
         )
     }
 
@@ -106,6 +90,30 @@ class HomeViewModel @Inject constructor(
 
     fun onDismissGenericErrorDialog() {
         updateUiState(genericErrorDialogIsVisible = false)
+    }
+
+    private fun createAndCachePetsFilterWithCachedLocation() {
+        viewModelScope.launch {
+            createAndCachePetsFilterWithCachedLocationUseCase.execute()
+                .catchAndLogException {
+                    updateUiState(genericErrorDialogIsVisible = true)
+                }
+                .firstOrNull()
+        }
+    }
+
+    private fun observeAndApplySearchFilter() {
+        viewModelScope.launch {
+            observeSearchFilterUseCase.execute()
+                .catchAndLogException {
+                    updateUiState(genericErrorDialogIsVisible = true)
+                }
+                .collect { searchFilter ->
+                    if (searchFilter == null) return@collect
+                    updateUiState(address = searchFilter.address.addressLine)
+                    petsPager.setFilterAndRefresh(searchFilter)
+                }
+        }
     }
 
     private fun updateUiState(

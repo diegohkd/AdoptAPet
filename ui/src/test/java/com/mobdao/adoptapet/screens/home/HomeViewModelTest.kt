@@ -1,24 +1,32 @@
 package com.mobdao.adoptapet.screens.home
 
+import androidx.paging.LoadState.Error
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.adoptapet.screens.home.petspaging.PetsPager
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.domain.usecases.filter.ObserveSearchFilterUseCase
 import com.mobdao.domain.models.SearchFilter
+import com.mobdao.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
+import com.mobdao.domain.usecases.filter.ObserveSearchFilterUseCase
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import junitparams.JUnitParamsRunner
+import junitparams.Parameters
+import junitparams.naming.TestCaseName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(JUnitParamsRunner::class)
 class HomeViewModelTest {
 
     @ExperimentalCoroutinesApi
@@ -30,11 +38,13 @@ class HomeViewModelTest {
             AddressMockFactory.create(addressLine = "addressLine")
         )
 
+    private val createAndCachePetsFilterWithCachedLocationUseCase: CreateAndCachePetsFilterWithCachedLocationUseCase =
+        mockk {
+            every { execute() } returns flowOf(Unit)
+        }
     private val observeSearchFilterUseCase: ObserveSearchFilterUseCase = mockk {
         every { execute() } returns flowOf(searchFilter)
     }
-    private val updateCachedPetsFilterWithCurrentLocationUseCase: UpdateCachedPetsFilterWithCurrentLocationUseCase =
-        mockk()
     private val petsPager: PetsPager = mockk {
         every { items } returns flowOf()
         justRun { setFilterAndRefresh(searchFilter) }
@@ -42,16 +52,41 @@ class HomeViewModelTest {
 
     private val tested by lazy {
         HomeViewModel(
+            createAndCachePetsFilterWithCachedLocationUseCase = createAndCachePetsFilterWithCachedLocationUseCase,
             observeSearchFilterUseCase = observeSearchFilterUseCase,
-            updateCachedPetsFilterWithCurrentLocationUseCase = updateCachedPetsFilterWithCurrentLocationUseCase,
             petsPager = petsPager,
         )
     }
 
     @Test
-    fun `when initialized then it observes location permission state`() {
-        // when / then
-        assertTrue(tested.uiState.value.observeLocationPermissionState)
+    fun `when initialized then pets filter is created with cached location`() {
+        // given
+        val creatingAndCachingPetsFilterWithCachedLocation = MutableSharedFlow<Unit>()
+        every { createAndCachePetsFilterWithCachedLocationUseCase.execute() } returns creatingAndCachingPetsFilterWithCachedLocation
+
+        // when
+        tested
+
+        // then
+        assertEquals(
+            creatingAndCachingPetsFilterWithCachedLocation.subscriptionCount.value,
+            1
+        )
+    }
+
+    @Test
+    fun `given creating and caching pets filter with cached location throws exception when initialized then generic error dialog is shown`() {
+        // given
+        every { createAndCachePetsFilterWithCachedLocationUseCase.execute() } returns flow { throw Exception() }
+
+        // when
+        tested
+
+        // then
+        assertEquals(
+            tested.uiState.value.genericErrorDialogIsVisible,
+            true
+        )
     }
 
     @Test
@@ -106,41 +141,75 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `given location permission granted when permission state updated then stops observing location permission state`() {
+    @Parameters(source = PetsListTestFixtureProvider::class)
+    @TestCaseName("given parameters {0} when pets list load state update then expect UI state updated to {1}")
+    fun `given parameters when pets list load state update then correct UI state is updated`(
+        givenParams: PetsListTestFixtureProvider.GivenParams,
+        expectedUiState: PetsListTestFixtureProvider.ExpectedUiState,
+    ) {
         // given / when
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        tested.onPetsListLoadStateUpdate(
+            refreshLoadState = givenParams.refreshLoadState,
+            appendLoadState = givenParams.appendLoadState,
+            itemsCount = givenParams.itemsCount,
+        )
 
         // then
-        assertFalse(tested.uiState.value.observeLocationPermissionState)
+        assertEquals(
+            tested.uiState.value.emptyListPlaceholderIsVisible,
+            expectedUiState.emptyListPlaceholderIsVisible
+        )
+        assertEquals(
+            tested.uiState.value.genericErrorDialogIsVisible,
+            expectedUiState.genericErrorDialogIsVisible
+        )
+        assertEquals(
+            tested.uiState.value.progressIndicatorIsVisible,
+            expectedUiState.progressIndicatorIsVisible
+        )
+        assertEquals(
+            tested.uiState.value.nextPageProgressIndicatorIsVisible,
+            expectedUiState.nextPageProgressIndicatorIsVisible
+        )
     }
 
     @Test
-    fun `given location permission granted when permission state updated then updates cached Pets filter with current location`() =
-        runTest {
-            // given
-            val mutableSharedFlow = MutableSharedFlow<Unit>()
-            every { updateCachedPetsFilterWithCurrentLocationUseCase.execute() } returns mutableSharedFlow
+    fun `when Pet is clicked then Pet clicked nav action is emitted`() {
+        // when
+        tested.onPetClicked(id = "pet-id")
 
-            // when
-            tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
-
-            // then
-            assertEquals(mutableSharedFlow.subscriptionCount.value, 1)
-        }
-
-    // TODO test locationPlaceholderIsVisible setting to false
-    // TODO test isUpdatingFilterWithCurrentLocation setting to true AND false
+        // then
+        assertEquals(
+            tested.navAction.value!!.peekContent(),
+            PetClicked(petId = "pet-id")
+        )
+    }
 
     @Test
-    fun `given location permission granted and updating cached Pets filter throws exception when permission state updated then generic error dialog is visible`() =
-        runTest {
-            // given
-            every { updateCachedPetsFilterWithCurrentLocationUseCase.execute() } returns flow { throw Exception() }
+    fun `when filter button is clicked then filter clicked nav action is emitted`() {
+        // when
+        tested.onFilterClicked()
 
-            // when
-            tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        // then
+        assertEquals(
+            tested.navAction.value!!.peekContent(),
+            FilterClicked
+        )
+    }
 
-            // then
-            assertTrue(tested.uiState.value.genericErrorDialogIsVisible)
-        }
+    @Test
+    fun `given generic error dialog is visible when dismiss the dialog then the dialog is hidden`() {
+        // given
+        tested.onPetsListLoadStateUpdate(
+            refreshLoadState = Error(Exception()),
+            appendLoadState = Error(Exception()),
+            itemsCount = 0,
+        )
+
+        // when
+        tested.onDismissGenericErrorDialog()
+
+        // then
+        assertFalse(tested.uiState.value.genericErrorDialogIsVisible)
+    }
 }

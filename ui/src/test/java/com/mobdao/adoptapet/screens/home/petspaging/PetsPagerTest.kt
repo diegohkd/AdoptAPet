@@ -5,20 +5,30 @@ import androidx.paging.Pager
 import androidx.paging.PagingSource
 import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
 import com.mobdao.adoptapet.utils.PagerFactory
+import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.domain.models.SearchFilter
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalPagingApi::class)
+@OptIn(ExperimentalPagingApi::class, FlowPreview::class)
 class PetsPagerTest {
+
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    var mainCoroutineRule = MainDispatcherRule()
 
     private val petsPagingSource: PetsPagingSource = mockk()
     private val pager: Pager<Int, Pet> = mockk {
@@ -40,28 +50,22 @@ class PetsPagerTest {
     }
 
     @Test
-    fun `given no search filter set when observing items then paging source is created with null filter`() =
+    fun `given no search filter set when observing items then paging source is not created and no paging data is returned`() =
         runTest {
-            // given
-            every {
-                pagerFactory.create<Int, Pet>(
-                    config = any(),
-                    pagingSourceFactory = any()
-                )
-            } answers {
-                lastArg<() -> PagingSource<Int, Pet>>()()
-                pager
+            // given / when
+            val pagingData = try {
+                tested.items.timeout(0.milliseconds).first()
+            } catch (e: Exception) {
+                null
             }
 
-            // when
-            tested.items.firstOrNull()
-
             // then
-            verify { petsPagingSourceFactory.create(searchFilter = null) }
+            assertNull(pagingData)
+            verify(exactly = 0) { petsPagingSourceFactory.create(any()) }
         }
 
     @Test
-    fun `given search filter set when observing items then paging source is re-created with search filter passed`() =
+    fun `given search filter set when observing items then paging source is created with search filter passed`() =
         runTest {
             // given
             every {
@@ -73,7 +77,6 @@ class PetsPagerTest {
                 lastArg<() -> PagingSource<Int, Pet>>()()
                 pager
             }
-            tested.items.firstOrNull()
             val searchFilter: SearchFilter = mockk()
             tested.setFilterAndRefresh(searchFilter)
 
@@ -82,29 +85,7 @@ class PetsPagerTest {
 
             // then
             verifyOrder {
-                petsPagingSourceFactory.create(searchFilter = null)
                 petsPagingSourceFactory.create(searchFilter = searchFilter)
             }
         }
-
-    @Test
-    fun `given filter not set when checking if pager is ready then false is returned`() {
-        // given / when
-        val result = tested.isReady()
-
-        // then
-        assertFalse(result)
-    }
-
-    @Test
-    fun `given filter set and list refreshed when checking if pager is ready then true is returned`() {
-        // given
-        tested.setFilterAndRefresh(mockk())
-
-        // when
-        val result = tested.isReady()
-
-        // then
-        assertTrue(result)
-    }
 }

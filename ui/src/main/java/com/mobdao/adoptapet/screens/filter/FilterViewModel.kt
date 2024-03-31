@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.FilterApplied
 import com.mobdao.common.kotlin.catchAndLogException
-import com.mobdao.domain.usecases.filter.GetSearchFilterUseCase
-import com.mobdao.domain.usecases.filter.SaveSearchFilterUseCase
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.models.SearchFilter
+import com.mobdao.domain.usecases.filter.GetSearchFilterUseCase
+import com.mobdao.domain.usecases.filter.SaveSearchFilterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,8 +29,9 @@ class FilterViewModel @Inject constructor(
     }
 
     data class UiState(
-        val selectedAddress: String = "",
+        val initialAddress: String = "",
         val petType: String = "",
+        val isApplyButtonEnabled: Boolean = false,
         val genericErrorDialogIsVisible: Boolean = false,
     )
 
@@ -41,38 +42,20 @@ class FilterViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private var petType: String? = null
-    private var address: Address? = null
+    private val address = MutableStateFlow<Address?>(null)
 
     init {
-        // TODO add state to the property names that are not in the UiState?
-        // TODO disable applying filter until address is returned?
-
-        viewModelScope.launch {
-            getSearchFilterUseCase.execute()
-                .catchAndLogException {
-                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-                }
-                .collect { searchFilter ->
-                    address = searchFilter?.address
-                    petType = searchFilter?.petType
-                    _uiState.update {
-                        it.copy(
-                            selectedAddress = address?.addressLine.orEmpty(),
-                            petType = searchFilter?.petType.orEmpty()
-                        )
-                    }
-                }
-        }
+        handleApplyButtonEnabledState()
+        loadSavedFilter()
     }
 
-    fun onFailedToGetAddress(throwable: Throwable?) {
+    fun onFailedToSearchAddress(throwable: Throwable?) {
         throwable?.let(Timber::e)
         _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
     }
 
-    fun onAddressSelected(address: Address) {
-        this.address = address
-        _uiState.update { it.copy(selectedAddress = address.addressLine) }
+    fun onSearchedAddressSelected(address: Address?) {
+        this.address.value = address
     }
 
     fun onPetTypeSelected(type: String) {
@@ -81,10 +64,7 @@ class FilterViewModel @Inject constructor(
     }
 
     fun onApplyClicked() {
-        val address = address ?: run {
-            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-            return
-        }
+        val address = address.value!!
 
         viewModelScope.launch {
             saveSearchFilterUseCase.execute(
@@ -104,5 +84,34 @@ class FilterViewModel @Inject constructor(
 
     fun onDismissGenericErrorDialog() {
         _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
+    }
+
+    private fun handleApplyButtonEnabledState() {
+        viewModelScope.launch {
+            address.collect { address ->
+                _uiState.update {
+                    it.copy(isApplyButtonEnabled = address != null)
+                }
+            }
+        }
+    }
+
+    private fun loadSavedFilter() {
+        viewModelScope.launch {
+            getSearchFilterUseCase.execute()
+                .catchAndLogException {
+                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                }
+                .collect { searchFilter ->
+                    address.value = searchFilter?.address
+                    petType = searchFilter?.petType
+                    _uiState.update {
+                        it.copy(
+                            initialAddress = searchFilter?.address?.addressLine.orEmpty(),
+                            petType = searchFilter?.petType.orEmpty()
+                        )
+                    }
+                }
+        }
     }
 }

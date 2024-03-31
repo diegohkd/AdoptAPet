@@ -32,20 +32,22 @@ import com.mobdao.domain.models.Address
 @Composable
 fun LocationSearchBar(
     modifier: Modifier = Modifier,
-    selectedAddress: String = "",
+    initialAddress: String = "",
     paddingHorizontal: Dp = 0.dp,
-    onAddressSelected: (Address) -> Unit,
+    onAddressSelected: (Address?) -> Unit,
     onError: (Throwable?) -> Unit, // TODO is it ok to pass throwable?
     viewModel: LocationSearchBarViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(selectedAddress) {
-        viewModel.onSelectedAddressUpdated(selectedAddress)
+    LaunchedEffect(initialAddress) {
+        viewModel.init(initialAddress)
     }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val addressSelectedEvent by viewModel.addressSelected.collectAsStateWithLifecycle()
     val errorEncounteredEvent by viewModel.errorEncountered.collectAsStateWithLifecycle()
 
-    addressSelectedEvent?.getContentIfNotHandled()?.let(onAddressSelected)
+    addressSelectedEvent?.getContentIfNotHandled()?.let {
+        onAddressSelected(it.address)
+    }
     errorEncounteredEvent?.getContentIfNotHandled()?.let(onError)
 
     val locationPermissionState = rememberMultiplePermissionsState(
@@ -59,7 +61,7 @@ fun LocationSearchBar(
             areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
         )
     }
-    val askLocationPermissionEvent by viewModel.askLocationPermission.collectAsStateWithLifecycle()
+    val askLocationPermissionEvent by viewModel.requestLocationPermission.collectAsStateWithLifecycle()
     askLocationPermissionEvent?.getContentIfNotHandled()?.let {
         locationPermissionState.launchMultiplePermissionRequest()
     }
@@ -68,11 +70,11 @@ fun LocationSearchBar(
         paddingHorizontal = paddingHorizontal,
         modifier = modifier,
         searchQuery = viewModel.locationSearchQuery,
-        active = uiState.locationSearchModeIsActive,
-        loading = uiState.locationProgressIndicatorIsVisible,
+        active = uiState.searchModeIsActive,
+        loading = uiState.progressIndicatorIsVisible,
         autocompleteAddresses = uiState.locationAutocompleteAddresses,
         onSearchQueryChange = viewModel::onLocationSearchQueryChanged,
-        onLocationSearchActiveChange = viewModel::onLocationSearchActiveChange,
+        onLocationSearchActiveChange = viewModel::onSearchModeActiveChange,
         onAutocompleteAddressSelected = viewModel::onAddressItemClicked,
         onCurrentLocationClicked = viewModel::onCurrentLocationClicked,
         onClearClicked = viewModel::onClearLocationSearchClicked,
