@@ -6,6 +6,7 @@ import com.mobdao.domain.api.entitites.Address
 import com.mobdao.domain.api.repositories.GeoLocationRepository
 import com.mobdao.remote.GeoLocationRemoteDataSource
 import com.mobdao.remote.responses.GeoCoordinates
+import com.mobdao.remote.responses.GeocodeResponse
 import javax.inject.Inject
 
 class GeoLocationRepositoryImpl @Inject constructor(
@@ -17,7 +18,7 @@ class GeoLocationRepositoryImpl @Inject constructor(
     override suspend fun getCurrentLocationAddress(): Address? {
         val currentGeoCoordinates: GeoCoordinates =
             geoLocationRemoteDataSource.getCurrentLocationCoordinates()
-        val reverseGeocodeResponse =
+        val reverseGeocodeResponse: GeocodeResponse =
             geoLocationRemoteDataSource.getLocationAddress(geoCoordinates = currentGeoCoordinates)
         return reverseGeocodeResponse
             .results

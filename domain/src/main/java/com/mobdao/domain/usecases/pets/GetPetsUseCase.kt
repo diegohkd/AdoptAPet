@@ -12,14 +12,14 @@ import javax.inject.Inject
 class GetPetsUseCase @Inject constructor(
     private val petsRepository: PetsRepository,
     private val petMapper: PetMapper,
-    private val searchFilterMapper: SearchFilterMapper
+    private val searchFilterMapper: SearchFilterMapper,
 ) {
 
-    fun execute(pageNumber: Int, searchFilter: SearchFilter?): Flow<List<Pet>> = flow {
+    fun execute(pageNumber: Int, searchFilter: SearchFilter): Flow<List<Pet>> = flow {
         emit(
             petsRepository.getPets(
                 pageNumber = pageNumber,
-                searchFilter = searchFilter?.let(searchFilterMapper::mapToEntity)
+                searchFilter = searchFilterMapper.mapToEntity(searchFilter)
             )
                 .map(petMapper::map)
         )

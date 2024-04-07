@@ -21,18 +21,18 @@ class PetsRepositoryImpl @Inject constructor(
     private val animalMapper: AnimalMapper,
 ) : PetsRepository {
 
-    override suspend fun getPets(pageNumber: Int, searchFilter: SearchFilter?): List<Pet> {
+    override suspend fun getPets(pageNumber: Int, searchFilter: SearchFilter): List<Pet> {
         val animals: List<Animal> = animalRemoteDataSource.getAnimals(
             pageNumber = pageNumber,
-            locationCoordinates = searchFilter?.address?.toLocationCoordinates(),
-            animalType = searchFilter?.petType
+            locationCoordinates = searchFilter.address.toLocationCoordinates(),
+            animalType = searchFilter.petType
         )
         saveToDatabase(animals)
         return animalMapper.mapToPet(animals)
     }
 
     override suspend fun getCachedPetById(petId: String): Pet? =
-        animalLocalDataSource.getAnimalById(animalId = petId)?.let { animalMapper.mapToPet(it) }
+        animalLocalDataSource.getAnimalById(animalId = petId)?.let(animalMapper::mapToPet)
 
     private suspend fun saveToDatabase(animals: List<AnimalRemoteResponse>) {
         val animalsDbEntities: List<AnimalDbEntity> = animals.let(animalMapper::mapToDbEntity)

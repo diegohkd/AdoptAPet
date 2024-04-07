@@ -12,8 +12,8 @@ import javax.inject.Inject
 class SaveSearchFilterUseCase @Inject constructor(
     private val searchFilterRepository: SearchFilterRepository,
     private val geoLocationRepository: GeoLocationRepository,
-    private val searchFilterMapper: SearchFilterMapper,
     private val addressMapper: AddressMapper,
+    private val searchFilterMapper: SearchFilterMapper,
 ) {
 
     fun execute(filter: SearchFilter): Flow<Unit> = flow {

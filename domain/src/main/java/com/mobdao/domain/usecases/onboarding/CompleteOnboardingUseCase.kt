@@ -14,6 +14,7 @@ class CompleteOnboardingUseCase @Inject constructor(
     private val addressMapper: AddressMapper,
 ) {
 
+    // TODO improve name of address?
     fun execute(address: Address): Flow<Unit> = flow {
         geoLocationRepository.cacheCurrentLocationAddress(addressMapper.map(address))
         onboardingService.saveOnboardingAsCompleted()

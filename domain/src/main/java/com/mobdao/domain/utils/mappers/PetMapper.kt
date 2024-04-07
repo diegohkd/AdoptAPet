@@ -3,6 +3,7 @@ package com.mobdao.domain.utils.mappers
 import com.mobdao.domain.models.Breeds
 import com.mobdao.domain.models.Pet
 import com.mobdao.domain.models.Photo
+import com.mobdao.domain.utils.PetEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -2,6 +2,8 @@ package com.mobdao.domain.utils.mappers
 
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.models.SearchFilter
+import com.mobdao.domain.utils.AddressEntity
+import com.mobdao.domain.utils.SearchFilterEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 

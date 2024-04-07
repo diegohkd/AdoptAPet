@@ -9,13 +9,13 @@ import javax.inject.Singleton
 @Singleton
 internal class AccessTokenManagerImpl @Inject constructor(
     private val accessTokenRemoteDataSource: AccessTokenRemoteDataSource,
-    private val accessTokenDataSource: AccessTokenLocalDataSource,
+    private val accessTokenLocalDataSource: AccessTokenLocalDataSource,
 ) : AccessTokenManager {
 
-    override fun getAccessToken(): String? = accessTokenDataSource.getAccessToken()
+    override fun getAccessToken(): String? = accessTokenLocalDataSource.getAccessToken()
 
     override suspend fun refreshAccessToken() {
         val accessToken: String = accessTokenRemoteDataSource.getNewAccessToken()
-        accessTokenDataSource.saveAccessToken(accessToken)
+        accessTokenLocalDataSource.saveAccessToken(accessToken)
     }
 }

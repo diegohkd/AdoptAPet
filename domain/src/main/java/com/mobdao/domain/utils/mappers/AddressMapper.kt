@@ -1,6 +1,7 @@
 package com.mobdao.domain.utils.mappers
 
 import com.mobdao.domain.models.Address
+import com.mobdao.domain.utils.AddressEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 

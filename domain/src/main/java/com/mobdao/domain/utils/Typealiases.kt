@@ -1,4 +1,4 @@
-package com.mobdao.domain.utils.mappers
+package com.mobdao.domain.utils
 
 import com.mobdao.domain.api.entitites.Address
 import com.mobdao.domain.api.entitites.Pet
