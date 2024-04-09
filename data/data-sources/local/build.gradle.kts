@@ -39,12 +39,12 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.androidx.room.roomRuntime)
-    // To use Kotlin Symbol Processing (KSP)
     ksp(libs.androidx.room.roomCompiler)
-    // optional - Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.roomKtx)
     implementation(libs.google.dagger.hiltAndroid)
     ksp(libs.google.dagger.hiltAndroidCompiler)
     implementation(libs.moshi.moshiKotlin)
     ksp(libs.moshi.moshiKotlinCodegen)
+
+    testImplementation(project(":common:test-utils"))
 }
