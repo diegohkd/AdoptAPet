@@ -45,6 +45,6 @@ class GetAutocompleteLocationOptionsUseCaseTest {
         val result: List<Address> = tested.execute(location).first()
 
         // then
-        assertEquals(result, listOf(autocompleteAddress1, autocompleteAddress1))
+        assertEquals(result, listOf(autocompleteAddress1, autocompleteAddress2))
     }
 }

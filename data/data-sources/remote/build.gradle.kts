@@ -47,4 +47,6 @@ dependencies {
     implementation(libs.okhttp3.loggingInterceptor)
     implementation(libs.google.dagger.hiltAndroid)
     kapt(libs.google.dagger.hiltAndroidCompiler)
+
+    testImplementation(project(":common:test-utils"))
 }
