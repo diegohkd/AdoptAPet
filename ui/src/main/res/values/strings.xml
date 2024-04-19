@@ -5,4 +5,5 @@
     <string name="location">Location</string>
     <string name="apply">Apply</string>
     <string name="next">Next</string>
+    <string name="no_pets_found">No pets found. \nChange your filters and try again.</string>
 </resources>

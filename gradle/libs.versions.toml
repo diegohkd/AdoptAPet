@@ -1,27 +1,26 @@
 [versions]
-# dependencies
-androidx-activityCompose = "1.8.2"
-androidx-composeBom = "2024.03.00"
+# libraries
+androidx-activityCompose = "1.9.0"
+androidx-composeBom = "2024.04.01"
 androidx-compose-material3 = "1.2.1"
-androidx-compose-ui = "1.6.4"
-androidx-coreKtx = "1.12.0"
+androidx-compose-ui = "1.6.6"
+androidx-coreKtx = "1.13.0"
 androidx-hiltNavigationCompose = "1.2.0"
 androidx-lifecycleRuntimeKtx = "2.7.0"
 androidx-room = "2.6.1"
-accompanistPermissions = "0.32.0"
-coil-compose = "2.6.0"
+accompanistPermissions = "0.34.0"
+coilCompose = "2.6.0"
 constraintlayoutCompose = "1.0.1"
 coroutines = "1.8.0"
-hilt-android = "2.51"
-hilt-android-compiler = "2.51"
+hiltAndroid = "2.51"
 junit = "4.13.2"
 junitParams = "1.1.1"
 navigation-lifecycleRuntimeCompose = "2.7.0"
-logging-interceptor = "4.12.0"
+loggingInterceptor = "4.12.0"
 mockk = "1.13.10"
 moshiKotlin = "1.15.1"
 moshiKotlinCodegen = "1.15.1"
-navigation-compose = "2.7.7"
+navigationCompose = "2.7.7"
 pagingCompose = "3.2.1"
 playServicesLocation = "21.2.0"
 retrofit2 = "2.9.0"
@@ -29,7 +28,7 @@ timber = "5.0.1"
 
 # plugins
 androidGradlePlugin = "8.2.2"
-androidLibraryPlugin = "8.3.1"
+androidLibraryPlugin = "8.3.2"
 detekt = "1.23.5"
 hiltPlugin = "2.51"
 kotlinPlugin = "1.9.22"
@@ -49,17 +48,17 @@ androidx-core-coreKtx = { group = "androidx.core", name = "core-ktx", version.re
 androidx-hilt-hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hiltNavigationCompose" }
 androidx-lifecycle-lifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycleRuntimeKtx" }
 androidx-lifecycle-lifecycleRuntimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "navigation-lifecycleRuntimeCompose" }
-androidx-navigation-navigationCompose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
+androidx-navigation-navigationCompose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-paging-pagingCompose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingCompose" }
 androidx-room-roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 androidx-room-roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 arturbosch-detekt-detektFormatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
-coilKt-coilCompose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+coilKt-coilCompose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 google-accompanist-accompanistPermissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 google-android-gms-playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
-google-dagger-hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt-android" }
-google-dagger-hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt-android-compiler" }
+google-dagger-hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
+google-dagger-hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroid" }
 jakewharton-timber-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 jetbrains-kotlinx-kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 jetbrains-kotlinx-kotlinxCoroutinesPlayServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
@@ -71,7 +70,7 @@ moshi-moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", versi
 moshi-moshiKotlinCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
 refrofit2-converterMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit2" }
 refrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
-okhttp3-loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+okhttp3-loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

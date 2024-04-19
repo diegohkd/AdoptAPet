@@ -8,7 +8,7 @@ sealed interface Destination {
     val route: String
 
     data object Splash : Destination {
-        override val route: String = "splah"
+        override val route: String = "splash"
     }
 
     data object Onboarding : Destination {

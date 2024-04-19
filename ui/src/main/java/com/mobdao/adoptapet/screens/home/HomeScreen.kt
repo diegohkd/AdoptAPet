@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -86,9 +87,7 @@ private fun UiContent(
     onFilterClicked: () -> Unit = {},
     onDismissGenericErrorDialog: () -> Unit = {},
 ) {
-    Scaffold(
-        containerColor = Color.White
-    ) {
+    Scaffold(containerColor = Color.White) {
         ConstraintLayout(
             modifier = Modifier
                 .padding(top = it.calculateTopPadding())
@@ -272,7 +271,7 @@ private fun EmptyListPlaceholder(modifier: Modifier, onFilterClicked: () -> Unit
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "No pets found. \nChange your filters and try again.",
+            text = stringResource(R.string.no_pets_found),
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
         )
