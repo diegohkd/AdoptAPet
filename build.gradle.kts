@@ -3,9 +3,9 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
     alias(libs.plugins.dagger.hilt.android) apply false
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.jetbrains.kotlin.android) apply false
-    alias(libs.plugins.android.library) apply false
+    id(libs.plugins.android.application.get().pluginId) apply false
+    id(libs.plugins.jetbrains.kotlin.android.get().pluginId) apply false
+    id(libs.plugins.android.library.get().pluginId) apply false
     alias(libs.plugins.google.devtools.ksp) apply false
     alias(libs.plugins.arturbosch.detekt)
 }

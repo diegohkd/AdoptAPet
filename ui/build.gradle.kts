@@ -1,20 +1,20 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id(libs.plugins.android.application.get().pluginId)
+    id(libs.plugins.jetbrains.kotlin.android.get().pluginId)
     alias(libs.plugins.dagger.hilt.android)
     id("kotlin-kapt")
 }
 
 android {
     namespace = "com.mobdao.adoptapet"
-    compileSdk = 34
+    compileSdk = BuildConstants.COMPILE_SDK
 
     defaultConfig {
         applicationId = "com.mobdao.adoptapet"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = BuildConstants.MIN_SDK
+        targetSdk = BuildConstants.TARGET_SDK
+        versionCode = BuildConstants.VERSION_CODE
+        versionName = BuildConstants.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
