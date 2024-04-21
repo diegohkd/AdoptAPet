@@ -1,7 +1,7 @@
-package com.mobdao.domain.api.repositories
+package com.mobdao.domain.dataapi.repositories
 
-import com.mobdao.domain.api.entitites.Pet
-import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.dataapi.entitites.Pet
+import com.mobdao.domain.dataapi.entitites.SearchFilter
 
 interface PetsRepository {
     suspend fun getPets(pageNumber: Int, searchFilter: SearchFilter): List<Pet>

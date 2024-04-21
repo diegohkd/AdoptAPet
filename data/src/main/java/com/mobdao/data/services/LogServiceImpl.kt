@@ -2,7 +2,7 @@ package com.mobdao.data.services
 
 import com.mobdao.common.config.AppConfig
 import com.mobdao.data.utils.wrappers.TimberWrapper
-import com.mobdao.domain.api.services.LogService
+import com.mobdao.domain.dataapi.services.LogService
 import javax.inject.Inject
 import javax.inject.Singleton
 

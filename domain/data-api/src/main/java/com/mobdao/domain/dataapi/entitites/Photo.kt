@@ -1,4 +1,4 @@
-package com.mobdao.domain.api.entitites
+package com.mobdao.domain.dataapi.entitites
 
 data class Photo(
     val smallUrl: String,

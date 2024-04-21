@@ -1,4 +1,4 @@
-package com.mobdao.domain.api.services
+package com.mobdao.domain.dataapi.services
 
 interface OnboardingService {
 

@@ -2,9 +2,9 @@ package com.mobdao.domain.usecases.pets
 
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.PetEntityMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.SearchFilterEntityMockFactory
-import com.mobdao.domain.api.repositories.PetsRepository
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.PetEntityMockFactory
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.SearchFilterEntityMockFactory
+import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.domain.models.Pet
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.utils.PetEntity

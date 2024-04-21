@@ -3,7 +3,7 @@ package com.mobdao.data.repositories
 import com.mobdao.cache.GeoLocationLocalDataSource
 import com.mobdao.data.common.AddressDbEntity
 import com.mobdao.data.utils.mappers.AddressMapper
-import com.mobdao.domain.api.entitites.Address
+import com.mobdao.domain.dataapi.entitites.Address
 import com.mobdao.remote.GeoLocationRemoteDataSource
 import com.mobdao.remote.responses.GeoCoordinates
 import com.mobdao.remote.responses.GeocodeResponse

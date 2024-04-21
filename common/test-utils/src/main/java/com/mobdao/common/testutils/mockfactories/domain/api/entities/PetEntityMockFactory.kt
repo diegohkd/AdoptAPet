@@ -1,10 +1,10 @@
-package com.mobdao.common.testutils.mockfactories.domain.api.entities
+package com.mobdao.common.testutils.mockfactories.domain.dataapi.entities
 
 import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
-import com.mobdao.domain.api.entitites.Breeds
-import com.mobdao.domain.api.entitites.Pet
-import com.mobdao.domain.api.entitites.Photo
+import com.mobdao.domain.dataapi.entitites.Breeds
+import com.mobdao.domain.dataapi.entitites.Pet
+import com.mobdao.domain.dataapi.entitites.Photo
 import io.mockk.every
 import io.mockk.mockk
 

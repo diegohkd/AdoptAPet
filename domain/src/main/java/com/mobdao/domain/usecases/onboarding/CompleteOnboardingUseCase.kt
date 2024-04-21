@@ -1,7 +1,7 @@
 package com.mobdao.domain.usecases.onboarding
 
-import com.mobdao.domain.api.repositories.GeoLocationRepository
-import com.mobdao.domain.api.services.OnboardingService
+import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
+import com.mobdao.domain.dataapi.services.OnboardingService
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.utils.mappers.AddressMapper
 import kotlinx.coroutines.flow.Flow

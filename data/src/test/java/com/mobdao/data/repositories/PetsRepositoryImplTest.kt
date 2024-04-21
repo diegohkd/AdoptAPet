@@ -2,12 +2,12 @@ package com.mobdao.data.repositories
 
 import com.mobdao.cache.AnimalLocalDataSource
 import com.mobdao.common.testutils.mockfactories.data.local.AnimalDbEntityMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.AddressEntityMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.SearchFilterEntityMockFactory
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.AddressEntityMockFactory
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.SearchFilterEntityMockFactory
 import com.mobdao.data.common.AnimalDbEntity
 import com.mobdao.data.utils.mappers.AnimalMapper
-import com.mobdao.domain.api.entitites.Pet
-import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.dataapi.entitites.Pet
+import com.mobdao.domain.dataapi.entitites.SearchFilter
 import com.mobdao.remote.AnimalRemoteDataSource
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
 import com.mobdao.remote.responses.Animal

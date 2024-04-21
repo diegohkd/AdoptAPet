@@ -1,6 +1,6 @@
 package com.mobdao.domain.usecases
 
-import com.mobdao.domain.api.services.LogService
+import com.mobdao.domain.dataapi.services.LogService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

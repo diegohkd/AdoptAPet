@@ -1,7 +1,7 @@
 package com.mobdao.domain.usecases.location
 
 import com.mobdao.common.exceptions.CurrentLocationNotFoundException
-import com.mobdao.domain.api.repositories.GeoLocationRepository
+import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.utils.AddressEntity
 import com.mobdao.domain.utils.mappers.AddressMapper

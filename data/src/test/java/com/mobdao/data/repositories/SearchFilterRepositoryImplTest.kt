@@ -2,10 +2,10 @@ package com.mobdao.data.repositories
 
 import com.mobdao.cache.SearchFilterLocalDataSource
 import com.mobdao.common.testutils.mockfactories.data.local.SearchFilterCacheMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.SearchFilterEntityMockFactory
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.SearchFilterEntityMockFactory
 import com.mobdao.data.common.SearchFilterCache
 import com.mobdao.data.utils.mappers.SearchFilterMapper
-import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.dataapi.entitites.SearchFilter
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk

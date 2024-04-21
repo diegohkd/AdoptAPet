@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:api"))
+    implementation(project(":domain:data-api"))
     implementation(project(":common"))
 
     implementation(libs.google.dagger.hiltAndroid)

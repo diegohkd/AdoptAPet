@@ -1,6 +1,6 @@
-package com.mobdao.domain.api.repositories
+package com.mobdao.domain.dataapi.repositories
 
-import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.dataapi.entitites.SearchFilter
 import kotlinx.coroutines.flow.Flow
 
 interface SearchFilterRepository {

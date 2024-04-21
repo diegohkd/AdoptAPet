@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mobdao.domain_api"
+    namespace = "com.mobdao.dataapi"
 }
 
 dependencies {

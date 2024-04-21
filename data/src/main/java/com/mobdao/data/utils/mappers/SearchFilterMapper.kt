@@ -2,8 +2,8 @@ package com.mobdao.data.utils.mappers
 
 import com.mobdao.data.common.AddressCache
 import com.mobdao.data.common.SearchFilterCache
-import com.mobdao.domain.api.entitites.Address
-import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.dataapi.entitites.Address
+import com.mobdao.domain.dataapi.entitites.SearchFilter
 import javax.inject.Inject
 import javax.inject.Singleton
 

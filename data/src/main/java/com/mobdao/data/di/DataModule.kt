@@ -8,11 +8,11 @@ import com.mobdao.data.services.LogServiceImpl
 import com.mobdao.data.services.OnboardingServiceImpl
 import com.mobdao.data.utils.AccessTokenManagerImpl
 import com.mobdao.data.utils.factories.AppConfigFactory
-import com.mobdao.domain.api.repositories.GeoLocationRepository
-import com.mobdao.domain.api.repositories.PetsRepository
-import com.mobdao.domain.api.repositories.SearchFilterRepository
-import com.mobdao.domain.api.services.LogService
-import com.mobdao.domain.api.services.OnboardingService
+import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
+import com.mobdao.domain.dataapi.repositories.PetsRepository
+import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
+import com.mobdao.domain.dataapi.services.LogService
+import com.mobdao.domain.dataapi.services.OnboardingService
 import com.mobdao.remote.api.AccessTokenManager
 import dagger.Binds
 import dagger.Module

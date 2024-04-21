@@ -1,6 +1,6 @@
-package com.mobdao.common.testutils.mockfactories.domain.api.entities
+package com.mobdao.common.testutils.mockfactories.domain.dataapi.entities
 
-import com.mobdao.domain.api.entitites.Breeds
+import com.mobdao.domain.dataapi.entitites.Breeds
 import io.mockk.every
 import io.mockk.mockk
 

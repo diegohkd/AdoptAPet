@@ -1,8 +1,8 @@
 package com.mobdao.domain.utils
 
-import com.mobdao.domain.api.entitites.Address
-import com.mobdao.domain.api.entitites.Pet
-import com.mobdao.domain.api.entitites.SearchFilter
+import com.mobdao.domain.dataapi.entitites.Address
+import com.mobdao.domain.dataapi.entitites.Pet
+import com.mobdao.domain.dataapi.entitites.SearchFilter
 
 typealias PetEntity = Pet
 typealias AddressEntity = Address

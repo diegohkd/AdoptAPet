@@ -2,9 +2,9 @@ package com.mobdao.domain.usecases.filter
 
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.AddressEntityMockFactory
-import com.mobdao.domain.api.repositories.GeoLocationRepository
-import com.mobdao.domain.api.repositories.SearchFilterRepository
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.AddressEntityMockFactory
+import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
+import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.utils.AddressEntity

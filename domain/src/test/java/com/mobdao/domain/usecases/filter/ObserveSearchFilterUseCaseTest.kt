@@ -1,8 +1,8 @@
 package com.mobdao.domain.usecases.filter
 
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.SearchFilterEntityMockFactory
-import com.mobdao.domain.api.repositories.SearchFilterRepository
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.SearchFilterEntityMockFactory
+import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.utils.SearchFilterEntity
 import com.mobdao.domain.utils.mappers.SearchFilterMapper

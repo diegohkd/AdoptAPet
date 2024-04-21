@@ -1,6 +1,6 @@
 package com.mobdao.domain.usecases.onboarding
 
-import com.mobdao.domain.api.services.OnboardingService
+import com.mobdao.domain.dataapi.services.OnboardingService
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first

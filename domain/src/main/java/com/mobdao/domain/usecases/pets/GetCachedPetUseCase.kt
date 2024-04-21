@@ -1,6 +1,6 @@
 package com.mobdao.domain.usecases.pets
 
-import com.mobdao.domain.api.repositories.PetsRepository
+import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.domain.models.Pet
 import com.mobdao.domain.utils.mappers.PetMapper
 import kotlinx.coroutines.flow.Flow

@@ -1,10 +1,10 @@
 package com.mobdao.domain.usecases.filter
 
 import com.mobdao.common.exceptions.LocationNotFoundException
-import com.mobdao.common.testutils.mockfactories.domain.api.entities.AddressEntityMockFactory
-import com.mobdao.domain.api.entitites.Address
-import com.mobdao.domain.api.repositories.GeoLocationRepository
-import com.mobdao.domain.api.repositories.SearchFilterRepository
+import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.AddressEntityMockFactory
+import com.mobdao.domain.dataapi.entitites.Address
+import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
+import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.utils.SearchFilterEntity
 import io.mockk.coEvery
 import io.mockk.justRun
