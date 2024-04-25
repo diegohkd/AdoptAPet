@@ -37,6 +37,7 @@ dependencies {
     implementation(project(":data:data-sources:local"))
     implementation(project(":data:data-sources:remote"))
     implementation(project(":domain:data-api"))
+    implementation(project(":domain:entities"))
 
     implementation(libs.google.dagger.hiltAndroid)
     kapt(libs.google.dagger.hiltAndroidCompiler)

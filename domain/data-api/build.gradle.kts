@@ -7,5 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain:entities"))
+
     implementation(libs.jetbrains.kotlinx.kotlinxCoroutinesCore)
 }

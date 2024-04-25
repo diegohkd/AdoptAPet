@@ -1,7 +1,7 @@
 package com.mobdao.domain.usecases.onboarding
 
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.AddressEntityMockFactory
+import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.dataapi.services.OnboardingService
 import com.mobdao.domain.models.Address
@@ -43,7 +43,7 @@ class CompleteOnboardingUseCaseTest {
     }
 
     @Test
-    fun `when execute onboarding is saved as completed`() = runTest {
+    fun `when execute then onboarding is saved as completed`() = runTest {
         // given / when
         tested.execute(address).first()
 

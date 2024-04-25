@@ -1,6 +1,8 @@
 package com.mobdao.remote
 
+import com.mobdao.domain.entities.Pet
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
+import com.mobdao.remote.common.mappers.EntityMapper
 import com.mobdao.remote.responses.Animal
 import com.mobdao.remote.responses.AnimalsResponse
 import com.mobdao.remote.services.PetFinderService
@@ -19,6 +21,9 @@ class AnimalRemoteDataSourceTest {
     private val animalsResponse: AnimalsResponse = mockk {
         every { animals } returns this@AnimalRemoteDataSourceTest.animals
     }
+    private val pet1: Pet = mockk()
+    private val pet2: Pet = mockk()
+    private val pets = listOf(pet1, pet2)
 
     private val petFinderService: PetFinderService = mockk {
         coEvery {
@@ -29,14 +34,17 @@ class AnimalRemoteDataSourceTest {
             )
         } returns animalsResponse
     }
+    private val entityMapper: EntityMapper = mockk {
+        every { toPets(animals) } returns pets
+    }
 
-    private val tested = AnimalRemoteDataSource(petFinderService)
+    private val tested = AnimalRemoteDataSource(petFinderService, entityMapper)
 
     @Test
-    fun `given page number, coordinates and animal type when get animals then animals are returned`() =
+    fun `given page number, coordinates and animal type when get pets then pets are returned`() =
         runTest {
             // given / when
-            val result = tested.getAnimals(
+            val result: List<Pet> = tested.getPets(
                 pageNumber = 1,
                 locationCoordinates = GeoCoordinates(
                     latitude = -123.0,
@@ -46,6 +54,6 @@ class AnimalRemoteDataSourceTest {
             )
 
             // then
-            assertEquals(result, animals)
+            assertEquals(result, pets)
         }
 }

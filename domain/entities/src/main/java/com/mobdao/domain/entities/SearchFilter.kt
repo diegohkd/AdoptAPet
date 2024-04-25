@@ -1,4 +1,4 @@
-package com.mobdao.domain.dataapi.entitites
+package com.mobdao.domain.entities
 
 // TODO rename to PetsFilter
 data class SearchFilter(

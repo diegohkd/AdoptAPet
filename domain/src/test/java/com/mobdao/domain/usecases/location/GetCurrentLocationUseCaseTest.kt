@@ -2,7 +2,7 @@ package com.mobdao.domain.usecases.location
 
 import com.mobdao.common.exceptions.CurrentLocationNotFoundException
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.AddressEntityMockFactory
+import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.utils.AddressEntity

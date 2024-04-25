@@ -1,11 +1,7 @@
 package com.mobdao.data.repositories
 
 import com.mobdao.cache.SearchFilterLocalDataSource
-import com.mobdao.common.testutils.mockfactories.data.local.SearchFilterCacheMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.dataapi.entities.SearchFilterEntityMockFactory
-import com.mobdao.data.common.SearchFilterCache
-import com.mobdao.data.utils.mappers.SearchFilterMapper
-import com.mobdao.domain.dataapi.entitites.SearchFilter
+import com.mobdao.domain.entities.SearchFilter
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -18,22 +14,16 @@ import org.junit.Test
 
 class SearchFilterRepositoryImplTest {
 
-    private val searchFilter: SearchFilter = SearchFilterEntityMockFactory.create()
-    private val searchFilterCache: SearchFilterCache = SearchFilterCacheMockFactory.create()
+    private val searchFilter: SearchFilter = mockk()
 
     private val searchFilterLocalDataSource: SearchFilterLocalDataSource = mockk {
-        justRun { saveSearchFilter(searchFilterCache) }
-        every { getSearchFilter() } returns searchFilterCache
-        every { observeSearchFilter() } returns MutableStateFlow(searchFilterCache)
-    }
-    private val searchFilterMapper: SearchFilterMapper = mockk {
-        every { mapToCacheModel(searchFilter) } returns searchFilterCache
-        every { mapFromCacheModel(searchFilterCache) } returns searchFilter
+        justRun { saveSearchFilter(searchFilter) }
+        every { getSearchFilter() } returns searchFilter
+        every { observeSearchFilter() } returns MutableStateFlow(searchFilter)
     }
 
     private val tested = SearchFilterRepositoryImpl(
         searchFilterLocalDataSource = searchFilterLocalDataSource,
-        searchFilterMapper = searchFilterMapper,
     )
 
     @Test
@@ -42,7 +32,7 @@ class SearchFilterRepositoryImplTest {
         tested.saveSearchFilter(searchFilter)
 
         // then
-        verify { searchFilterLocalDataSource.saveSearchFilter(searchFilterCache) }
+        verify { searchFilterLocalDataSource.saveSearchFilter(searchFilter) }
     }
 
     @Test

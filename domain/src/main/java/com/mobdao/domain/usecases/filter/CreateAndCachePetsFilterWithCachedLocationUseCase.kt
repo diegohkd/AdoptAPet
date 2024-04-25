@@ -1,9 +1,9 @@
 package com.mobdao.domain.usecases.filter
 
 import com.mobdao.common.exceptions.LocationNotFoundException
-import com.mobdao.domain.dataapi.entitites.Address
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
+import com.mobdao.domain.entities.Address
 import com.mobdao.domain.utils.SearchFilterEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

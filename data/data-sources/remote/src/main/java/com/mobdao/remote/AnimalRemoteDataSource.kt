@@ -1,6 +1,7 @@
 package com.mobdao.remote
 
-import com.mobdao.remote.responses.Animal
+import com.mobdao.domain.entities.Pet
+import com.mobdao.remote.common.mappers.EntityMapper
 import com.mobdao.remote.services.PetFinderService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -8,15 +9,16 @@ import javax.inject.Singleton
 @Singleton
 class AnimalRemoteDataSource @Inject internal constructor(
     private val petFinderService: PetFinderService,
+    private val entityMapper: EntityMapper,
 ) {
 
     data class GeoCoordinates(val latitude: Double, val longitude: Double)
 
-    suspend fun getAnimals(
+    suspend fun getPets(
         pageNumber: Int,
         locationCoordinates: GeoCoordinates?,
         animalType: String?
-    ): List<Animal> {
+    ): List<Pet> {
         val location = locationCoordinates?.let {
             "${it.latitude},${it.longitude}"
         }
@@ -24,6 +26,6 @@ class AnimalRemoteDataSource @Inject internal constructor(
             pageNumber = pageNumber,
             location = location,
             type = animalType,
-        ).animals
+        ).animals.let(entityMapper::toPets)
     }
 }

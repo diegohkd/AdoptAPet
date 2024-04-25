@@ -1,4 +1,4 @@
-package com.mobdao.domain.dataapi.entitites
+package com.mobdao.domain.entities
 
 data class Address(
     val addressLine: String,

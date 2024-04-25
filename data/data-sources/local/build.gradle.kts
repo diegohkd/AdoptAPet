@@ -11,6 +11,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":domain:entities"))
 
     implementation(libs.androidx.room.roomRuntime)
     ksp(libs.androidx.room.roomCompiler)

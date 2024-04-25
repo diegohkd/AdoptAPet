@@ -1,7 +1,7 @@
-package com.mobdao.common.testutils.mockfactories.domain.dataapi.entities
+package com.mobdao.common.testutils.mockfactories.domain.entities
 
-import com.mobdao.domain.dataapi.entitites.Address
-import com.mobdao.domain.dataapi.entitites.SearchFilter
+import com.mobdao.domain.entities.Address
+import com.mobdao.domain.entities.SearchFilter
 import io.mockk.every
 import io.mockk.mockk
 

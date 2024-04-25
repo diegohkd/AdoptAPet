@@ -1,22 +1,22 @@
 package com.mobdao.remote.responses
 
-data class AnimalsResponse(
+internal data class AnimalsResponse(
     val animals: List<Animal>
 )
 
-data class Animal(
+internal data class Animal(
     val id: String,
     val name: String,
     val breeds: Breeds,
     val photos: List<Photo>
 )
 
-data class Breeds(
+internal data class Breeds(
     val primary: String?,
     val secondary: String?,
 )
 
-data class Photo(
+internal data class Photo(
     val small: String,
     val medium: String,
     val large: String,

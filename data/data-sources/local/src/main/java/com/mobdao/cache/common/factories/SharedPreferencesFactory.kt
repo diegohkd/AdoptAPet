@@ -1,4 +1,4 @@
-package com.mobdao.cache.factories
+package com.mobdao.cache.common.factories
 
 import android.content.Context
 import android.content.SharedPreferences

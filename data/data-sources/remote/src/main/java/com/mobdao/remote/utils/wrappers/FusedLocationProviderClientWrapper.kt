@@ -8,7 +8,7 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FusedLocationProviderClientWrapper @Inject constructor(context: Context) {
+internal class FusedLocationProviderClientWrapper @Inject constructor(context: Context) {
 
     private val fusedLocationClient =
         LocationServices.getFusedLocationProviderClient(context)

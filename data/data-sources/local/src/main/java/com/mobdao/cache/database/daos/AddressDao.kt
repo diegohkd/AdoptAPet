@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.mobdao.cache.database.entities.Address
 
 @Dao
-interface AddressDao {
+internal interface AddressDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(address: List<Address>)

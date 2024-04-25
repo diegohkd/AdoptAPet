@@ -11,6 +11,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":domain:entities"))
 
     implementation(libs.jetbrains.kotlinx.kotlinxCoroutinesPlayServices)
     implementation(libs.google.android.gms.playServicesLocation)

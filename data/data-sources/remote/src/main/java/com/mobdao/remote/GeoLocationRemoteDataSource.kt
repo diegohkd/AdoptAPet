@@ -4,8 +4,9 @@ import android.annotation.SuppressLint
 import android.location.Location
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.mobdao.common.config.AppConfig
-import com.mobdao.remote.responses.GeoCoordinates
-import com.mobdao.remote.responses.GeocodeResponse
+import com.mobdao.domain.entities.Address
+import com.mobdao.domain.entities.GeoCoordinates
+import com.mobdao.remote.common.mappers.EntityMapper
 import com.mobdao.remote.services.GeoapifyService
 import com.mobdao.remote.utils.wrappers.FusedLocationProviderClientWrapper
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class GeoLocationRemoteDataSource @Inject internal constructor(
     private val fusedLocationClient: FusedLocationProviderClientWrapper,
     private val geoapifyService: GeoapifyService,
     private val appConfig: AppConfig,
+    private val entityMapper: EntityMapper,
 ) {
 
     private val geoapifyKey: String by lazy { appConfig.geoapifyConfig.apiKey }
@@ -31,18 +33,18 @@ class GeoLocationRemoteDataSource @Inject internal constructor(
         )
     }
 
-    suspend fun getLocationAddress(geoCoordinates: GeoCoordinates): GeocodeResponse =
+    suspend fun getLocationAddress(geoCoordinates: GeoCoordinates): List<Address> =
         geoapifyService.reverseGeocode(
             apiKey = geoapifyKey,
             latitude = geoCoordinates.latitude,
             longitude = geoCoordinates.longitude,
             format = REVERSE_GEOCODE_RESPONSE_FORMAT
-        )
+        ).let(entityMapper::toAddresses)
 
-    suspend fun autocompleteLocation(location: String): GeocodeResponse =
+    suspend fun autocompleteLocation(location: String): List<Address> =
         geoapifyService.autocomplete(
             apiKey = geoapifyKey,
             text = location,
             format = REVERSE_GEOCODE_RESPONSE_FORMAT
-        )
+        ).let(entityMapper::toAddresses)
 }

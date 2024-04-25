@@ -1,14 +1,13 @@
 package com.mobdao.data.repositories
 
 import com.mobdao.cache.GeoLocationLocalDataSource
-import com.mobdao.data.common.AddressDbEntity
-import com.mobdao.data.utils.mappers.AddressMapper
-import com.mobdao.domain.dataapi.entitites.Address
+import com.mobdao.domain.entities.Address
+import com.mobdao.domain.entities.GeoCoordinates
 import com.mobdao.remote.GeoLocationRemoteDataSource
-import com.mobdao.remote.responses.GeoCoordinates
-import com.mobdao.remote.responses.GeocodeResponse
-import com.mobdao.remote.responses.GeocodeResult
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -17,45 +16,30 @@ import org.junit.Test
 class GeoLocationRepositoryImplTest {
 
     private val currentGeoCoordinates: GeoCoordinates = mockk()
-    private val locationGeocodeResult1: GeocodeResult = mockk()
-    private val locationGeocodeResult2: GeocodeResult = mockk()
     private val locationAddress1: Address = mockk()
     private val locationAddress2: Address = mockk()
-    private val locationGeocodeResponse: GeocodeResponse = mockk {
-        every { results } returns listOf(
-            locationGeocodeResult1,
-            locationGeocodeResult2
-        )
-    }
-    private val currentAddressDbEntity: AddressDbEntity = mockk()
+    private val addresses = listOf(locationAddress1, locationAddress2)
 
     private val geoLocationRemoteDataSource: GeoLocationRemoteDataSource = mockk {
         coEvery { getCurrentLocationCoordinates() } returns currentGeoCoordinates
-        coEvery { getLocationAddress(currentGeoCoordinates) } returns locationGeocodeResponse
-        coEvery { autocompleteLocation("location") } returns locationGeocodeResponse
+        coEvery { getLocationAddress(currentGeoCoordinates) } returns addresses
+        coEvery { autocompleteLocation("location") } returns addresses
     }
     private val geoLocationLocalDataSource: GeoLocationLocalDataSource = mockk {
-        coEvery { getCurrentAddress() } returns currentAddressDbEntity
-        coJustRun { saveCurrentAddress(currentAddressDbEntity) }
-    }
-    private val addressMapper: AddressMapper = mockk {
-        every { mapToEntity(locationGeocodeResult1) } returns locationAddress1
-        every { mapToEntity(locationGeocodeResult2) } returns locationAddress2
-        every { mapToEntity(currentAddressDbEntity) } returns locationAddress1
-        every { mapToDbEntity(locationAddress1) } returns currentAddressDbEntity
+        coEvery { getCurrentAddress() } returns locationAddress1
+        coJustRun { saveCurrentAddress(locationAddress1) }
     }
 
     private val tested = GeoLocationRepositoryImpl(
         geoLocationRemoteDataSource = geoLocationRemoteDataSource,
         geoLocationLocalDataSource = geoLocationLocalDataSource,
-        addressMapper = addressMapper,
     )
 
     @Test
     fun `given current geo coordinates returns empty list of reversed geocoding when get current location address then null is returned`() =
         runTest {
             // given
-            every { locationGeocodeResponse.results } returns emptyList()
+            coEvery { geoLocationRemoteDataSource.getLocationAddress(currentGeoCoordinates) } returns emptyList()
 
             // when
             val result: Address? = tested.getCurrentLocationAddress()
@@ -111,6 +95,6 @@ class GeoLocationRepositoryImplTest {
             tested.cacheCurrentLocationAddress(address = locationAddress1)
 
             // then
-            coVerify { geoLocationLocalDataSource.saveCurrentAddress(currentAddressDbEntity) }
+            coVerify { geoLocationLocalDataSource.saveCurrentAddress(locationAddress1) }
         }
 }

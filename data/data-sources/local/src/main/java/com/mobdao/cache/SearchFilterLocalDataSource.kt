@@ -1,6 +1,6 @@
 package com.mobdao.cache
 
-import com.mobdao.cache.models.SearchFilter
+import com.mobdao.domain.entities.SearchFilter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

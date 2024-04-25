@@ -12,5 +12,6 @@ dependencies {
     implementation(project(":data:data-sources:local"))
     implementation(project(":domain"))
     implementation(project(":domain:data-api"))
+    implementation(project(":domain:entities"))
     api(libs.bundles.unitTest)
 }

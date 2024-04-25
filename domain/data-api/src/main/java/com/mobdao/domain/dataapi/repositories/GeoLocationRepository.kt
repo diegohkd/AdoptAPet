@@ -1,6 +1,6 @@
 package com.mobdao.domain.dataapi.repositories
 
-import com.mobdao.domain.dataapi.entitites.Address
+import com.mobdao.domain.entities.Address
 
 interface GeoLocationRepository {
     suspend fun getCurrentLocationAddress(): Address?

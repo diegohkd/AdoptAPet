@@ -7,7 +7,7 @@ import com.mobdao.cache.database.AppDatabase
 import com.mobdao.cache.database.AppDatabaseFactory
 import com.mobdao.cache.database.daos.AddressDao
 import com.mobdao.cache.database.daos.AnimalDao
-import com.mobdao.cache.factories.SharedPreferencesFactory
+import com.mobdao.cache.common.factories.SharedPreferencesFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

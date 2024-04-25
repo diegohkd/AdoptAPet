@@ -1,21 +1,25 @@
 package com.mobdao.cache
 
+import com.mobdao.cache.common.mappers.EntityMapper
 import com.mobdao.cache.database.daos.AnimalDao
-import com.mobdao.cache.database.entities.Animal
+import com.mobdao.domain.entities.Pet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AnimalLocalDataSource @Inject internal constructor(private val animalDao: AnimalDao) {
+class AnimalLocalDataSource @Inject internal constructor(
+    private val animalDao: AnimalDao,
+    private val entityMapper: EntityMapper,
+) {
 
-    suspend fun saveAnimals(animals: List<Animal>) {
-        animalDao.insertAll(animals)
+    suspend fun savePets(pets: List<Pet>) {
+        animalDao.insertAll(entityMapper.toAnimal(pets))
     }
 
-    suspend fun getAnimalById(animalId: String): Animal? =
+    suspend fun getPetById(petId: String): Pet? =
         withContext(Dispatchers.IO) {
-            animalDao.getById(animalId)
+            animalDao.getById(petId)?.let(entityMapper::toPet)
         }
 }

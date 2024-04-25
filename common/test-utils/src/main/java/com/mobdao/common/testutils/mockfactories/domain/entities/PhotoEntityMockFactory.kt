@@ -1,6 +1,6 @@
-package com.mobdao.common.testutils.mockfactories.domain.dataapi.entities
+package com.mobdao.common.testutils.mockfactories.domain.entities
 
-import com.mobdao.domain.dataapi.entitites.Photo
+import com.mobdao.domain.entities.Photo
 import io.mockk.every
 import io.mockk.mockk
 

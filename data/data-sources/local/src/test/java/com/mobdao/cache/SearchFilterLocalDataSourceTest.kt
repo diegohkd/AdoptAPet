@@ -1,6 +1,6 @@
 package com.mobdao.cache
 
-import com.mobdao.cache.models.SearchFilter
+import com.mobdao.domain.entities.SearchFilter
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
