@@ -2,8 +2,8 @@ package com.mobdao.remote
 
 import com.mobdao.common.config.AppConfig
 import com.mobdao.common.config.PetFinderConfig
-import com.mobdao.remote.responses.AccessTokenResponse
-import com.mobdao.remote.services.AuthService
+import com.mobdao.remote.internal.responses.AccessTokenResponse
+import com.mobdao.remote.internal.services.AuthService
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

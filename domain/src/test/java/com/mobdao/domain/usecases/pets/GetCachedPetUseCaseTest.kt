@@ -4,8 +4,8 @@ import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.PetEntityMockFactory
 import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.domain.models.Pet
-import com.mobdao.domain.utils.PetEntity
-import com.mobdao.domain.utils.mappers.PetMapper
+import com.mobdao.domain.internal.PetEntity
+import com.mobdao.domain.internal.mappers.PetMapper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

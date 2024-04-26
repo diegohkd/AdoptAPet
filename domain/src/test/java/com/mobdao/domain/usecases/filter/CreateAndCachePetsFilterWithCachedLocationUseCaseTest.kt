@@ -5,7 +5,7 @@ import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMo
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.entities.Address
-import com.mobdao.domain.utils.SearchFilterEntity
+import com.mobdao.domain.internal.SearchFilterEntity
 import io.mockk.coEvery
 import io.mockk.justRun
 import io.mockk.mockk

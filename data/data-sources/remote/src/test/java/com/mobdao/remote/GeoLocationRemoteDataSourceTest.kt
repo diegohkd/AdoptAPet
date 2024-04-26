@@ -6,10 +6,10 @@ import com.mobdao.common.config.AppConfig
 import com.mobdao.common.config.GeoapifyConfig
 import com.mobdao.domain.entities.Address
 import com.mobdao.domain.entities.GeoCoordinates
-import com.mobdao.remote.common.mappers.EntityMapper
-import com.mobdao.remote.responses.GeocodeResponse
-import com.mobdao.remote.services.GeoapifyService
-import com.mobdao.remote.utils.wrappers.FusedLocationProviderClientWrapper
+import com.mobdao.remote.internal.mappers.EntityMapper
+import com.mobdao.remote.internal.responses.GeocodeResponse
+import com.mobdao.remote.internal.services.GeoapifyService
+import com.mobdao.remote.internal.wrappers.FusedLocationProviderClientWrapper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

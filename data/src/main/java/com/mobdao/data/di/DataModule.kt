@@ -13,7 +13,7 @@ import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.dataapi.services.LogService
 import com.mobdao.domain.dataapi.services.OnboardingService
-import com.mobdao.remote.api.AccessTokenManager
+import com.mobdao.remote.AccessTokenManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

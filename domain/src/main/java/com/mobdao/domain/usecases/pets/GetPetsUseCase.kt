@@ -3,13 +3,13 @@ package com.mobdao.domain.usecases.pets
 import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.domain.models.Pet
 import com.mobdao.domain.models.SearchFilter
-import com.mobdao.domain.utils.mappers.PetMapper
-import com.mobdao.domain.utils.mappers.SearchFilterMapper
+import com.mobdao.domain.internal.mappers.PetMapper
+import com.mobdao.domain.internal.mappers.SearchFilterMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetPetsUseCase @Inject constructor(
+class GetPetsUseCase @Inject internal constructor(
     private val petsRepository: PetsRepository,
     private val petMapper: PetMapper,
     private val searchFilterMapper: SearchFilterMapper,

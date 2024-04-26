@@ -4,8 +4,8 @@ import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.SearchFilterEntityMockFactory
 import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.models.SearchFilter
-import com.mobdao.domain.utils.SearchFilterEntity
-import com.mobdao.domain.utils.mappers.SearchFilterMapper
+import com.mobdao.domain.internal.SearchFilterEntity
+import com.mobdao.domain.internal.mappers.SearchFilterMapper
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first

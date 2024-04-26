@@ -1,6 +1,6 @@
 package com.mobdao.data.repositories
 
-import com.mobdao.cache.AnimalLocalDataSource
+import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.domain.entities.Address
 import com.mobdao.domain.entities.Pet

@@ -1,6 +1,6 @@
 package com.mobdao.data.utils
 
-import com.mobdao.cache.AccessTokenLocalDataSource
+import com.mobdao.local.AccessTokenLocalDataSource
 import com.mobdao.remote.AccessTokenRemoteDataSource
 import io.mockk.*
 import kotlinx.coroutines.test.runTest

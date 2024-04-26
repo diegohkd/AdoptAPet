@@ -1,6 +1,6 @@
 package com.mobdao.data.repositories
 
-import com.mobdao.cache.SearchFilterLocalDataSource
+import com.mobdao.local.SearchFilterLocalDataSource
 import com.mobdao.domain.entities.SearchFilter
 import io.mockk.every
 import io.mockk.justRun

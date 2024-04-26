@@ -5,8 +5,8 @@ import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.models.Address
-import com.mobdao.domain.utils.AddressEntity
-import com.mobdao.domain.utils.mappers.AddressMapper
+import com.mobdao.domain.internal.AddressEntity
+import com.mobdao.domain.internal.mappers.AddressMapper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

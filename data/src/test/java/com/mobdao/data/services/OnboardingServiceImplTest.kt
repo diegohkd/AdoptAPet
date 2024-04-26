@@ -1,6 +1,6 @@
 package com.mobdao.data.services
 
-import com.mobdao.cache.OnboardingLocalDataSource
+import com.mobdao.local.OnboardingLocalDataSource
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk

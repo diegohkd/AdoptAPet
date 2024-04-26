@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class HasCompletedOnboardingUseCase @Inject constructor(
+class HasCompletedOnboardingUseCase @Inject internal constructor(
     private val onboardingService: OnboardingService
 ) {
 

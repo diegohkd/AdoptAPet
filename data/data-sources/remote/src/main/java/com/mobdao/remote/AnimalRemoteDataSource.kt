@@ -1,8 +1,8 @@
 package com.mobdao.remote
 
 import com.mobdao.domain.entities.Pet
-import com.mobdao.remote.common.mappers.EntityMapper
-import com.mobdao.remote.services.PetFinderService
+import com.mobdao.remote.internal.mappers.EntityMapper
+import com.mobdao.remote.internal.services.PetFinderService
 import javax.inject.Inject
 import javax.inject.Singleton
 

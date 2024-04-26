@@ -4,7 +4,7 @@ import com.mobdao.common.exceptions.LocationNotFoundException
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.entities.Address
-import com.mobdao.domain.utils.SearchFilterEntity
+import com.mobdao.domain.internal.SearchFilterEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package com.mobdao.data.repositories
 
-import com.mobdao.cache.AnimalLocalDataSource
+import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.SearchFilterEntityMockFactory
 import com.mobdao.domain.entities.Pet
