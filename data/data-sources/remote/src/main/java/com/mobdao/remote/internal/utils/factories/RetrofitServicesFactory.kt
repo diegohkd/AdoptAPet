@@ -1,9 +1,9 @@
-package com.mobdao.remote.internal.factories
+package com.mobdao.remote.internal.utils.factories
 
 import com.mobdao.remote.internal.services.AuthService
 import com.mobdao.remote.internal.services.GeoapifyService
 import com.mobdao.remote.internal.services.PetFinderService
-import com.mobdao.remote.internal.factories.networkinterceptors.AccessTokenInterceptor
+import com.mobdao.remote.internal.utils.factories.networkinterceptors.AccessTokenInterceptor
 import javax.inject.Inject
 import javax.inject.Singleton
 

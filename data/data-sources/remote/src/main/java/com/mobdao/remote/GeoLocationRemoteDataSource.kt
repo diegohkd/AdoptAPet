@@ -6,9 +6,9 @@ import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.mobdao.common.config.AppConfig
 import com.mobdao.domain.entities.Address
 import com.mobdao.domain.entities.GeoCoordinates
-import com.mobdao.remote.internal.mappers.EntityMapper
+import com.mobdao.remote.internal.utils.mappers.EntityMapper
 import com.mobdao.remote.internal.services.GeoapifyService
-import com.mobdao.remote.internal.wrappers.FusedLocationProviderClientWrapper
+import com.mobdao.remote.internal.utils.wrappers.FusedLocationProviderClientWrapper
 import javax.inject.Inject
 import javax.inject.Singleton
 

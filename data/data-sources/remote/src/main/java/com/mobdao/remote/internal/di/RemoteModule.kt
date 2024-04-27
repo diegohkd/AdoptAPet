@@ -3,8 +3,8 @@ package com.mobdao.remote.internal.di
 import com.mobdao.remote.internal.services.AuthService
 import com.mobdao.remote.internal.services.GeoapifyService
 import com.mobdao.remote.internal.services.PetFinderService
-import com.mobdao.remote.internal.factories.RetrofitServicesFactory
-import com.mobdao.remote.internal.factories.networkinterceptors.AccessTokenInterceptor
+import com.mobdao.remote.internal.utils.factories.RetrofitServicesFactory
+import com.mobdao.remote.internal.utils.factories.networkinterceptors.AccessTokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

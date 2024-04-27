@@ -1,7 +1,9 @@
-package com.mobdao.remote.internal.factories
+package com.mobdao.remote.internal.utils.factories
 
 import com.mobdao.common.config.AppConfig
+import com.mobdao.remote.internal.utils.adapters.AnimalTypeAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,10 +14,7 @@ import javax.inject.Singleton
 
 // TODO maybe create different factory depending on the buildType
 @Singleton
-internal class RetrofitFactory @Inject constructor(
-    private val appConfig: AppConfig,
-    private val moshi: Moshi,
-) {
+internal class RetrofitFactory @Inject constructor(private val appConfig: AppConfig) {
 
     fun create(baseUrl: String, interceptors: List<Interceptor> = emptyList()): Retrofit {
         val client = OkHttpClient.Builder()
@@ -29,7 +28,14 @@ internal class RetrofitFactory @Inject constructor(
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(client.build())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder()
+                        .add(AnimalTypeAdapter())
+                        .addLast(KotlinJsonAdapterFactory())
+                        .build()
+                )
+            )
             .build()
     }
 }

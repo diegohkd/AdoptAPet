@@ -1,4 +1,4 @@
-package com.mobdao.remote.internal.factories.networkinterceptors
+package com.mobdao.remote.internal.utils.factories.networkinterceptors
 
 import com.mobdao.remote.AccessTokenManager
 import kotlinx.coroutines.runBlocking

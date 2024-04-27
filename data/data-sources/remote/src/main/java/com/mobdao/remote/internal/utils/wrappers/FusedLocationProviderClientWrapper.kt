@@ -1,4 +1,4 @@
-package com.mobdao.remote.internal.wrappers
+package com.mobdao.remote.internal.utils.wrappers
 
 import android.content.Context
 import android.location.Location

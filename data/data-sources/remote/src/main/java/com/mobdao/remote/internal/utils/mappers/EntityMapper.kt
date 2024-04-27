@@ -1,10 +1,12 @@
-package com.mobdao.remote.internal.mappers
+package com.mobdao.remote.internal.utils.mappers
 
 import com.mobdao.domain.entities.Address
 import com.mobdao.domain.entities.Pet
 import com.mobdao.domain.entities.Photo
 import com.mobdao.remote.internal.responses.Animal
+import com.mobdao.remote.internal.responses.AnimalType.*
 import com.mobdao.remote.internal.responses.GeocodeResponse
+import com.mobdao.remote.internal.utils.DomainEntityAnimalType
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,6 +18,16 @@ internal class EntityMapper @Inject constructor() {
             with(animal) {
                 Pet(
                     id = id,
+                    type = when (type) {
+                        DOG -> DomainEntityAnimalType.DOG
+                        CAT -> DomainEntityAnimalType.CAT
+                        RABBIT -> DomainEntityAnimalType.RABBIT
+                        SMALL_AND_FURRY -> DomainEntityAnimalType.SMALL_AND_FURRY
+                        HORSE -> DomainEntityAnimalType.HORSE
+                        BIRD -> DomainEntityAnimalType.BIRD
+                        SCALES_FINS_AND_OTHER -> DomainEntityAnimalType.SCALES_FINS_AND_OTHER
+                        BARNYARD -> DomainEntityAnimalType.BARNYARD
+                    },
                     name = name,
                     breeds = com.mobdao.domain.entities.Breeds(
                         primary = breeds.primary,
@@ -35,7 +47,7 @@ internal class EntityMapper @Inject constructor() {
 
     fun toAddresses(geocodeResponse: GeocodeResponse): List<Address> =
         geocodeResponse.results.map { geocodeResult ->
-            with (geocodeResult) {
+            with(geocodeResult) {
                 Address(
                     addressLine = formatted,
                     latitude = lat,
