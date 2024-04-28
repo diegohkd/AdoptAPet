@@ -1,5 +1,6 @@
 package com.mobdao.common.testutils.mockfactories.domain
 
+import com.mobdao.domain.models.AnimalType
 import com.mobdao.domain.models.Breeds
 import com.mobdao.domain.models.Pet
 import com.mobdao.domain.models.Photo
@@ -10,11 +11,13 @@ object PetMockFactory {
 
     fun create(
         id: String = "id",
+        type: AnimalType = AnimalType.DOG,
         name: String = "name",
         breeds: Breeds = BreedsMockFactory.create(),
         photos: List<Photo> = listOf(PhotoMockFactory.create()),
     ): Pet = mockk {
         every { this@mockk.id } returns id
+        every { this@mockk.type } returns type
         every { this@mockk.name } returns name
         every { this@mockk.breeds } returns breeds
         every { this@mockk.photos } returns photos

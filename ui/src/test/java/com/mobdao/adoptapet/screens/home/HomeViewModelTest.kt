@@ -7,6 +7,7 @@ import com.mobdao.adoptapet.screens.home.petspaging.PetsPager
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
+import com.mobdao.domain.models.AnimalType
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
 import com.mobdao.domain.usecases.filter.ObserveSearchFilterUseCase
@@ -175,13 +176,19 @@ class HomeViewModelTest {
 
     @Test
     fun `when Pet is clicked then Pet clicked nav action is emitted`() {
+        // given
+        val animalType: AnimalType = mockk<AnimalType>()
+        val pet: HomeViewModel.Pet = mockk {
+            every { id } returns "pet-id"
+            every { type } returns animalType
+        }
         // when
-        tested.onPetClicked(id = "pet-id")
+        tested.onPetClicked(pet = pet)
 
         // then
         assertEquals(
             tested.navAction.value!!.peekContent(),
-            PetClicked(petId = "pet-id")
+            PetClicked(petId = "pet-id", type = animalType)
         )
     }
 

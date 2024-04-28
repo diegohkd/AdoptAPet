@@ -9,6 +9,7 @@ import com.mobdao.adoptapet.utils.PetDomain
 import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
+import com.mobdao.domain.models.AnimalType.DOG
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.usecases.pets.GetPetsUseCase
 import io.mockk.every
@@ -28,6 +29,7 @@ class PetsPagingSourceTest {
     }
     private val pet: PetDomain = PetMockFactory.create(
         id = "id",
+        type = DOG,
         name = "name",
         breeds = BreedsMockFactory.create(
             primary = "primary",
@@ -172,6 +174,7 @@ class PetsPagingSourceTest {
                 listOf(
                     Pet(
                         id = "id",
+                        type = DOG,
                         name = "name",
                         breeds = Pet.Breeds(
                             primary = "primary",
