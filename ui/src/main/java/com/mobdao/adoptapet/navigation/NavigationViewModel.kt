@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.*
 import com.mobdao.adoptapet.screens.home.HomeViewModel
-import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.*
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
 import com.mobdao.common.kotlin.catchAndLogException
+import com.mobdao.domain.models.AnimalType
 import com.mobdao.domain.usecases.onboarding.HasCompletedOnboardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -23,9 +25,7 @@ class NavigationViewModel @Inject constructor(
         data object SplashToHomeScreen : NavAction
         data object OnboardingToHomeScreen : NavAction
         data object FilterScreen : NavAction
-        data class CatDetailsScreen(val petId: String) : NavAction
-        data class DogDetailsScreen(val petId: String) : NavAction
-        data class RabbitDetailsScreen(val petId: String) : NavAction
+        data class PetDetailsScreen(val petId: String, val type: AnimalType) : NavAction
         data object PreviousScreen : NavAction
     }
 
@@ -60,10 +60,8 @@ class NavigationViewModel @Inject constructor(
     fun onHomeNavAction(navAction: HomeViewModel.NavAction) {
         _navAction.value = Event(
             when (navAction) {
-                is CatClicked -> CatDetailsScreen(navAction.petId)
-                is DogClicked -> DogDetailsScreen(navAction.petId)
+                is PetClicked -> PetDetailsScreen(petId = navAction.petId, type = navAction.type)
                 FilterClicked -> FilterScreen
-                is RabbitClicked -> RabbitDetailsScreen(navAction.petId)
             }
         )
     }

@@ -19,30 +19,16 @@ sealed interface Destination {
         override val route: String = "home"
     }
 
-    sealed class PetDetails : Destination {
-        companion object {
-            const val PET_ID_ARG = "pedId"
-        }
-
+    data object PetDetails : Destination {
+        const val PET_ID_ARG = "pedId"
+        const val PET_TYPE_ARG = "pedType"
         val arguments = listOf(
             navArgument(PET_ID_ARG) { type = NavType.StringType }
         )
-        protected abstract val host: String
 
-        override val route: String get() = "${host}?$PET_ID_ARG={$PET_ID_ARG}"
-        fun buildRouteWithArgs(petId: String): String = "$host?$PET_ID_ARG=$petId"
-
-        data object Cat : PetDetails() {
-            override val host: String = "cat_details"
-        }
-
-        data object Dog : PetDetails() {
-            override val host: String = "dog_details"
-        }
-
-        data object Rabbit : PetDetails() {
-            override val host: String = "rabbit_details"
-        }
+        private const val HOST: String = "pet_details"
+        override val route: String = "$HOST?$PET_ID_ARG={$PET_ID_ARG}&$PET_TYPE_ARG={$PET_TYPE_ARG}"
+        fun buildRouteWithArgs(petId: String, petType: String): String = "$HOST?$PET_ID_ARG=$petId&$PET_TYPE_ARG=$petType"
     }
 
     data object Filter : Destination {

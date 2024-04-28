@@ -51,9 +51,7 @@ class HomeViewModel @Inject constructor(
     }
 
     sealed interface NavAction {
-        data class CatClicked(val petId: String) : NavAction
-        data class DogClicked(val petId: String) : NavAction
-        data class RabbitClicked(val petId: String) : NavAction
+        data class PetClicked(val petId: String, val type: AnimalType) : NavAction
         data object FilterClicked : NavAction
     }
 
@@ -86,13 +84,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onPetClicked(pet: Pet) {
-        _navAction.value = Event(
-            when (pet.type) {
-                CAT -> CatClicked(pet.id)
-                DOG -> DogClicked(pet.id)
-                else -> RabbitClicked(pet.id) // TODO handle other cases
-            }
-        )
+        _navAction.value = Event(PetClicked(pet.id, pet.type))
     }
 
     fun onFilterClicked() {

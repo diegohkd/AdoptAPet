@@ -33,13 +33,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
-import com.mobdao.adoptapet.common.theme.color.CatColorSchema
 import com.mobdao.adoptapet.common.theme.color.ColorSchema
-import com.mobdao.adoptapet.common.theme.color.DogColorSchema
-import com.mobdao.adoptapet.common.theme.color.RabbitColorSchema
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.screens.home.HomeViewModel.*
-import com.mobdao.domain.models.AnimalType
+import com.mobdao.adoptapet.utils.extensions.toColorSchema
+import com.mobdao.domain.models.AnimalType.*
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -209,13 +207,7 @@ private fun ToolBar(
 
 @Composable
 private fun PetItem(pet: Pet, onClick: (pet: Pet) -> Unit) {
-    val colorSchema: ColorSchema = remember(pet) {
-        when (pet.type) {
-            AnimalType.DOG -> DogColorSchema
-            AnimalType.CAT -> CatColorSchema
-            else -> RabbitColorSchema // TODO handle other cases
-        }
-    }
+    val colorSchema: ColorSchema = remember(pet.type) { pet.type.toColorSchema() }
     AdoptAPetTheme(colorSchema = colorSchema) {
         Card {
             Row(
@@ -300,28 +292,28 @@ fun HomeContentPreview() {
                     data = listOf(
                         Pet(
                             id = "id-1",
-                            type = AnimalType.DOG,
+                            type = DOG,
                             name = "Bibico",
                             breeds = Pet.Breeds("SRD", ""),
                             thumbnailUrl = "",
                         ),
                         Pet(
                             id = "id-2",
-                            type = AnimalType.DOG,
+                            type = DOG,
                             name = "Nina",
                             breeds = Pet.Breeds("SRD", ""),
                             thumbnailUrl = "",
                         ),
                         Pet(
                             id = "id-3",
-                            type = AnimalType.CAT,
+                            type = CAT,
                             name = "Nilla",
                             breeds = Pet.Breeds("SRD", ""),
                             thumbnailUrl = "",
                         ),
                         Pet(
                             id = "id-4",
-                            type = AnimalType.RABBIT,
+                            type = RABBIT,
                             name = "Pepê",
                             breeds = Pet.Breeds("SRD", ""),
                             thumbnailUrl = "",

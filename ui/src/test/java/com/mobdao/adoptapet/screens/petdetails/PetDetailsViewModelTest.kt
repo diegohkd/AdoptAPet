@@ -2,8 +2,7 @@ package com.mobdao.adoptapet.screens.petdetails
 
 import androidx.lifecycle.SavedStateHandle
 import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_ID_ARG
-import com.mobdao.adoptapet.screens.petdetails.base.PetDetailsViewModel
-import com.mobdao.adoptapet.screens.petdetails.base.PetDetailsViewModel.UiState
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory

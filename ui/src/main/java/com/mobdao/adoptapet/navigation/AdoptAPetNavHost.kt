@@ -10,15 +10,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
+import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_TYPE_ARG
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.*
 import com.mobdao.adoptapet.screens.filter.FilterScreen
 import com.mobdao.adoptapet.screens.home.HomeScreen
 import com.mobdao.adoptapet.screens.onboarding.OnboardingScreen
-import com.mobdao.adoptapet.screens.petdetails.CatDetailsScreen
-import com.mobdao.adoptapet.screens.petdetails.DogDetailsScreen
-import com.mobdao.adoptapet.screens.petdetails.RabbitDetailsScreen
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsScreen
 import com.mobdao.adoptapet.screens.splash.SplashScreen
+import com.mobdao.domain.models.AnimalType
 
 @Composable
 fun AdoptAPetNavHost(
@@ -47,17 +47,12 @@ fun AdoptAPetNavHost(
                 .build()
             navController.navigate(route = Destination.Home.route, navOptions = navOptions)
         }
-        is CatDetailsScreen ->
+        is PetDetailsScreen ->
             navController.navigate(
-                route = Destination.PetDetails.Cat.buildRouteWithArgs(navDestination.petId)
-            )
-        is DogDetailsScreen ->
-            navController.navigate(
-                route = Destination.PetDetails.Dog.buildRouteWithArgs(navDestination.petId)
-            )
-        is RabbitDetailsScreen ->
-            navController.navigate(
-                route = Destination.PetDetails.Rabbit.buildRouteWithArgs(navDestination.petId)
+                route = Destination.PetDetails.buildRouteWithArgs(
+                    petId = navDestination.petId,
+                    petType = navDestination.type.name,
+                )
             )
         FilterScreen -> navController.navigate(route = Destination.Filter.route)
         PreviousScreen -> navController.popBackStack()
@@ -78,22 +73,18 @@ fun AdoptAPetNavHost(
             HomeScreen(onNavAction = viewModel::onHomeNavAction)
         }
         composable(
-            route = Destination.PetDetails.Cat.route,
-            arguments = Destination.PetDetails.Cat.arguments,
+            route = Destination.PetDetails.route,
+            arguments = Destination.PetDetails.arguments,
         ) {
-            CatDetailsScreen()
-        }
-        composable(
-            route = Destination.PetDetails.Dog.route,
-            arguments = Destination.PetDetails.Dog.arguments,
-        ) {
-            DogDetailsScreen()
-        }
-        composable(
-            route = Destination.PetDetails.Rabbit.route,
-            arguments = Destination.PetDetails.Rabbit.arguments,
-        ) {
-            RabbitDetailsScreen()
+            /*
+            * TODO improve this? One solution would be creating a different screen for each animal
+            *  type, but that will require a ton of boilerplate
+            */
+            val animalType: AnimalType = AnimalType.fromName(
+                name = it.arguments?.getString(PET_TYPE_ARG),
+            ) ?: return@composable
+
+            PetDetailsScreen(animalType = animalType)
         }
         composable(route = Destination.Filter.route) {
             FilterScreen(onFilterApplied = viewModel::onFilterApplied)

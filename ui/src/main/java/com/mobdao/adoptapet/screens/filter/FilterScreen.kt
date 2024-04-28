@@ -16,7 +16,16 @@ import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.FilterAppli
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState
 import com.mobdao.domain.models.Address
 
-private val petTypes = listOf("Dog", "Cat", "Rabbit")
+private val petTypes = listOf(
+    "Dog",
+    "Cat",
+    "Rabbit",
+    "Bird",
+    "Small & Furry",
+    "Horse",
+    "Barnyard",
+    "Scales, Fins & Other"
+)
 
 @Composable
 fun FilterScreen(
