@@ -15,8 +15,13 @@ This is currently a WIP, but the architecture and some basic functionality are m
 - Kotlin Flow.
 - Kotlin Coroutines.
 - Multi-modules.
-- Gradle with Kotlin DSL.
-- Versions catalog.
+- Design system.
+	- Extension theme of Material Theme.
+	- Different color schema per animal type.
+- Gradle
+	- Kotlin DSL.
+	- Versuibs catalog.
+	- Common config with Precompiled script plugins and constants.
 - Code analysis with detekt.
 - Unit tests with JUnit4 and Mockk.
 
