@@ -113,7 +113,6 @@ private fun UiContent(
                 IconButton(onClick = onClearClicked) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        tint = MaterialTheme.colorScheme.onSurface,
                         contentDescription = ""
                     )
                 }
@@ -123,11 +122,11 @@ private fun UiContent(
         LazyColumn {
             item {
                 Text(
-                    text = "Current location",
+                    text = stringResource(R.string.current_location),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable(onClick = onCurrentLocationClicked),
+                        .clickable(onClick = onCurrentLocationClicked)
+                        .padding(8.dp),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                 )

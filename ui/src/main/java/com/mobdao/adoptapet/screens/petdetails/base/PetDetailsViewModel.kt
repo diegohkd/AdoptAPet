@@ -1,9 +1,9 @@
-package com.mobdao.adoptapet.screens.petdetails
+package com.mobdao.adoptapet.screens.petdetails.base
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_ID_ARG
+import com.mobdao.adoptapet.navigation.Destination.PetDetails.Companion.PET_ID_ARG
 import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.usecases.pets.GetCachedPetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -15,7 +15,9 @@ import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.*
 import com.mobdao.adoptapet.screens.filter.FilterScreen
 import com.mobdao.adoptapet.screens.home.HomeScreen
 import com.mobdao.adoptapet.screens.onboarding.OnboardingScreen
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsScreen
+import com.mobdao.adoptapet.screens.petdetails.CatDetailsScreen
+import com.mobdao.adoptapet.screens.petdetails.DogDetailsScreen
+import com.mobdao.adoptapet.screens.petdetails.RabbitDetailsScreen
 import com.mobdao.adoptapet.screens.splash.SplashScreen
 
 @Composable
@@ -45,11 +47,19 @@ fun AdoptAPetNavHost(
                 .build()
             navController.navigate(route = Destination.Home.route, navOptions = navOptions)
         }
-        FilterScreen -> navController.navigate(route = Destination.Filter.route)
-        is PetDetailsScreen ->
+        is CatDetailsScreen ->
             navController.navigate(
-                route = Destination.PetDetails.buildRouteWithArgs(navDestination.petId)
+                route = Destination.PetDetails.Cat.buildRouteWithArgs(navDestination.petId)
             )
+        is DogDetailsScreen ->
+            navController.navigate(
+                route = Destination.PetDetails.Dog.buildRouteWithArgs(navDestination.petId)
+            )
+        is RabbitDetailsScreen ->
+            navController.navigate(
+                route = Destination.PetDetails.Rabbit.buildRouteWithArgs(navDestination.petId)
+            )
+        FilterScreen -> navController.navigate(route = Destination.Filter.route)
         PreviousScreen -> navController.popBackStack()
         null -> {}
     }
@@ -65,16 +75,25 @@ fun AdoptAPetNavHost(
             OnboardingScreen(onCompleted = viewModel::onOnboardingCompleted)
         }
         composable(route = Destination.Home.route) {
-            HomeScreen(
-                onPetClicked = viewModel::onPetClicked,
-                onFilterClicked = viewModel::onFilterClicked,
-            )
+            HomeScreen(onNavAction = viewModel::onHomeNavAction)
         }
         composable(
-            route = Destination.PetDetails.route,
-            arguments = Destination.PetDetails.arguments,
+            route = Destination.PetDetails.Cat.route,
+            arguments = Destination.PetDetails.Cat.arguments,
         ) {
-            PetDetailsScreen()
+            CatDetailsScreen()
+        }
+        composable(
+            route = Destination.PetDetails.Dog.route,
+            arguments = Destination.PetDetails.Dog.arguments,
+        ) {
+            DogDetailsScreen()
+        }
+        composable(
+            route = Destination.PetDetails.Rabbit.route,
+            arguments = Destination.PetDetails.Rabbit.arguments,
+        ) {
+            RabbitDetailsScreen()
         }
         composable(route = Destination.Filter.route) {
             FilterScreen(onFilterApplied = viewModel::onFilterApplied)

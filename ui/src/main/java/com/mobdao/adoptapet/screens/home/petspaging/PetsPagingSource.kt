@@ -3,6 +3,7 @@ package com.mobdao.adoptapet.screens.home.petspaging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.mobdao.adoptapet.screens.home.HomeViewModel
+import com.mobdao.domain.models.Pet
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.usecases.pets.GetPetsUseCase
 import kotlinx.coroutines.flow.first
@@ -29,17 +30,7 @@ class PetsPagingSource private constructor(
             val pets: List<HomeViewModel.Pet> = getPetsUseCase
                 .execute(pageNumber = pageNumber, searchFilter = searchFilter)
                 .first()
-                .map {
-                    HomeViewModel.Pet(
-                        id = it.id,
-                        name = it.name,
-                        breeds = HomeViewModel.Pet.Breeds(
-                            primary = it.breeds.primary,
-                            secondary = it.breeds.secondary,
-                        ),
-                        thumbnailUrl = it.photos.firstOrNull()?.smallUrl.orEmpty()
-                    )
-                }
+                .map { it.toViewModelModel() }
             LoadResult.Page(
                 data = pets,
                 prevKey = if (pageNumber == 1) null else pageNumber - 1,
@@ -50,6 +41,18 @@ class PetsPagingSource private constructor(
             LoadResult.Error(exception)
         }
     }
+
+    private fun Pet.toViewModelModel(): HomeViewModel.Pet =
+        HomeViewModel.Pet(
+            id = id,
+            type = type,
+            name = name,
+            breeds = HomeViewModel.Pet.Breeds(
+                primary = breeds.primary,
+                secondary = breeds.secondary,
+            ),
+            thumbnailUrl = photos.firstOrNull()?.smallUrl.orEmpty()
+        )
 
     @Singleton
     class Factory @Inject constructor(private val getPetsUseCase: GetPetsUseCase) {

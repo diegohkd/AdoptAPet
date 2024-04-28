@@ -59,7 +59,7 @@ private fun UiContent(
             onAddressSelected = onAddressSelected,
             onError = onFailedToGetAddress,
         )
-        Text(text = "Type")
+        Text(text = stringResource(R.string.type))
         ExposedDropdownMenuBox(
             expanded = isTypeDropdownExpanded,
             onExpandedChange = {

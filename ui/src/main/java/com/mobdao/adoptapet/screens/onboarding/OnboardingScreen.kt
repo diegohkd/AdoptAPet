@@ -2,6 +2,7 @@ package com.mobdao.adoptapet.screens.onboarding
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +52,11 @@ private fun UiContent(
     onNextClicked: () -> Unit,
     onDismissGenericErrorDialog: () -> Unit,
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding(),
+    ) {
         val (welcomeTextRef, searchBarRef, nextButtonRef) = createRefs()
 
         Text(

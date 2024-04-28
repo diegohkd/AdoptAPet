@@ -1,18 +1,20 @@
 package com.mobdao.adoptapet.screens.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
-import androidx.paging.LoadState.*
+import androidx.paging.LoadState.Error
+import androidx.paging.LoadState.NotLoading
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.common.extensions.isLoading
-import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
-import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.*
 import com.mobdao.adoptapet.screens.home.petspaging.PetsPager
 import com.mobdao.common.kotlin.catchAndLogException
+import com.mobdao.domain.models.AnimalType
+import com.mobdao.domain.models.AnimalType.CAT
+import com.mobdao.domain.models.AnimalType.DOG
 import com.mobdao.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
 import com.mobdao.domain.usecases.filter.ObserveSearchFilterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +39,7 @@ class HomeViewModel @Inject constructor(
 
     data class Pet(
         val id: String,
+        val type: AnimalType,
         val name: String,
         val breeds: Breeds,
         val thumbnailUrl: String,
@@ -48,7 +51,9 @@ class HomeViewModel @Inject constructor(
     }
 
     sealed interface NavAction {
-        data class PetClicked(val petId: String) : NavAction
+        data class CatClicked(val petId: String) : NavAction
+        data class DogClicked(val petId: String) : NavAction
+        data class RabbitClicked(val petId: String) : NavAction
         data object FilterClicked : NavAction
     }
 
@@ -80,8 +85,14 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun onPetClicked(id: String) {
-        _navAction.value = Event(PetClicked(id))
+    fun onPetClicked(pet: Pet) {
+        _navAction.value = Event(
+            when (pet.type) {
+                CAT -> CatClicked(pet.id)
+                DOG -> DogClicked(pet.id)
+                else -> RabbitClicked(pet.id) // TODO handle other cases
+            }
+        )
     }
 
     fun onFilterClicked() {

@@ -6,4 +6,7 @@
     <string name="apply">Apply</string>
     <string name="next">Next</string>
     <string name="no_pets_found">No pets found. \nChange your filters and try again.</string>
+    <string name="current_location">Current location</string>
+    <string name="type">Type</string>
+    <string name="update_filters">Update filters</string>
 </resources>
