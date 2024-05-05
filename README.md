@@ -25,3 +25,7 @@ This is currently a WIP, but the architecture and some basic functionality are m
 - Code analysis with detekt.
 - Unit tests with JUnit4 and Mockk.
 
+# Architecture
+![Architecture](assets/app_architecture.webp?raw=true "App Architecture")
+
+The architecture is based on the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) and Android's [Guide to app architecture](https://developer.android.com/topic/architecture). The goal is to be as close to a pure Clean Architecture as possible, but note that this is not an ideal architecture for such small and simple project as this one. I used it mostly for study purposes.
