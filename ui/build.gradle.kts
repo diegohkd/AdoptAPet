@@ -53,7 +53,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
-    implementation(project(":di"))
+    implementation(project(":di-core"))
     implementation(project(":domain"))
 
     implementation(libs.androidx.paging.pagingCompose)
