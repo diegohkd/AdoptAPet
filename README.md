@@ -24,6 +24,10 @@ This is currently a WIP, but the architecture and some basic functionality are m
 	- Common config with Precompiled script plugins and constants.
 - Code analysis with detekt.
 - Unit tests with JUnit4 and Mockk.
+- CI - Simple Github Actions workflow that runs on pull requests to prevent code with issues getting merged. It validates
+	- Code quality using detekt.
+	- Unit tests.
+	- And that the project builds.
 
 # Architecture
 ![Architecture](assets/app_architecture.webp?raw=true "App Architecture")
