@@ -1,11 +1,11 @@
 package com.mobdao.local
 
+import com.mobdao.common.testutils.mockfactories.domain.entities.PetEntityMockFactory
+import com.mobdao.domain.entities.Pet
 import com.mobdao.local.internal.common.mappers.EntityMapper
 import com.mobdao.local.internal.database.daos.AnimalDao
 import com.mobdao.local.internal.database.entities.Animal
 import com.mobdao.local.mockfactories.AnimalDbEntityMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.entities.PetEntityMockFactory
-import com.mobdao.domain.entities.Pet
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify

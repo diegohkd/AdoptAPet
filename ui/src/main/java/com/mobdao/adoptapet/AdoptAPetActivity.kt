@@ -8,7 +8,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
-import com.mobdao.adoptapet.common.theme.color.DefaultColorSchema
 import com.mobdao.adoptapet.navigation.AdoptAPetNavHost
 import dagger.hilt.android.AndroidEntryPoint
 

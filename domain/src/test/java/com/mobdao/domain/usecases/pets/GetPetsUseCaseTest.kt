@@ -5,12 +5,12 @@ import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.PetEntityMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.SearchFilterEntityMockFactory
 import com.mobdao.domain.dataapi.repositories.PetsRepository
-import com.mobdao.domain.models.Pet
-import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.internal.PetEntity
 import com.mobdao.domain.internal.SearchFilterEntity
 import com.mobdao.domain.internal.mappers.PetMapper
 import com.mobdao.domain.internal.mappers.SearchFilterMapper
+import com.mobdao.domain.models.Pet
+import com.mobdao.domain.models.SearchFilter
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

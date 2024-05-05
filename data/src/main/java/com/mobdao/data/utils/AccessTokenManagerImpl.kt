@@ -1,8 +1,8 @@
 package com.mobdao.data.utils
 
 import com.mobdao.local.AccessTokenLocalDataSource
-import com.mobdao.remote.AccessTokenRemoteDataSource
 import com.mobdao.remote.AccessTokenManager
+import com.mobdao.remote.AccessTokenRemoteDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 

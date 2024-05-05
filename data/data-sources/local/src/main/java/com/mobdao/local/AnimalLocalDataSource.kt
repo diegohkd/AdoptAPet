@@ -1,8 +1,8 @@
 package com.mobdao.local
 
+import com.mobdao.domain.entities.Pet
 import com.mobdao.local.internal.common.mappers.EntityMapper
 import com.mobdao.local.internal.database.daos.AnimalDao
-import com.mobdao.domain.entities.Pet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

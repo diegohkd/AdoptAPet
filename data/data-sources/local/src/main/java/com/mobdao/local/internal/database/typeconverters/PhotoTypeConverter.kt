@@ -2,8 +2,8 @@ package com.mobdao.local.internal.database.typeconverters
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.mobdao.local.internal.database.entities.Photo
 import com.mobdao.common.JsonAdapter
+import com.mobdao.local.internal.database.entities.Photo
 import javax.inject.Inject
 import javax.inject.Singleton
 

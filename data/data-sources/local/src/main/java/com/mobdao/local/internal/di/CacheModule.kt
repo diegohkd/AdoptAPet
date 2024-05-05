@@ -3,11 +3,11 @@ package com.mobdao.local.internal.di
 import android.content.Context
 import com.mobdao.local.AccessTokenLocalDataSource
 import com.mobdao.local.OnboardingLocalDataSource
+import com.mobdao.local.internal.common.factories.SharedPreferencesFactory
 import com.mobdao.local.internal.database.AppDatabase
 import com.mobdao.local.internal.database.AppDatabaseFactory
 import com.mobdao.local.internal.database.daos.AddressDao
 import com.mobdao.local.internal.database.daos.AnimalDao
-import com.mobdao.local.internal.common.factories.SharedPreferencesFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

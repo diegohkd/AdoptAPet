@@ -2,9 +2,9 @@ package com.mobdao.domain.usecases.location
 
 import com.mobdao.common.exceptions.CurrentLocationNotFoundException
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
-import com.mobdao.domain.models.Address
 import com.mobdao.domain.internal.AddressEntity
 import com.mobdao.domain.internal.mappers.AddressMapper
+import com.mobdao.domain.models.Address
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

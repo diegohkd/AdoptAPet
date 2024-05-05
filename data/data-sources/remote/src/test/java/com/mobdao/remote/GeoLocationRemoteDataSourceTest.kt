@@ -6,9 +6,9 @@ import com.mobdao.common.config.AppConfig
 import com.mobdao.common.config.GeoapifyConfig
 import com.mobdao.domain.entities.Address
 import com.mobdao.domain.entities.GeoCoordinates
-import com.mobdao.remote.internal.utils.mappers.EntityMapper
 import com.mobdao.remote.internal.responses.GeocodeResponse
 import com.mobdao.remote.internal.services.GeoapifyService
+import com.mobdao.remote.internal.utils.mappers.EntityMapper
 import com.mobdao.remote.internal.utils.wrappers.FusedLocationProviderClientWrapper
 import io.mockk.coEvery
 import io.mockk.every

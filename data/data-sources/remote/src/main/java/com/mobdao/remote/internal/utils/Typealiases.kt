@@ -1,3 +1,5 @@
+@file:Suppress("Filename")
+
 package com.mobdao.remote.internal.utils
 
 import com.mobdao.domain.entities.AnimalType

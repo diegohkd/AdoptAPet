@@ -28,7 +28,10 @@ sealed interface Destination {
 
         private const val HOST: String = "pet_details"
         override val route: String = "$HOST?$PET_ID_ARG={$PET_ID_ARG}&$PET_TYPE_ARG={$PET_TYPE_ARG}"
-        fun buildRouteWithArgs(petId: String, petType: String): String = "$HOST?$PET_ID_ARG=$petId&$PET_TYPE_ARG=$petType"
+        fun buildRouteWithArgs(
+            petId: String,
+            petType: String
+        ): String = "$HOST?$PET_ID_ARG=$petId&$PET_TYPE_ARG=$petType"
     }
 
     data object Filter : Destination {

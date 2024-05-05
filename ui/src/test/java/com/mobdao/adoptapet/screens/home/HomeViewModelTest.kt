@@ -63,7 +63,9 @@ class HomeViewModelTest {
     fun `when initialized then pets filter is created with cached location`() {
         // given
         val creatingAndCachingPetsFilterWithCachedLocation = MutableSharedFlow<Unit>()
-        every { createAndCachePetsFilterWithCachedLocationUseCase.execute() } returns creatingAndCachingPetsFilterWithCachedLocation
+        every {
+            createAndCachePetsFilterWithCachedLocationUseCase.execute()
+        } returns creatingAndCachingPetsFilterWithCachedLocation
 
         // when
         tested

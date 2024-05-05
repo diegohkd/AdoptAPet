@@ -21,7 +21,7 @@ object PetsListTestFixtureProvider {
 
     private val error = Error(Exception())
 
-    @Suppress("UNUSED")
+    @Suppress("UNUSED", "LongMethod")
     @JvmStatic
     fun provide(): Array<Array<Any>> =
         arrayOf(

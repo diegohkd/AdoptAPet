@@ -77,9 +77,9 @@ fun AdoptAPetNavHost(
             arguments = Destination.PetDetails.arguments,
         ) {
             /*
-            * TODO improve this? One solution would be creating a different screen for each animal
-            *  type, but that will require a ton of boilerplate
-            */
+             * TODO improve this? One solution would be creating a different screen for each animal
+             *  type, but that will require a ton of boilerplate
+             */
             val animalType: AnimalType = AnimalType.fromName(
                 name = it.arguments?.getString(PET_TYPE_ARG),
             ) ?: return@composable

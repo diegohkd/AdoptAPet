@@ -13,8 +13,6 @@ import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.*
 import com.mobdao.adoptapet.screens.home.petspaging.PetsPager
 import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.models.AnimalType
-import com.mobdao.domain.models.AnimalType.CAT
-import com.mobdao.domain.models.AnimalType.DOG
 import com.mobdao.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
 import com.mobdao.domain.usecases.filter.ObserveSearchFilterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -75,8 +73,8 @@ class HomeViewModel @Inject constructor(
     ) {
         updateUiState(
             emptyListPlaceholderIsVisible = refreshLoadState is NotLoading &&
-                    appendLoadState.endOfPaginationReached &&
-                    itemsCount == 0,
+                appendLoadState.endOfPaginationReached &&
+                itemsCount == 0,
             genericErrorDialogIsVisible = refreshLoadState is Error || appendLoadState is Error,
             progressIndicatorIsVisible = refreshLoadState.isLoading(),
             nextPageProgressIndicatorIsVisible = appendLoadState.isLoading(),

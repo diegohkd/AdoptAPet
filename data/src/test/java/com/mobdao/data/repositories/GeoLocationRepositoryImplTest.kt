@@ -1,8 +1,8 @@
 package com.mobdao.data.repositories
 
-import com.mobdao.local.GeoLocationLocalDataSource
 import com.mobdao.domain.entities.Address
 import com.mobdao.domain.entities.GeoCoordinates
+import com.mobdao.local.GeoLocationLocalDataSource
 import com.mobdao.remote.GeoLocationRemoteDataSource
 import io.mockk.coEvery
 import io.mockk.coJustRun

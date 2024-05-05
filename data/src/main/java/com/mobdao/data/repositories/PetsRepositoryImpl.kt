@@ -1,10 +1,10 @@
 package com.mobdao.data.repositories
 
-import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.domain.entities.Address
 import com.mobdao.domain.entities.Pet
 import com.mobdao.domain.entities.SearchFilter
+import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.remote.AnimalRemoteDataSource
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
 import javax.inject.Inject

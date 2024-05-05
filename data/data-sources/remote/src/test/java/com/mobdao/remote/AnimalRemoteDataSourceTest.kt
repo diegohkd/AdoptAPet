@@ -2,10 +2,10 @@ package com.mobdao.remote
 
 import com.mobdao.domain.entities.Pet
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
-import com.mobdao.remote.internal.utils.mappers.EntityMapper
 import com.mobdao.remote.internal.responses.Animal
 import com.mobdao.remote.internal.responses.AnimalsResponse
 import com.mobdao.remote.internal.services.PetFinderService
+import com.mobdao.remote.internal.utils.mappers.EntityMapper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

@@ -2,9 +2,9 @@ package com.mobdao.domain.usecases.filter
 
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
-import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.internal.mappers.AddressMapper
 import com.mobdao.domain.internal.mappers.SearchFilterMapper
+import com.mobdao.domain.models.SearchFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

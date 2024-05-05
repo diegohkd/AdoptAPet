@@ -5,12 +5,12 @@ import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
-import com.mobdao.domain.models.Address
-import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.internal.AddressEntity
 import com.mobdao.domain.internal.SearchFilterEntity
 import com.mobdao.domain.internal.mappers.AddressMapper
 import com.mobdao.domain.internal.mappers.SearchFilterMapper
+import com.mobdao.domain.models.Address
+import com.mobdao.domain.models.SearchFilter
 import io.mockk.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
