@@ -20,11 +20,11 @@ This is currently a WIP, but the architecture and some basic functionality are m
 	- Different color schema per animal type.
 - Gradle
 	- Kotlin DSL.
-	- Versuibs catalog.
+	- Versions catalog.
 	- Common config with Precompiled script plugins and constants.
 - Code analysis with detekt.
 - Unit tests with JUnit4 and Mockk.
-- CI - Simple Github Actions workflow that runs on pull requests to prevent code with issues getting merged. It validates
+- CI - Simple Github Actions workflow that runs on pull requests to prevent code with issues getting merged. It validates:
 	- Code quality using detekt.
 	- Unit tests.
 	- And that the project builds.
