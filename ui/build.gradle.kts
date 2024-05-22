@@ -2,6 +2,7 @@ plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.jetbrains.kotlin.android.get().pluginId)
     alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
 }
 
@@ -40,9 +41,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {
