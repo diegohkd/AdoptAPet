@@ -22,11 +22,12 @@ class AnimalRemoteDataSource @Inject internal constructor(
         val location = locationCoordinates?.let {
             "${it.latitude},${it.longitude}"
         }
-        val oi = petFinderService.getAnimals(
+        return petFinderService.getAnimals(
             pageNumber = pageNumber,
             location = location,
             type = animalType,
-        ).animals
-        return oi.let(entityMapper::toPets)
+        )
+            .animals
+            .let(entityMapper::toPets)
     }
 }

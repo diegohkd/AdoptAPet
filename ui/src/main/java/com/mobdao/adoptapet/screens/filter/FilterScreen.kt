@@ -12,7 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBar
-import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.FilterApplied
+import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState
 import com.mobdao.domain.models.Address
 
@@ -29,16 +29,13 @@ private val petTypes = listOf(
 
 @Composable
 fun FilterScreen(
-    onFilterApplied: () -> Unit,
+    onNavAction: (NavAction) -> Unit,
     viewModel: FilterViewModel = hiltViewModel()
 ) {
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    when (navActionEvent?.getContentIfNotHandled()) {
-        is FilterApplied -> onFilterApplied()
-        null -> {}
-    }
+    navActionEvent?.getContentIfNotHandled()?.let(onNavAction)
 
     UiContent(
         uiState = uiState,

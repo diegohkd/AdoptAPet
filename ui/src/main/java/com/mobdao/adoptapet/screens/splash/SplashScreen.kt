@@ -9,19 +9,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mobdao.adoptapet.screens.splash.SplashViewModel.NavAction.Completed
+import com.mobdao.adoptapet.screens.splash.SplashViewModel.NavAction
 
 @Composable
 fun SplashScreen(
-    onCompleted: () -> Unit,
+    onNavAction: (NavAction) -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val navAction by viewModel.navAction.collectAsStateWithLifecycle()
 
-    when (navAction?.getContentIfNotHandled()) {
-        Completed -> onCompleted()
-        null -> {}
-    }
+    navAction?.getContentIfNotHandled()?.let(onNavAction)
 
     UiContent()
 }

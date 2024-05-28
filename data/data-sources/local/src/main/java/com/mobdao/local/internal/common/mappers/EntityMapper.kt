@@ -1,15 +1,9 @@
 package com.mobdao.local.internal.common.mappers
 
 import com.mobdao.domain.entities.Pet
-import com.mobdao.local.internal.common.DomainEntityAddress
-import com.mobdao.local.internal.common.DomainEntityAnimalType
-import com.mobdao.local.internal.common.DomainEntityBreeds
-import com.mobdao.local.internal.common.DomainEntityPhoto
-import com.mobdao.local.internal.database.entities.Address
-import com.mobdao.local.internal.database.entities.Animal
+import com.mobdao.local.internal.common.*
+import com.mobdao.local.internal.database.entities.*
 import com.mobdao.local.internal.database.entities.AnimalType.*
-import com.mobdao.local.internal.database.entities.Breeds
-import com.mobdao.local.internal.database.entities.Photo
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,14 +30,23 @@ internal class EntityMapper @Inject constructor() {
                         primaryBreed = breeds.primary,
                         secondaryBreed = breeds.secondary,
                     ),
-                    photos.map {
+                    age = age,
+                    size = size,
+                    gender = gender,
+                    description = description,
+                    distance = distance,
+                    photos = photos.map {
                         Photo(
                             smallUrl = it.smallUrl,
                             mediumUrl = it.mediumUrl,
                             largeUrl = it.largeUrl,
                             fullUrl = it.fullUrl,
                         )
-                    }
+                    },
+                    contact = Contact(
+                        email = contact?.email.orEmpty(),
+                        phone = contact?.phone.orEmpty()
+                    )
                 )
             }
         }
@@ -67,14 +70,23 @@ internal class EntityMapper @Inject constructor() {
                     primary = breeds.primaryBreed,
                     secondary = breeds.secondaryBreed,
                 ),
-                photos.map {
+                age = age,
+                size = size,
+                gender = gender,
+                description = description,
+                distance = distance,
+                photos = photos.map {
                     DomainEntityPhoto(
                         smallUrl = it.smallUrl,
                         mediumUrl = it.mediumUrl,
                         largeUrl = it.largeUrl,
                         fullUrl = it.fullUrl,
                     )
-                }
+                },
+                contact = DomainEntityContact(
+                    email = contact?.email.orEmpty(),
+                    phone = contact?.phone.orEmpty(),
+                ),
             )
         }
 

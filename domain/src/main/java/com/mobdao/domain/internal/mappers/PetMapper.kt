@@ -4,6 +4,7 @@ import com.mobdao.domain.internal.AnimalTypeEntity
 import com.mobdao.domain.internal.PetEntity
 import com.mobdao.domain.models.AnimalType.*
 import com.mobdao.domain.models.Breeds
+import com.mobdao.domain.models.Contact
 import com.mobdao.domain.models.Pet
 import com.mobdao.domain.models.Photo
 import javax.inject.Inject
@@ -31,6 +32,11 @@ internal class PetMapper @Inject constructor() {
                     primary = pet.breeds.primary,
                     secondary = pet.breeds.secondary,
                 ),
+                age = age,
+                size = size,
+                gender = gender,
+                description = description,
+                distance = distance,
                 photos = pet.photos.map {
                     Photo(
                         smallUrl = it.smallUrl,
@@ -38,7 +44,11 @@ internal class PetMapper @Inject constructor() {
                         largeUrl = it.largeUrl,
                         fullUrl = it.fullUrl,
                     )
-                }
+                },
+                contact = Contact(
+                    email = contact?.email.orEmpty(),
+                    phone = contact?.phone.orEmpty(),
+                )
             )
         }
 }

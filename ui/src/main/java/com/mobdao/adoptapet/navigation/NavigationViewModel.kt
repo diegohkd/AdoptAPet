@@ -4,9 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.*
+import com.mobdao.adoptapet.screens.filter.FilterViewModel
 import com.mobdao.adoptapet.screens.home.HomeViewModel
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
 import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
+import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel
+import com.mobdao.adoptapet.screens.splash.SplashViewModel
 import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.models.AnimalType
 import com.mobdao.domain.usecases.onboarding.HasCompletedOnboardingUseCase
@@ -37,27 +41,35 @@ class NavigationViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun onSplashCompleted() {
-        viewModelScope.launch {
-            val hasCompletedOnboarding = hasCompletedOnboardingUseCase.execute()
-                .catchAndLogException {
-                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+    fun onNavAction(navAction: SplashViewModel.NavAction) {
+        when (navAction) {
+            SplashViewModel.NavAction.Completed -> {
+                viewModelScope.launch {
+                    val hasCompletedOnboarding = hasCompletedOnboardingUseCase.execute()
+                        .catchAndLogException {
+                            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                        }
+                        .firstOrNull()
+                        ?: return@launch
+                    _navAction.value = if (hasCompletedOnboarding) {
+                        Event(SplashToHomeScreen)
+                    } else {
+                        Event(OnboardingScreen)
+                    }
                 }
-                .firstOrNull()
-                ?: false
-            _navAction.value = if (hasCompletedOnboarding) {
-                Event(SplashToHomeScreen)
-            } else {
-                Event(OnboardingScreen)
             }
         }
     }
 
-    fun onOnboardingCompleted() {
-        _navAction.value = Event(OnboardingToHomeScreen)
+    fun onNavAction(navAction: OnboardingViewModel.NavAction) {
+        when (navAction) {
+            OnboardingViewModel.NavAction.Completed -> {
+                _navAction.value = Event(OnboardingToHomeScreen)
+            }
+        }
     }
 
-    fun onHomeNavAction(navAction: HomeViewModel.NavAction) {
+    fun onNavAction(navAction: HomeViewModel.NavAction) {
         _navAction.value = Event(
             when (navAction) {
                 is PetClicked -> PetDetailsScreen(petId = navAction.petId, type = navAction.type)
@@ -66,8 +78,20 @@ class NavigationViewModel @Inject constructor(
         )
     }
 
-    fun onFilterApplied() {
-        _navAction.value = Event(PreviousScreen)
+    fun onNavAction(navAction: PetDetailsViewModel.NavAction) {
+        _navAction.value = Event(
+            when (navAction) {
+                is PetDetailsViewModel.NavAction.BackButtonClicked -> PreviousScreen
+            }
+        )
+    }
+
+    fun onNavAction(navAction: FilterViewModel.NavAction) {
+        when (navAction) {
+            FilterViewModel.NavAction.FilterApplied -> {
+                _navAction.value = Event(PreviousScreen)
+            }
+        }
     }
 
     fun onDismissGenericErrorDialog() {

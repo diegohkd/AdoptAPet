@@ -9,7 +9,13 @@ internal data class Animal(
     val type: AnimalType,
     val name: String,
     val breeds: Breeds,
-    val photos: List<Photo>
+    val age: String?,
+    val size: String?,
+    val gender: String?,
+    val description: String?,
+    val distance: Float?,
+    val photos: List<Photo>,
+    val contact: Contact?,
 )
 
 internal enum class AnimalType(val rawValue: String) {
@@ -33,4 +39,9 @@ internal data class Photo(
     val medium: String,
     val large: String,
     val full: String,
+)
+
+internal data class Contact(
+    val email: String?,
+    val phone: String?,
 )
