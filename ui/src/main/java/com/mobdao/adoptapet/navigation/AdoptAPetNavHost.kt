@@ -64,13 +64,13 @@ fun AdoptAPetNavHost(
         startDestination = Destination.Splash.route,
     ) {
         composable(route = Destination.Splash.route) {
-            SplashScreen(onCompleted = viewModel::onSplashCompleted)
+            SplashScreen(onNavAction = viewModel::onNavAction)
         }
         composable(route = Destination.Onboarding.route) {
-            OnboardingScreen(onCompleted = viewModel::onOnboardingCompleted)
+            OnboardingScreen(onNavAction = viewModel::onNavAction)
         }
         composable(route = Destination.Home.route) {
-            HomeScreen(onNavAction = viewModel::onHomeNavAction)
+            HomeScreen(onNavAction = viewModel::onNavAction)
         }
         composable(
             route = Destination.PetDetails.route,
@@ -84,10 +84,13 @@ fun AdoptAPetNavHost(
                 name = it.arguments?.getString(PET_TYPE_ARG),
             ) ?: return@composable
 
-            PetDetailsScreen(animalType = animalType)
+            PetDetailsScreen(
+                animalType = animalType,
+                onNavAction = viewModel::onNavAction,
+            )
         }
         composable(route = Destination.Filter.route) {
-            FilterScreen(onFilterApplied = viewModel::onFilterApplied)
+            FilterScreen(onNavAction = viewModel::onNavAction)
         }
     }
 

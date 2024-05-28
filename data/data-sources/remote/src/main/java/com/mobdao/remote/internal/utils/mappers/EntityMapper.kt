@@ -7,6 +7,7 @@ import com.mobdao.remote.internal.responses.Animal
 import com.mobdao.remote.internal.responses.AnimalType.*
 import com.mobdao.remote.internal.responses.GeocodeResponse
 import com.mobdao.remote.internal.utils.DomainEntityAnimalType
+import com.mobdao.remote.internal.utils.DomainEntityContact
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,6 +34,11 @@ internal class EntityMapper @Inject constructor() {
                         primary = breeds.primary,
                         secondary = breeds.secondary,
                     ),
+                    age = age.orEmpty(),
+                    size = size.orEmpty(),
+                    gender = gender.orEmpty(),
+                    description = description.orEmpty(),
+                    distance = distance,
                     photos = photos.map { photo ->
                         Photo(
                             smallUrl = photo.small,
@@ -40,7 +46,11 @@ internal class EntityMapper @Inject constructor() {
                             largeUrl = photo.large,
                             fullUrl = photo.full,
                         )
-                    }
+                    },
+                    contact = DomainEntityContact(
+                        email = contact?.email.orEmpty(),
+                        phone = contact?.phone.orEmpty(),
+                    )
                 )
             }
         }

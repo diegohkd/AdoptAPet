@@ -12,7 +12,14 @@ internal data class Animal(
     val name: String,
     @Embedded
     val breeds: Breeds,
-    val photos: List<Photo>
+    val age: String,
+    val size: String,
+    val gender: String,
+    val description: String,
+    val distance: Float?,
+    val photos: List<Photo>,
+    @Embedded
+    val contact: Contact?
 )
 
 internal enum class AnimalType(val rawValue: String) {
@@ -36,4 +43,9 @@ internal data class Photo(
 internal data class Breeds(
     val primaryBreed: String?,
     val secondaryBreed: String?,
+)
+
+data class Contact(
+    val email: String,
+    val phone: String,
 )

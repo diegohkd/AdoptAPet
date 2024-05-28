@@ -18,22 +18,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBar
-import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel.NavAction.Completed
+import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel.NavAction
 import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel.UiState
 import com.mobdao.domain.models.Address
 
 @Composable
 fun OnboardingScreen(
-    onCompleted: () -> Unit,
+    onNavAction: (NavAction) -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
 
-    when (navActionEvent?.getContentIfNotHandled()) {
-        Completed -> onCompleted()
-        null -> {}
-    }
+    navActionEvent?.getContentIfNotHandled()?.let(onNavAction)
 
     UiContent(
         uiState = uiState,
