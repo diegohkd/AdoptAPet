@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,7 +32,6 @@ import com.mobdao.domain.models.Address
 fun LocationSearchBar(
     modifier: Modifier = Modifier,
     initialAddress: String = "",
-    paddingHorizontal: Dp = 0.dp,
     onAddressSelected: (Address?) -> Unit,
     onError: (Throwable?) -> Unit, // TODO is it ok to pass throwable?
     viewModel: LocationSearchBarViewModel = hiltViewModel(),
@@ -67,7 +65,6 @@ fun LocationSearchBar(
     }
 
     UiContent(
-        paddingHorizontal = paddingHorizontal,
         modifier = modifier,
         searchQuery = viewModel.locationSearchQuery,
         active = uiState.searchModeIsActive,
@@ -84,7 +81,6 @@ fun LocationSearchBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UiContent(
-    paddingHorizontal: Dp,
     modifier: Modifier = Modifier,
     searchQuery: String,
     active: Boolean,
@@ -96,15 +92,13 @@ private fun UiContent(
     onCurrentLocationClicked: () -> Unit,
     onClearClicked: () -> Unit,
 ) {
-    SearchBar(
+    DockedSearchBar(
         query = searchQuery,
         onQueryChange = onSearchQueryChange,
         onSearch = { /* no-op*/ },
         active = active,
         onActiveChange = onLocationSearchActiveChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = if (active) 0.dp else paddingHorizontal),
+        modifier = modifier.fillMaxWidth(),
         placeholder = {
             Text(text = stringResource(R.string.location))
         },
