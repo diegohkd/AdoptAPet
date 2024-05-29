@@ -1,12 +1,17 @@
 package com.mobdao.adoptapet.screens.filter
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobdao.adoptapet.R
@@ -58,49 +63,71 @@ private fun UiContent(
     onDismissGenericErrorDialog: () -> Unit,
 ) {
     var isTypeDropdownExpanded by remember { mutableStateOf(false) }
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        LocationSearchBar(
-            initialAddress = uiState.initialAddress,
-            onAddressSelected = onAddressSelected,
-            onError = onFailedToGetAddress,
-        )
-        Text(text = stringResource(R.string.type))
-        ExposedDropdownMenuBox(
-            expanded = isTypeDropdownExpanded,
-            onExpandedChange = {
-                isTypeDropdownExpanded = it
-            },
-        ) {
-            TextField(
-                value = uiState.petType,
-                onValueChange = { /*no-op*/ },
-                modifier = Modifier.menuAnchor(),
-                readOnly = true,
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Filter") },
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
             )
-            ExposedDropdownMenu(
-                expanded = isTypeDropdownExpanded,
-                onDismissRequest = {
-                    isTypeDropdownExpanded = false
-                }
-            ) {
-                petTypes.forEach {
-                    DropdownMenuItem(
-                        text = { Text(it) },
-                        onClick = {
-                            isTypeDropdownExpanded = false
-                            onPetTypeSelected(it)
-                        }
+        }
+    ) { internalPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(internalPadding)
+        ) {
+            LocationSearchBar(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                initialAddress = uiState.initialAddress,
+                onAddressSelected = onAddressSelected,
+                onError = onFailedToGetAddress,
+            )
+            Column(modifier = Modifier.padding(top = 72.dp, start = 16.dp, end = 16.dp)) {
+                Text(text = stringResource(R.string.type))
+                ExposedDropdownMenuBox(
+                    expanded = isTypeDropdownExpanded,
+                    onExpandedChange = {
+                        isTypeDropdownExpanded = it
+                    },
+                ) {
+                    TextField(
+                        value = uiState.petType,
+                        onValueChange = { /*no-op*/ },
+                        modifier = Modifier.menuAnchor(),
+                        readOnly = true,
                     )
+                    ExposedDropdownMenu(
+                        expanded = isTypeDropdownExpanded,
+                        onDismissRequest = {
+                            isTypeDropdownExpanded = false
+                        }
+                    ) {
+                        petTypes.forEach {
+                            DropdownMenuItem(
+                                text = { Text(it) },
+                                onClick = {
+                                    isTypeDropdownExpanded = false
+                                    onPetTypeSelected(it)
+                                }
+                            )
+                        }
+                    }
+                }
+                Button(
+                    onClick = onApplyClicked,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    enabled = uiState.isApplyButtonEnabled,
+                ) {
+                    Text(text = stringResource(R.string.apply))
                 }
             }
-        }
-        Button(
-            onClick = onApplyClicked,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            enabled = uiState.isApplyButtonEnabled,
-        ) {
-            Text(text = stringResource(R.string.apply))
         }
     }
 

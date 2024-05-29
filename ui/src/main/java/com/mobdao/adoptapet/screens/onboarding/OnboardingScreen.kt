@@ -1,13 +1,14 @@
 package com.mobdao.adoptapet.screens.onboarding
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,15 +53,16 @@ private fun UiContent(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .safeDrawingPadding(),
+            .safeDrawingPadding()
+            .padding(horizontal = 16.dp),
     ) {
-        val (welcomeTextRef, searchBarRef, nextButtonRef) = createRefs()
+        val (welcomeTextRef, searchBarRef, imageRef, nextButtonRef) = createRefs()
 
         Text(
             text = "Welcome to Adopt a Pet.\nPlease enter a location so we can improve our search for pets.",
             modifier = Modifier.constrainAs(welcomeTextRef) {
                 centerHorizontallyTo(parent)
-                linkTo(top = parent.top, bottom = parent.bottom, bias = 0.25f)
+                top.linkTo(parent.top, margin = 54.dp)
             },
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
@@ -68,12 +70,23 @@ private fun UiContent(
         LocationSearchBar(
             modifier = Modifier.constrainAs(searchBarRef) {
                 centerHorizontallyTo(parent)
-                linkTo(top = parent.top, bottom = parent.bottom, bias = 0.5f)
+                top.linkTo(welcomeTextRef.bottom, margin = 54.dp)
             },
             initialAddress = uiState.selectedAddress,
-            paddingHorizontal = 16.dp,
             onAddressSelected = onAddressSelected,
             onError = onFailedToGetAddress,
+        )
+        Image(
+            painter = painterResource(R.drawable.onboarding_image),
+            contentDescription = "",
+            modifier = Modifier
+                .widthIn(max = 400.dp)
+                .fillMaxWidth()
+                .constrainAs(imageRef) {
+                    centerHorizontallyTo(parent)
+                    top.linkTo(searchBarRef.top, margin = 100.dp)
+                },
+            contentScale = ContentScale.FillWidth
         )
         Button(
             onClick = onNextClicked,
