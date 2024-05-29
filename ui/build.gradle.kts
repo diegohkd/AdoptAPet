@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.hilt.hiltNavigationCompose)
     implementation(libs.google.dagger.hiltAndroid)
     kapt(libs.google.dagger.hiltAndroidCompiler)
+    implementation(libs.airbnb.android.lottieCompose)
 
     debugImplementation(libs.androidx.compose.ui.uiTooling)
     debugImplementation(libs.androidx.compose.ui.uiTestManifest)
