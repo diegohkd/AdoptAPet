@@ -37,9 +37,10 @@ jobs:
           echo "PET_FINDER_CLIENT_ID=\"$PET_FINDER_CLIENT_ID\"" >> local.properties
           echo "PET_FINDER_CLIENT_SECRET=\"$PET_FINDER_CLIENT_SECRET\"" >> local.properties
           echo "GEOAPIFY_API_KEY=\"$GEOAPIFY_API_KEY\"" >> local.properties
-
-      - name: Detekt
-        run: ./gradlew detekt
+      - run: curl -sSLO https://github.com/pinterest/ktlint/releases/download/1.3.1/ktlint && chmod a+x ktlint
+      - name: Ktlint
+        run: |
+          ./ktlint "**/src/**/*.kt" --editorconfig=.editorconfig
 
       - name: Unit Tests
         run: ./gradlew testDebugUnitTest
