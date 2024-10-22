@@ -24,7 +24,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 abstract class DataModule {
-
     @Binds
     internal abstract fun bindsLogService(impl: LogServiceImpl): LogService
 
@@ -35,14 +34,10 @@ abstract class DataModule {
     internal abstract fun bindsPetsRepository(impl: PetsRepositoryImpl): PetsRepository
 
     @Binds
-    internal abstract fun bindsGeoLocationRepository(
-        impl: GeoLocationRepositoryImpl
-    ): GeoLocationRepository
+    internal abstract fun bindsGeoLocationRepository(impl: GeoLocationRepositoryImpl): GeoLocationRepository
 
     @Binds
-    internal abstract fun bindsSearchFilterRepository(
-        impl: SearchFilterRepositoryImpl
-    ): SearchFilterRepository
+    internal abstract fun bindsSearchFilterRepository(impl: SearchFilterRepositoryImpl): SearchFilterRepository
 
     @Binds
     internal abstract fun bindsAccessTokenManager(impl: AccessTokenManagerImpl): AccessTokenManager
@@ -50,8 +45,6 @@ abstract class DataModule {
     companion object {
         @Singleton
         @Provides
-        fun provideAppConfig(
-            appConfigFactory: AppConfigFactory
-        ): AppConfig = appConfigFactory.create()
+        fun provideAppConfig(appConfigFactory: AppConfigFactory): AppConfig = appConfigFactory.create()
     }
 }

@@ -10,17 +10,18 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class AccessTokenLocalDataSourceTest {
-
     private val accessToken: String = "accessToken"
-    private val editor: SharedPreferences.Editor = mockk {
-        every { putString(ACCESS_TOKEN_KEY, "newAccessToken") } returns this
-        justRun { apply() }
-    }
+    private val editor: SharedPreferences.Editor =
+        mockk {
+            every { putString(ACCESS_TOKEN_KEY, "newAccessToken") } returns this
+            justRun { apply() }
+        }
 
-    private val sharedPreferences: SharedPreferences = mockk {
-        every { getString(ACCESS_TOKEN_KEY, null) } returns accessToken
-        every { edit() } returns editor
-    }
+    private val sharedPreferences: SharedPreferences =
+        mockk {
+            every { getString(ACCESS_TOKEN_KEY, null) } returns accessToken
+            every { edit() } returns editor
+        }
 
     private val tested = AccessTokenLocalDataSource(sharedPreferences)
 

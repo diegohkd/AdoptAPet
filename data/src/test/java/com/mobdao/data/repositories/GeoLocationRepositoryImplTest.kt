@@ -14,26 +14,28 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class GeoLocationRepositoryImplTest {
-
     private val currentGeoCoordinates: GeoCoordinates = mockk()
     private val locationAddress1: Address = mockk()
     private val locationAddress2: Address = mockk()
     private val addresses = listOf(locationAddress1, locationAddress2)
 
-    private val geoLocationRemoteDataSource: GeoLocationRemoteDataSource = mockk {
-        coEvery { getCurrentLocationCoordinates() } returns currentGeoCoordinates
-        coEvery { getLocationAddress(currentGeoCoordinates) } returns addresses
-        coEvery { autocompleteLocation("location") } returns addresses
-    }
-    private val geoLocationLocalDataSource: GeoLocationLocalDataSource = mockk {
-        coEvery { getCurrentAddress() } returns locationAddress1
-        coJustRun { saveCurrentAddress(locationAddress1) }
-    }
+    private val geoLocationRemoteDataSource: GeoLocationRemoteDataSource =
+        mockk {
+            coEvery { getCurrentLocationCoordinates() } returns currentGeoCoordinates
+            coEvery { getLocationAddress(currentGeoCoordinates) } returns addresses
+            coEvery { autocompleteLocation("location") } returns addresses
+        }
+    private val geoLocationLocalDataSource: GeoLocationLocalDataSource =
+        mockk {
+            coEvery { getCurrentAddress() } returns locationAddress1
+            coJustRun { saveCurrentAddress(locationAddress1) }
+        }
 
-    private val tested = GeoLocationRepositoryImpl(
-        geoLocationRemoteDataSource = geoLocationRemoteDataSource,
-        geoLocationLocalDataSource = geoLocationLocalDataSource,
-    )
+    private val tested =
+        GeoLocationRepositoryImpl(
+            geoLocationRemoteDataSource = geoLocationRemoteDataSource,
+            geoLocationLocalDataSource = geoLocationLocalDataSource,
+        )
 
     @Test
     fun `given current geo coordinates returns empty list of reversed geocoding when get current location address then null is returned`() =

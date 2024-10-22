@@ -12,7 +12,12 @@ import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_TYPE_ARG
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction
-import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.*
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.FilterScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.OnboardingScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.OnboardingToHomeScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.PetDetailsScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.PreviousScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.SplashToHomeScreen
 import com.mobdao.adoptapet.screens.filter.FilterScreen
 import com.mobdao.adoptapet.screens.home.HomeScreen
 import com.mobdao.adoptapet.screens.onboarding.OnboardingScreen
@@ -30,29 +35,36 @@ fun AdoptAPetNavHost(
 
     when (val navDestination = navActionEvent?.getContentIfNotHandled()) {
         SplashToHomeScreen -> {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(Destination.Splash.route, inclusive = true)
-                .build()
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(Destination.Splash.route, inclusive = true)
+                    .build()
             navController.navigate(route = Destination.Home.route, navOptions = navOptions)
         }
         OnboardingScreen -> {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(Destination.Splash.route, inclusive = true)
-                .build()
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(Destination.Splash.route, inclusive = true)
+                    .build()
             navController.navigate(route = Destination.Onboarding.route, navOptions = navOptions)
         }
         OnboardingToHomeScreen -> {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(Destination.Onboarding.route, inclusive = true)
-                .build()
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(Destination.Onboarding.route, inclusive = true)
+                    .build()
             navController.navigate(route = Destination.Home.route, navOptions = navOptions)
         }
         is PetDetailsScreen ->
             navController.navigate(
-                route = Destination.PetDetails.buildRouteWithArgs(
-                    petId = navDestination.petId,
-                    petType = navDestination.type.name,
-                )
+                route =
+                    Destination.PetDetails.buildRouteWithArgs(
+                        petId = navDestination.petId,
+                        petType = navDestination.type.name,
+                    ),
             )
         FilterScreen -> navController.navigate(route = Destination.Filter.route)
         PreviousScreen -> navController.popBackStack()
@@ -80,9 +92,10 @@ fun AdoptAPetNavHost(
              * TODO improve this? One solution would be creating a different screen for each animal
              *  type, but that will require a ton of boilerplate
              */
-            val animalType: AnimalType = AnimalType.fromName(
-                name = it.arguments?.getString(PET_TYPE_ARG),
-            ) ?: return@composable
+            val animalType: AnimalType =
+                AnimalType.fromName(
+                    name = it.arguments?.getString(PET_TYPE_ARG),
+                ) ?: return@composable
 
             PetDetailsScreen(
                 animalType = animalType,

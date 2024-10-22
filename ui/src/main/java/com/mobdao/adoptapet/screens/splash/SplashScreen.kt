@@ -36,12 +36,12 @@ fun SplashScreen(
 private fun UiContent() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val composition: LottieComposition? by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.splash_animation)
+            LottieCompositionSpec.RawRes(R.raw.splash_animation),
         )
         LottieAnimation(
             composition = composition,
             modifier = Modifier.width(200.dp),
-            iterations = LottieConstants.IterateForever
+            iterations = LottieConstants.IterateForever,
         )
     }
 }

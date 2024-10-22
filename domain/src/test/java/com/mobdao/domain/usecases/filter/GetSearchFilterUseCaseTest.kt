@@ -15,40 +15,44 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class GetSearchFilterUseCaseTest {
-
     private val searchFilterEntity: SearchFilterEntity = SearchFilterEntityMockFactory.create()
     private val searchFilterUseCaseModel: SearchFilter = SearchFilterMockFactory.create()
 
-    private val searchFilterRepository: SearchFilterRepository = mockk {
-        every { getSearchFilter() } returns searchFilterEntity
-    }
-    private val searchFilterMapper: SearchFilterMapper = mockk {
-        every { mapFromEntity(searchFilterEntity) } returns searchFilterUseCaseModel
-    }
+    private val searchFilterRepository: SearchFilterRepository =
+        mockk {
+            every { getSearchFilter() } returns searchFilterEntity
+        }
+    private val searchFilterMapper: SearchFilterMapper =
+        mockk {
+            every { mapFromEntity(searchFilterEntity) } returns searchFilterUseCaseModel
+        }
 
-    private val tested = GetSearchFilterUseCase(
-        searchFilterRepository = searchFilterRepository,
-        searchFilterMapper = searchFilterMapper,
-    )
-
-    @Test
-    fun `given search filter is null when executed then null is returned`() = runTest {
-        // given
-        every { searchFilterRepository.getSearchFilter() } returns null
-
-        // when
-        val result: SearchFilter? = tested.execute().first()
-
-        // then
-        assertNull(result)
-    }
+    private val tested =
+        GetSearchFilterUseCase(
+            searchFilterRepository = searchFilterRepository,
+            searchFilterMapper = searchFilterMapper,
+        )
 
     @Test
-    fun `given search filter is not null when executed then search filter is returned`() = runTest {
-        // given / when
-        val result: SearchFilter? = tested.execute().first()
+    fun `given search filter is null when executed then null is returned`() =
+        runTest {
+            // given
+            every { searchFilterRepository.getSearchFilter() } returns null
 
-        // then
-        assertEquals(result, searchFilterUseCaseModel)
-    }
+            // when
+            val result: SearchFilter? = tested.execute().first()
+
+            // then
+            assertNull(result)
+        }
+
+    @Test
+    fun `given search filter is not null when executed then search filter is returned`() =
+        runTest {
+            // given / when
+            val result: SearchFilter? = tested.execute().first()
+
+            // then
+            assertEquals(result, searchFilterUseCaseModel)
+        }
 }

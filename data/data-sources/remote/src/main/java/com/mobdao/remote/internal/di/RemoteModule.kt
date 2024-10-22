@@ -14,14 +14,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 internal abstract class RemoteModule {
-
     companion object {
-
         @Singleton
         @Provides
-        fun provideAuthService(
-            retrofitServicesFactory: RetrofitServicesFactory
-        ): AuthService = retrofitServicesFactory.createAuthService()
+        fun provideAuthService(retrofitServicesFactory: RetrofitServicesFactory): AuthService = retrofitServicesFactory.createAuthService()
 
         @Singleton
         @Provides

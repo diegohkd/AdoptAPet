@@ -14,28 +14,32 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
 class FilterViewModelTest {
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
 
     private val address: Address = AddressMockFactory.create(addressLine = "addressLine")
-    private val searchFilter = SearchFilterMockFactory.create(
-        address = address,
-        petType = "petType",
-    )
+    private val searchFilter =
+        SearchFilterMockFactory.create(
+            address = address,
+            petType = "petType",
+        )
 
-    private val getSearchFilterUseCase: GetSearchFilterUseCase = mockk {
-        every { execute() } returns flowOf(searchFilter)
-    }
-    private val saveSearchFilterUseCase: SaveSearchFilterUseCase = mockk {
-        every { execute(SearchFilter(address, "petType")) } returns flowOf(Unit)
-    }
+    private val getSearchFilterUseCase: GetSearchFilterUseCase =
+        mockk {
+            every { execute() } returns flowOf(searchFilter)
+        }
+    private val saveSearchFilterUseCase: SaveSearchFilterUseCase =
+        mockk {
+            every { execute(SearchFilter(address, "petType")) } returns flowOf(Unit)
+        }
 
     private val tested by lazy {
         FilterViewModel(
@@ -125,7 +129,7 @@ class FilterViewModelTest {
         // then
         assertEquals(
             tested.uiState.value.petType,
-            "type"
+            "type",
         )
     }
 
@@ -137,8 +141,8 @@ class FilterViewModelTest {
             saveSearchFilterUseCase.execute(
                 SearchFilter(
                     address = address,
-                    petType = "petType"
-                )
+                    petType = "petType",
+                ),
             )
         } returns savingSearchFilter
 
@@ -148,7 +152,7 @@ class FilterViewModelTest {
         // then
         assertEquals(
             savingSearchFilter.subscriptionCount.value,
-            1
+            1,
         )
     }
 
@@ -159,8 +163,8 @@ class FilterViewModelTest {
             saveSearchFilterUseCase.execute(
                 SearchFilter(
                     address = address,
-                    petType = "petType"
-                )
+                    petType = "petType",
+                ),
             )
         } returns flow { throw Exception() }
 

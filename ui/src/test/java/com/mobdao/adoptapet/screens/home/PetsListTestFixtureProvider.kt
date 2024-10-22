@@ -1,11 +1,12 @@
 package com.mobdao.adoptapet.screens.home
 
 import androidx.paging.LoadState
-import androidx.paging.LoadState.*
+import androidx.paging.LoadState.Error
+import androidx.paging.LoadState.Loading
+import androidx.paging.LoadState.NotLoading
 import io.mockk.mockk
 
 object PetsListTestFixtureProvider {
-
     data class GivenParams(
         val refreshLoadState: LoadState,
         val appendLoadState: LoadState,

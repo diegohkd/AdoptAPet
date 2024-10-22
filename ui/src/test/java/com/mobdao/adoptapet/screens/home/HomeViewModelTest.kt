@@ -22,34 +22,37 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(JUnitParamsRunner::class)
 class HomeViewModelTest {
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
 
     private val searchFilter: SearchFilter =
         SearchFilterMockFactory.create(
-            AddressMockFactory.create(addressLine = "addressLine")
+            AddressMockFactory.create(addressLine = "addressLine"),
         )
 
     private val createAndCachePetsFilterWithCachedLocationUseCase: CreateAndCachePetsFilterWithCachedLocationUseCase =
         mockk {
             every { execute() } returns flowOf(Unit)
         }
-    private val observeSearchFilterUseCase: ObserveSearchFilterUseCase = mockk {
-        every { execute() } returns flowOf(searchFilter)
-    }
-    private val petsPager: PetsPager = mockk {
-        every { items } returns flowOf()
-        justRun { setFilterAndRefresh(searchFilter) }
-    }
+    private val observeSearchFilterUseCase: ObserveSearchFilterUseCase =
+        mockk {
+            every { execute() } returns flowOf(searchFilter)
+        }
+    private val petsPager: PetsPager =
+        mockk {
+            every { items } returns flowOf()
+            justRun { setFilterAndRefresh(searchFilter) }
+        }
 
     private val tested by lazy {
         HomeViewModel(
@@ -73,7 +76,7 @@ class HomeViewModelTest {
         // then
         assertEquals(
             creatingAndCachingPetsFilterWithCachedLocation.subscriptionCount.value,
-            1
+            1,
         )
     }
 
@@ -88,7 +91,7 @@ class HomeViewModelTest {
         // then
         assertEquals(
             tested.uiState.value.genericErrorDialogIsVisible,
-            true
+            true,
         )
     }
 
@@ -109,7 +112,7 @@ class HomeViewModelTest {
         // when / then
         assertEquals(
             tested.uiState.value.address,
-            ""
+            "",
         )
     }
 
@@ -118,7 +121,7 @@ class HomeViewModelTest {
         // when / then
         assertEquals(
             tested.uiState.value.address,
-            "addressLine"
+            "addressLine",
         )
     }
 
@@ -160,19 +163,19 @@ class HomeViewModelTest {
         // then
         assertEquals(
             tested.uiState.value.emptyListPlaceholderIsVisible,
-            expectedUiState.emptyListPlaceholderIsVisible
+            expectedUiState.emptyListPlaceholderIsVisible,
         )
         assertEquals(
             tested.uiState.value.genericErrorDialogIsVisible,
-            expectedUiState.genericErrorDialogIsVisible
+            expectedUiState.genericErrorDialogIsVisible,
         )
         assertEquals(
             tested.uiState.value.progressIndicatorIsVisible,
-            expectedUiState.progressIndicatorIsVisible
+            expectedUiState.progressIndicatorIsVisible,
         )
         assertEquals(
             tested.uiState.value.nextPageProgressIndicatorIsVisible,
-            expectedUiState.nextPageProgressIndicatorIsVisible
+            expectedUiState.nextPageProgressIndicatorIsVisible,
         )
     }
 
@@ -180,17 +183,18 @@ class HomeViewModelTest {
     fun `when Pet is clicked then Pet clicked nav action is emitted`() {
         // given
         val animalType: AnimalType = mockk<AnimalType>()
-        val pet: HomeViewModel.Pet = mockk {
-            every { id } returns "pet-id"
-            every { type } returns animalType
-        }
+        val pet: HomeViewModel.Pet =
+            mockk {
+                every { id } returns "pet-id"
+                every { type } returns animalType
+            }
         // when
         tested.onPetClicked(pet = pet)
 
         // then
         assertEquals(
             tested.navAction.value!!.peekContent(),
-            PetClicked(petId = "pet-id", type = animalType)
+            PetClicked(petId = "pet-id", type = animalType),
         )
     }
 
@@ -202,7 +206,7 @@ class HomeViewModelTest {
         // then
         assertEquals(
             tested.navAction.value!!.peekContent(),
-            FilterClicked
+            FilterClicked,
         )
     }
 

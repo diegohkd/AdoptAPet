@@ -3,7 +3,9 @@ package com.mobdao.adoptapet.screens.petdetails
 import androidx.lifecycle.SavedStateHandle
 import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_ID_ARG
 import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.*
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.Contact
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetCard
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetHeader
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.ContactMockFactory
@@ -21,33 +23,36 @@ import org.junit.Rule
 import org.junit.Test
 
 class PetDetailsViewModelTest {
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
 
     private val petId: String = "pet-id"
-    private val pet: Pet = PetMockFactory.create(
-        name = "name",
-        breeds = BreedsMockFactory.create(primary = "primary"),
-        age = "age",
-        size = "size",
-        gender = "gender",
-        description = "description",
-        distance = 123f,
-        photos = listOf(PhotoMockFactory.create(largeUrl = "largeUrl")),
-        contact = ContactMockFactory.create(
-            email = "email",
-            phone = "phone",
-        ),
-    )
+    private val pet: Pet =
+        PetMockFactory.create(
+            name = "name",
+            breeds = BreedsMockFactory.create(primary = "primary"),
+            age = "age",
+            size = "size",
+            gender = "gender",
+            description = "description",
+            distance = 123f,
+            photos = listOf(PhotoMockFactory.create(largeUrl = "largeUrl")),
+            contact =
+                ContactMockFactory.create(
+                    email = "email",
+                    phone = "phone",
+                ),
+        )
 
-    private val savedStateHandle: SavedStateHandle = mockk {
-        every { get<String>(PET_ID_ARG) } returns petId
-    }
-    private val getCachedPetUseCase: GetCachedPetUseCase = mockk {
-        every { execute("pet-id") } returns flowOf(pet)
-    }
+    private val savedStateHandle: SavedStateHandle =
+        mockk {
+            every { get<String>(PET_ID_ARG) } returns petId
+        }
+    private val getCachedPetUseCase: GetCachedPetUseCase =
+        mockk {
+            every { execute("pet-id") } returns flowOf(pet)
+        }
 
     private val tested by lazy {
         PetDetailsViewModel(
@@ -64,7 +69,7 @@ class PetDetailsViewModelTest {
         // when / then
         assertEquals(
             tested.uiState.value.genericErrorDialogIsVisible,
-            true
+            true,
         )
     }
 
@@ -73,7 +78,7 @@ class PetDetailsViewModelTest {
         // given / when / then
         assertEquals(
             tested.uiState.value.genericErrorDialogIsVisible,
-            false
+            false,
         )
     }
 
@@ -85,7 +90,7 @@ class PetDetailsViewModelTest {
         // when / then
         assertEquals(
             tested.uiState.value.genericErrorDialogIsVisible,
-            true
+            true,
         )
     }
 
@@ -102,7 +107,7 @@ class PetDetailsViewModelTest {
                 petCard = PetCard(),
                 contact = Contact(),
                 genericErrorDialogIsVisible = true,
-            )
+            ),
         )
     }
 
@@ -112,24 +117,27 @@ class PetDetailsViewModelTest {
         assertEquals(
             tested.uiState.value,
             UiState(
-                petHeader = PetHeader(
-                    photoUrl = "largeUrl",
-                    name = "name",
-                ),
-                petCard = PetCard(
-                    breed = "primary",
-                    age = "age",
-                    gender = "gender",
-                    description = "description",
-                    size = "size",
-                    distance = 123f,
-                ),
-                contact = Contact(
-                    email = "email",
-                    phone = "phone",
-                ),
+                petHeader =
+                    PetHeader(
+                        photoUrl = "largeUrl",
+                        name = "name",
+                    ),
+                petCard =
+                    PetCard(
+                        breed = "primary",
+                        age = "age",
+                        gender = "gender",
+                        description = "description",
+                        size = "size",
+                        distance = 123f,
+                    ),
+                contact =
+                    Contact(
+                        email = "email",
+                        phone = "phone",
+                    ),
                 genericErrorDialogIsVisible = false,
-            )
+            ),
         )
     }
 
@@ -145,7 +153,7 @@ class PetDetailsViewModelTest {
         // then
         assertEquals(
             tested.uiState.value.genericErrorDialogIsVisible,
-            false
+            false,
         )
     }
 }

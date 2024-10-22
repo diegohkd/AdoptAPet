@@ -4,7 +4,6 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 sealed interface Destination {
-
     val route: String
 
     data object Splash : Destination {
@@ -22,15 +21,17 @@ sealed interface Destination {
     data object PetDetails : Destination {
         const val PET_ID_ARG = "pedId"
         const val PET_TYPE_ARG = "pedType"
-        val arguments = listOf(
-            navArgument(PET_ID_ARG) { type = NavType.StringType }
-        )
+        val arguments =
+            listOf(
+                navArgument(PET_ID_ARG) { type = NavType.StringType },
+            )
 
         private const val HOST: String = "pet_details"
         override val route: String = "$HOST?$PET_ID_ARG={$PET_ID_ARG}&$PET_TYPE_ARG={$PET_TYPE_ARG}"
+
         fun buildRouteWithArgs(
             petId: String,
-            petType: String
+            petType: String,
         ): String = "$HOST?$PET_ID_ARG=$petId&$PET_TYPE_ARG=$petType"
     }
 

@@ -5,10 +5,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class InitializeAppOnAppCreatedUseCase @Inject constructor(private val logService: LogService) {
-
-    fun execute(): Flow<Unit> = flow {
-        logService.init()
-        emit(Unit)
+class InitializeAppOnAppCreatedUseCase
+    @Inject
+    constructor(
+        private val logService: LogService,
+    ) {
+        fun execute(): Flow<Unit> =
+            flow {
+                logService.init()
+                emit(Unit)
+            }
     }
-}

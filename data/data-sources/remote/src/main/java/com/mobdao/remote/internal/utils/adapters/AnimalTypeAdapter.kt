@@ -5,7 +5,6 @@ import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
 
 internal class AnimalTypeAdapter {
-
     @ToJson
     fun toJson(animalType: AnimalType): String = animalType.rawValue
 

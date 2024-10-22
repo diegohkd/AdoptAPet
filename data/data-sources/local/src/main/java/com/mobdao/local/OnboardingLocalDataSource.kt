@@ -8,7 +8,6 @@ private const val HAS_COMPLETED_ONBOARDING = "HAS_COMPLETED_ONBOARDING"
 class OnboardingLocalDataSource internal constructor(
     private val sharedPreferences: SharedPreferences,
 ) {
-
     fun hasCompletedOnboarding(): Boolean =
         try {
             sharedPreferences.getBoolean(HAS_COMPLETED_ONBOARDING, false)
@@ -18,7 +17,8 @@ class OnboardingLocalDataSource internal constructor(
         }
 
     fun completeOnboarding() {
-        sharedPreferences.edit()
+        sharedPreferences
+            .edit()
             .putBoolean(HAS_COMPLETED_ONBOARDING, true)
             .apply()
     }

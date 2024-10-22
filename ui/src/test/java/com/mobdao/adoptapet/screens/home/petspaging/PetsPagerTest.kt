@@ -25,22 +25,24 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalPagingApi::class, FlowPreview::class)
 class PetsPagerTest {
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
 
     private val petsPagingSource: PetsPagingSource = mockk()
-    private val pager: Pager<Int, Pet> = mockk {
-        every { flow } returns flowOf(mockk())
-    }
+    private val pager: Pager<Int, Pet> =
+        mockk {
+            every { flow } returns flowOf(mockk())
+        }
 
-    private val pagerFactory: PagerFactory = mockk {
-        every { create<Int, Pet>(config = any(), pagingSourceFactory = any()) } returns pager
-    }
-    private val petsPagingSourceFactory: PetsPagingSource.Factory = mockk {
-        every { create(any()) } returns petsPagingSource
-    }
+    private val pagerFactory: PagerFactory =
+        mockk {
+            every { create<Int, Pet>(config = any(), pagingSourceFactory = any()) } returns pager
+        }
+    private val petsPagingSourceFactory: PetsPagingSource.Factory =
+        mockk {
+            every { create(any()) } returns petsPagingSource
+        }
 
     private val tested by lazy {
         PetsPager(
@@ -53,11 +55,12 @@ class PetsPagerTest {
     fun `given no search filter set when observing items then paging source is not created and no paging data is returned`() =
         runTest {
             // given / when
-            val pagingData = try {
-                tested.items.timeout(0.milliseconds).first()
-            } catch (e: Exception) {
-                null
-            }
+            val pagingData =
+                try {
+                    tested.items.timeout(0.milliseconds).first()
+                } catch (e: Exception) {
+                    null
+                }
 
             // then
             assertNull(pagingData)
@@ -71,7 +74,7 @@ class PetsPagerTest {
             every {
                 pagerFactory.create<Int, Pet>(
                     config = any(),
-                    pagingSourceFactory = any()
+                    pagingSourceFactory = any(),
                 )
             } answers {
                 lastArg<() -> PagingSource<Int, Pet>>()()

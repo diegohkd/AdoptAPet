@@ -10,15 +10,18 @@ import javax.inject.Singleton
 // TODO save Photo as another database entity
 @Singleton
 @ProvidedTypeConverter
-internal class PhotoTypeConverter @Inject constructor(private val jsonAdapter: JsonAdapter) {
+internal class PhotoTypeConverter
+    @Inject
+    constructor(
+        private val jsonAdapter: JsonAdapter,
+    ) {
+        @TypeConverter
+        fun fromPhotos(data: List<Photo>): String = jsonAdapter.toJson(PhotosList(data), PhotosList::class.java)
 
-    @TypeConverter
-    fun fromPhotos(data: List<Photo>): String =
-        jsonAdapter.toJson(PhotosList(data), PhotosList::class.java)
+        @TypeConverter
+        fun toPhotos(json: String): List<Photo> = jsonAdapter.fromJson(json, PhotosList::class.java)!!.photos
+    }
 
-    @TypeConverter
-    fun toPhotos(json: String): List<Photo> =
-        jsonAdapter.fromJson(json, PhotosList::class.java)!!.photos
-}
-
-private data class PhotosList(val photos: List<Photo>)
+private data class PhotosList(
+    val photos: List<Photo>,
+)

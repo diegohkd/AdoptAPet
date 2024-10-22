@@ -8,29 +8,32 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class SearchFilterMapper @Inject constructor() {
+internal class SearchFilterMapper
+    @Inject
+    constructor() {
+        fun mapToEntity(searchFilter: SearchFilter): SearchFilterEntity =
+            SearchFilterEntity(
+                address =
+                    searchFilter.address.let {
+                        AddressEntity(
+                            addressLine = it.addressLine,
+                            latitude = it.latitude,
+                            longitude = it.longitude,
+                        )
+                    },
+                petType = searchFilter.petType,
+            )
 
-    fun mapToEntity(searchFilter: SearchFilter): SearchFilterEntity =
-        SearchFilterEntity(
-            address = searchFilter.address.let {
-                AddressEntity(
-                    addressLine = it.addressLine,
-                    latitude = it.latitude,
-                    longitude = it.longitude,
-                )
-            },
-            petType = searchFilter.petType,
-        )
-
-    fun mapFromEntity(searchFilterEntity: SearchFilterEntity): SearchFilter =
-        SearchFilter(
-            address = searchFilterEntity.address.let {
-                Address(
-                    addressLine = it.addressLine,
-                    latitude = it.latitude,
-                    longitude = it.longitude,
-                )
-            },
-            petType = searchFilterEntity.petType,
-        )
-}
+        fun mapFromEntity(searchFilterEntity: SearchFilterEntity): SearchFilter =
+            SearchFilter(
+                address =
+                    searchFilterEntity.address.let {
+                        Address(
+                            addressLine = it.addressLine,
+                            latitude = it.latitude,
+                            longitude = it.longitude,
+                        )
+                    },
+                petType = searchFilterEntity.petType,
+            )
+    }

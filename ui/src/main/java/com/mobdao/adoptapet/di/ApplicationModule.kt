@@ -11,7 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ApplicationModule {
-
     companion object {
         @Provides
         @Singleton

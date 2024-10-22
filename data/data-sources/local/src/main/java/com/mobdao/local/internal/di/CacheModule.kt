@@ -17,28 +17,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 internal abstract class CacheModule {
-
     companion object {
-
         @Singleton
         @Provides
         fun provideDatabase(
             appContext: Context,
-            appDatabaseFactory: AppDatabaseFactory
+            appDatabaseFactory: AppDatabaseFactory,
         ): AppDatabase = appDatabaseFactory.create(appContext)
 
         @Singleton
         @Provides
-        fun provideAccessTokenLocalDataSource(
-            sharedPreferencesFactory: SharedPreferencesFactory
-        ): AccessTokenLocalDataSource =
+        fun provideAccessTokenLocalDataSource(sharedPreferencesFactory: SharedPreferencesFactory): AccessTokenLocalDataSource =
             AccessTokenLocalDataSource(sharedPreferencesFactory.createForAccessTokenDataSource())
 
         @Singleton
         @Provides
-        fun provideOnboardingLocalDataSource(
-            sharedPreferencesFactory: SharedPreferencesFactory
-        ): OnboardingLocalDataSource =
+        fun provideOnboardingLocalDataSource(sharedPreferencesFactory: SharedPreferencesFactory): OnboardingLocalDataSource =
             OnboardingLocalDataSource(sharedPreferencesFactory.createForOnboardingDataSource())
 
         @Singleton

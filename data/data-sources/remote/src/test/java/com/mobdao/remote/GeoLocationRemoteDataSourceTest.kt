@@ -18,52 +18,58 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GeoLocationRemoteDataSourceTest {
-
-    private val location: Location = mockk {
-        every { latitude } returns -123.0
-        every { longitude } returns 345.0
-    }
-    private val geoapifyConfig: GeoapifyConfig = mockk {
-        every { apiKey } returns "apiKey"
-    }
+    private val location: Location =
+        mockk {
+            every { latitude } returns -123.0
+            every { longitude } returns 345.0
+        }
+    private val geoapifyConfig: GeoapifyConfig =
+        mockk {
+            every { apiKey } returns "apiKey"
+        }
     private val geocodeResponse: GeocodeResponse = mockk()
     private val address1: Address = mockk()
     private val address2: Address = mockk()
     private val addresses = listOf(address1, address2)
 
-    private val fusedLocationClient: FusedLocationProviderClientWrapper = mockk {
-        coEvery { getCurrentLocation(PRIORITY_HIGH_ACCURACY) } returns location
-    }
-    private val geoapifyService: GeoapifyService = mockk {
-        coEvery {
-            reverseGeocode(
-                apiKey = "apiKey",
-                latitude = -123.0,
-                longitude = 456.0,
-                format = REVERSE_GEOCODE_RESPONSE_FORMAT,
-            )
-        } returns geocodeResponse
-        coEvery {
-            autocomplete(
-                apiKey = "apiKey",
-                text = "location",
-                format = REVERSE_GEOCODE_RESPONSE_FORMAT,
-            )
-        } returns geocodeResponse
-    }
-    private val appConfig: AppConfig = mockk {
-        every { geoapifyConfig } returns this@GeoLocationRemoteDataSourceTest.geoapifyConfig
-    }
-    private val entityMapper: EntityMapper = mockk {
-        every { toAddresses(geocodeResponse) } returns addresses
-    }
+    private val fusedLocationClient: FusedLocationProviderClientWrapper =
+        mockk {
+            coEvery { getCurrentLocation(PRIORITY_HIGH_ACCURACY) } returns location
+        }
+    private val geoapifyService: GeoapifyService =
+        mockk {
+            coEvery {
+                reverseGeocode(
+                    apiKey = "apiKey",
+                    latitude = -123.0,
+                    longitude = 456.0,
+                    format = REVERSE_GEOCODE_RESPONSE_FORMAT,
+                )
+            } returns geocodeResponse
+            coEvery {
+                autocomplete(
+                    apiKey = "apiKey",
+                    text = "location",
+                    format = REVERSE_GEOCODE_RESPONSE_FORMAT,
+                )
+            } returns geocodeResponse
+        }
+    private val appConfig: AppConfig =
+        mockk {
+            every { geoapifyConfig } returns this@GeoLocationRemoteDataSourceTest.geoapifyConfig
+        }
+    private val entityMapper: EntityMapper =
+        mockk {
+            every { toAddresses(geocodeResponse) } returns addresses
+        }
 
-    private val tested = GeoLocationRemoteDataSource(
-        fusedLocationClient = fusedLocationClient,
-        geoapifyService = geoapifyService,
-        appConfig = appConfig,
-        entityMapper = entityMapper,
-    )
+    private val tested =
+        GeoLocationRemoteDataSource(
+            fusedLocationClient = fusedLocationClient,
+            geoapifyService = geoapifyService,
+            appConfig = appConfig,
+            entityMapper = entityMapper,
+        )
 
     @Test
     fun `when get current location coordinates then current location coordinates is returned`() =
@@ -77,7 +83,7 @@ class GeoLocationRemoteDataSourceTest {
                 GeoCoordinates(
                     latitude = -123.0,
                     longitude = 345.0,
-                )
+                ),
             )
         }
 

@@ -1,6 +1,10 @@
 package com.mobdao.adoptapet.navigation
 
-import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.*
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.FilterScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.OnboardingScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.OnboardingToHomeScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.PetDetailsScreen
+import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.PreviousScreen
 import com.mobdao.adoptapet.screens.filter.FilterViewModel
 import com.mobdao.adoptapet.screens.home.HomeViewModel
 import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel
@@ -14,12 +18,14 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
 class NavigationViewModelTest {
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
@@ -115,7 +121,7 @@ class NavigationViewModelTest {
             tested.navAction.value!!.peekContent(),
             PetDetailsScreen(
                 petId = "petId",
-                type = animalType
+                type = animalType,
             ),
         )
     }

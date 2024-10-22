@@ -10,31 +10,33 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class HasCompletedOnboardingUseCaseTest {
-
-    private val onboardingService: OnboardingService = mockk {
-        every { hasCompletedOnboarding() } returns false
-    }
+    private val onboardingService: OnboardingService =
+        mockk {
+            every { hasCompletedOnboarding() } returns false
+        }
 
     private val tested = HasCompletedOnboardingUseCase(onboardingService)
 
     @Test
-    fun `given has not completed onboarding when execute then return false`() = runTest {
-        // given / when
-        val result: Boolean = tested.execute().first()
+    fun `given has not completed onboarding when execute then return false`() =
+        runTest {
+            // given / when
+            val result: Boolean = tested.execute().first()
 
-        // then
-        assertFalse(result)
-    }
+            // then
+            assertFalse(result)
+        }
 
     @Test
-    fun `given has completed onboarding when execute then return true`() = runTest {
-        // given
-        every { onboardingService.hasCompletedOnboarding() } returns true
+    fun `given has completed onboarding when execute then return true`() =
+        runTest {
+            // given
+            every { onboardingService.hasCompletedOnboarding() } returns true
 
-        // when
-        val result: Boolean = tested.execute().first()
+            // when
+            val result: Boolean = tested.execute().first()
 
-        // then
-        assertTrue(result)
-    }
+            // then
+            assertTrue(result)
+        }
 }

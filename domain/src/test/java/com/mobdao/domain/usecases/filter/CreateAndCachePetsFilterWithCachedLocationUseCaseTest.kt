@@ -15,20 +15,22 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class CreateAndCachePetsFilterWithCachedLocationUseCaseTest {
-
     private val address: Address = AddressEntityMockFactory.create()
 
-    private val geoLocationRepository: GeoLocationRepository = mockk {
-        coEvery { getCachedCurrentLocationAddress() } returns address
-    }
-    private val searchFilterRepository: SearchFilterRepository = mockk {
-        justRun { saveSearchFilter(any()) }
-    }
+    private val geoLocationRepository: GeoLocationRepository =
+        mockk {
+            coEvery { getCachedCurrentLocationAddress() } returns address
+        }
+    private val searchFilterRepository: SearchFilterRepository =
+        mockk {
+            justRun { saveSearchFilter(any()) }
+        }
 
-    private val tested = CreateAndCachePetsFilterWithCachedLocationUseCase(
-        geoLocationRepository = geoLocationRepository,
-        searchFilterRepository = searchFilterRepository,
-    )
+    private val tested =
+        CreateAndCachePetsFilterWithCachedLocationUseCase(
+            geoLocationRepository = geoLocationRepository,
+            searchFilterRepository = searchFilterRepository,
+        )
 
     @Test(expected = LocationNotFoundException::class)
     fun `given cached current location is null when executed then LocationNotFoundException is thrown`() =

@@ -5,7 +5,6 @@ import io.mockk.every
 import io.mockk.mockk
 
 object AddressEntityMockFactory {
-
     fun create(
         addressLine: String = "addressLine",
         latitude: Double = -21.312261,

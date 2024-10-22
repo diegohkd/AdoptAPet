@@ -18,6 +18,6 @@ fun GenericErrorDialog(onDismissGenericErrorDialog: () -> Unit) {
         },
         text = {
             Text(text = stringResource(R.string.ops_something_went_wrong))
-        }
+        },
     )
 }

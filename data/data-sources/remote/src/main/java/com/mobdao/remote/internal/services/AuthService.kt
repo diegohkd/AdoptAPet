@@ -14,6 +14,6 @@ internal interface AuthService {
         @Field("client_id")
         clientId: String,
         @Field("client_secret")
-        clientSecret: String
+        clientSecret: String,
     ): AccessTokenResponse
 }

@@ -8,7 +8,8 @@ enum class AnimalType {
     HORSE,
     BIRD,
     SCALES_FINS_AND_OTHER,
-    BARNYARD;
+    BARNYARD,
+    ;
 
     companion object {
         private val nameToType: Map<String, AnimalType> = entries.associateBy { it.name }

@@ -1,4 +1,4 @@
-@file:Suppress("Filename")
+@file:Suppress("ktlint:standard:filename")
 
 package com.mobdao.adoptapet.utils
 

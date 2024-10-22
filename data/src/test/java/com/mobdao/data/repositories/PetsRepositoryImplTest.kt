@@ -17,11 +17,11 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class PetsRepositoryImplTest {
-
-    private val address = AddressEntityMockFactory.create(
-        latitude = 123.0,
-        longitude = 123.0,
-    )
+    private val address =
+        AddressEntityMockFactory.create(
+            latitude = 123.0,
+            longitude = 123.0,
+        )
     private val searchFilter: SearchFilter =
         SearchFilterEntityMockFactory.create(
             address = address,
@@ -31,70 +31,79 @@ class PetsRepositoryImplTest {
     private val pet2: Pet = mockk()
     private val pets = listOf(pet1, pet2)
 
-    private val animalRemoteDataSource: AnimalRemoteDataSource = mockk {
-        coEvery {
-            getPets(
+    private val animalRemoteDataSource: AnimalRemoteDataSource =
+        mockk {
+            coEvery {
+                getPets(
+                    pageNumber = 1,
+                    locationCoordinates =
+                        GeoCoordinates(
+                            latitude = 123.0,
+                            longitude = 123.0,
+                        ),
+                    animalType = "petType",
+                )
+            } returns pets
+        }
+    private val animalLocalDataSource: AnimalLocalDataSource =
+        mockk {
+            coJustRun { savePets(pets) }
+            coEvery { getPetById(petId = "id-1") } returns pet1
+        }
+
+    private val tested =
+        PetsRepositoryImpl(
+            animalRemoteDataSource = animalRemoteDataSource,
+            animalLocalDataSource = animalLocalDataSource,
+        )
+
+    @Test
+    fun `given search filter when get pets then fetched pets are cached`() =
+        runTest {
+            // given / when
+            tested.getPets(
                 pageNumber = 1,
-                locationCoordinates = GeoCoordinates(
-                    latitude = 123.0,
-                    longitude = 123.0
-                ),
-                animalType = "petType",
+                searchFilter = searchFilter,
             )
-        } returns pets
-    }
-    private val animalLocalDataSource: AnimalLocalDataSource = mockk {
-        coJustRun { savePets(pets) }
-        coEvery { getPetById(petId = "id-1") } returns pet1
-    }
 
-    private val tested = PetsRepositoryImpl(
-        animalRemoteDataSource = animalRemoteDataSource,
-        animalLocalDataSource = animalLocalDataSource,
-    )
+            // then
+            coVerify { animalLocalDataSource.savePets(pets) }
+        }
 
     @Test
-    fun `given search filter when get pets then fetched pets are cached`() = runTest {
-        // given / when
-        tested.getPets(
-            pageNumber = 1,
-            searchFilter = searchFilter,
-        )
+    fun `given search filter when get pets then pets are returned`() =
+        runTest {
+            // given / when
+            val result: List<Pet> =
+                tested.getPets(
+                    pageNumber = 1,
+                    searchFilter = searchFilter,
+                )
 
-        // then
-        coVerify { animalLocalDataSource.savePets(pets) }
-    }
-
-    @Test
-    fun `given search filter when get pets then pets are returned`() = runTest {
-        // given / when
-        val result: List<Pet> = tested.getPets(
-            pageNumber = 1,
-            searchFilter = searchFilter,
-        )
-
-        // then
-        assertEquals(result, pets)
-    }
+            // then
+            assertEquals(result, pets)
+        }
 
     @Test
-    fun `given unknown Pet ID when get Pet by ID then null is returned`() = runTest {
-        // given
-        coEvery { animalLocalDataSource.getPetById("unknown-id") } returns null
+    fun `given unknown Pet ID when get Pet by ID then null is returned`() =
+        runTest {
+            // given
+            coEvery { animalLocalDataSource.getPetById("unknown-id") } returns null
 
-        // when
-        val result: Pet? = tested.getCachedPetById(petId = "unknown-id")
+            // when
+            val result: Pet? = tested.getCachedPetById(petId = "unknown-id")
 
-        // then
-        assertNull(result)
-    }
+            // then
+            assertNull(result)
+        }
 
     @Test
-    fun `given known Pet ID when get Pet by ID then Pet with same ID is returned`() = runTest {
-        // given / when
-        val result: Pet? = tested.getCachedPetById(petId = "id-1")
+    fun `given known Pet ID when get Pet by ID then Pet with same ID is returned`() =
+        runTest {
+            // given / when
+            val result: Pet? = tested.getCachedPetById(petId = "id-1")
 
-        // then
-        assertEquals(result, pet1)
-    }
+            // then
+            assertEquals(result, pet1)
+        }
 }
