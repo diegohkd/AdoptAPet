@@ -6,10 +6,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MoshiFactory @Inject constructor() {
-
-    fun create(): Moshi =
-        Moshi.Builder()
-            .addLast(KotlinJsonAdapterFactory())
-            .build()
-}
+class MoshiFactory
+    @Inject
+    constructor() {
+        fun create(): Moshi =
+            Moshi
+                .Builder()
+                .addLast(KotlinJsonAdapterFactory())
+                .build()
+    }

@@ -11,16 +11,17 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class OnboardingLocalDataSourceTest {
+    private val editor: Editor =
+        mockk {
+            every { putBoolean("HAS_COMPLETED_ONBOARDING", true) } returns this
+            justRun { apply() }
+        }
 
-    private val editor: Editor = mockk {
-        every { putBoolean("HAS_COMPLETED_ONBOARDING", true) } returns this
-        justRun { apply() }
-    }
-
-    private val sharedPreferences: SharedPreferences = mockk {
-        every { getBoolean("HAS_COMPLETED_ONBOARDING", false) } returns false
-        every { edit() } returns editor
-    }
+    private val sharedPreferences: SharedPreferences =
+        mockk {
+            every { getBoolean("HAS_COMPLETED_ONBOARDING", false) } returns false
+            every { edit() } returns editor
+        }
 
     private val tested = OnboardingLocalDataSource(sharedPreferences)
 
@@ -30,7 +31,7 @@ class OnboardingLocalDataSourceTest {
         every {
             sharedPreferences.getBoolean(
                 "HAS_COMPLETED_ONBOARDING",
-                false
+                false,
             )
         } throws RuntimeException()
 
@@ -47,7 +48,7 @@ class OnboardingLocalDataSourceTest {
         every {
             sharedPreferences.getBoolean(
                 "HAS_COMPLETED_ONBOARDING",
-                false
+                false,
             )
         } returns true
 

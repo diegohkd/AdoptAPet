@@ -12,7 +12,6 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class AdoptAPetApplication : Application() {
-
     @Inject
     lateinit var initializeAppOnAppCreatedUseCase: InitializeAppOnAppCreatedUseCase
 
@@ -21,7 +20,8 @@ class AdoptAPetApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         applicationScope.launch {
-            initializeAppOnAppCreatedUseCase.execute()
+            initializeAppOnAppCreatedUseCase
+                .execute()
                 .catchAndLogException()
                 .firstOrNull()
         }

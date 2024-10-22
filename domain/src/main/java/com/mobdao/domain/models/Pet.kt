@@ -11,5 +11,5 @@ data class Pet(
     val description: String,
     val distance: Float?,
     val photos: List<Photo>,
-    val contact: Contact
+    val contact: Contact,
 )

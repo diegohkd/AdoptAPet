@@ -11,10 +11,11 @@ import com.mobdao.local.internal.database.typeconverters.PhotoTypeConverter
 
 @Database(
     entities = [Animal::class, Address::class],
-    version = 1
+    version = 1,
 )
 @TypeConverters(PhotoTypeConverter::class)
 internal abstract class AppDatabase : RoomDatabase() {
     abstract fun addressDao(): AddressDao
+
     abstract fun animalDao(): AnimalDao
 }

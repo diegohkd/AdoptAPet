@@ -13,18 +13,19 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SearchFilterRepositoryImplTest {
-
     private val searchFilter: SearchFilter = mockk()
 
-    private val searchFilterLocalDataSource: SearchFilterLocalDataSource = mockk {
-        justRun { saveSearchFilter(searchFilter) }
-        every { getSearchFilter() } returns searchFilter
-        every { observeSearchFilter() } returns MutableStateFlow(searchFilter)
-    }
+    private val searchFilterLocalDataSource: SearchFilterLocalDataSource =
+        mockk {
+            justRun { saveSearchFilter(searchFilter) }
+            every { getSearchFilter() } returns searchFilter
+            every { observeSearchFilter() } returns MutableStateFlow(searchFilter)
+        }
 
-    private val tested = SearchFilterRepositoryImpl(
-        searchFilterLocalDataSource = searchFilterLocalDataSource,
-    )
+    private val tested =
+        SearchFilterRepositoryImpl(
+            searchFilterLocalDataSource = searchFilterLocalDataSource,
+        )
 
     @Test
     fun `given search filter when save search filter then filter is saved`() {
@@ -45,11 +46,12 @@ class SearchFilterRepositoryImplTest {
     }
 
     @Test
-    fun `when observe search filter then search filter is returned`() = runTest {
-        // when
-        val result: SearchFilter? = tested.observeSearchFilter().first()
+    fun `when observe search filter then search filter is returned`() =
+        runTest {
+            // when
+            val result: SearchFilter? = tested.observeSearchFilter().first()
 
-        // then
-        assertEquals(result, searchFilter)
-    }
+            // then
+            assertEquals(result, searchFilter)
+        }
 }

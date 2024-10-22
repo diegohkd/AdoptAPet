@@ -8,7 +8,6 @@ internal const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
 class AccessTokenLocalDataSource internal constructor(
     private val sharedPreferences: SharedPreferences,
 ) {
-
     fun getAccessToken(): String? =
         try {
             sharedPreferences.getString(ACCESS_TOKEN_KEY, null)
@@ -18,7 +17,8 @@ class AccessTokenLocalDataSource internal constructor(
         }
 
     fun saveAccessToken(accessToken: String?) {
-        sharedPreferences.edit()
+        sharedPreferences
+            .edit()
             .putString(ACCESS_TOKEN_KEY, accessToken)
             .apply()
     }

@@ -1,11 +1,14 @@
 package com.mobdao.common.testutils.mockfactories.domain
 
-import com.mobdao.domain.models.*
+import com.mobdao.domain.models.AnimalType
+import com.mobdao.domain.models.Breeds
+import com.mobdao.domain.models.Contact
+import com.mobdao.domain.models.Pet
+import com.mobdao.domain.models.Photo
 import io.mockk.every
 import io.mockk.mockk
 
 object PetMockFactory {
-
     fun create(
         id: String = "id",
         type: AnimalType = AnimalType.DOG,
@@ -17,18 +20,19 @@ object PetMockFactory {
         description: String = "description",
         distance: Float = 123f,
         photos: List<Photo> = listOf(PhotoMockFactory.create()),
-        contact: Contact = ContactMockFactory.create()
-    ): Pet = mockk {
-        every { this@mockk.id } returns id
-        every { this@mockk.type } returns type
-        every { this@mockk.name } returns name
-        every { this@mockk.breeds } returns breeds
-        every { this@mockk.age } returns age
-        every { this@mockk.size } returns size
-        every { this@mockk.gender } returns gender
-        every { this@mockk.description } returns description
-        every { this@mockk.distance } returns distance
-        every { this@mockk.photos } returns photos
-        every { this@mockk.contact } returns contact
-    }
+        contact: Contact = ContactMockFactory.create(),
+    ): Pet =
+        mockk {
+            every { this@mockk.id } returns id
+            every { this@mockk.type } returns type
+            every { this@mockk.name } returns name
+            every { this@mockk.breeds } returns breeds
+            every { this@mockk.age } returns age
+            every { this@mockk.size } returns size
+            every { this@mockk.gender } returns gender
+            every { this@mockk.description } returns description
+            every { this@mockk.distance } returns distance
+            every { this@mockk.photos } returns photos
+            every { this@mockk.contact } returns contact
+        }
 }

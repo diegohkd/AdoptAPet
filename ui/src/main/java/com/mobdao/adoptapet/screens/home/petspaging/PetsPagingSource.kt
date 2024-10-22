@@ -17,7 +17,6 @@ class PetsPagingSource private constructor(
     private val getPetsUseCase: GetPetsUseCase,
     private val searchFilter: SearchFilter,
 ) : PagingSource<Int, HomeViewModel.Pet>() {
-
     override fun getRefreshKey(state: PagingState<Int, HomeViewModel.Pet>): Int? {
         // Force to always start from first page on refresh
         return null
@@ -27,10 +26,11 @@ class PetsPagingSource private constructor(
         val pageNumber: Int = params.key ?: DEFAULT_INITIAL_PAGE_NUMBER
         // TODO handle page size
         return try {
-            val pets: List<HomeViewModel.Pet> = getPetsUseCase
-                .execute(pageNumber = pageNumber, searchFilter = searchFilter)
-                .first()
-                .map { it.toViewModelModel() }
+            val pets: List<HomeViewModel.Pet> =
+                getPetsUseCase
+                    .execute(pageNumber = pageNumber, searchFilter = searchFilter)
+                    .first()
+                    .map { it.toViewModelModel() }
             LoadResult.Page(
                 data = pets,
                 prevKey = if (pageNumber == 1) null else pageNumber - 1,
@@ -47,17 +47,20 @@ class PetsPagingSource private constructor(
             id = id,
             type = type,
             name = name,
-            breeds = HomeViewModel.Pet.Breeds(
-                primary = breeds.primary,
-                secondary = breeds.secondary,
-            ),
-            thumbnailUrl = photos.firstOrNull()?.smallUrl.orEmpty()
+            breeds =
+                HomeViewModel.Pet.Breeds(
+                    primary = breeds.primary,
+                    secondary = breeds.secondary,
+                ),
+            thumbnailUrl = photos.firstOrNull()?.smallUrl.orEmpty(),
         )
 
     @Singleton
-    class Factory @Inject constructor(private val getPetsUseCase: GetPetsUseCase) {
-
-        fun create(searchFilter: SearchFilter): PetsPagingSource =
-            PetsPagingSource(getPetsUseCase, searchFilter)
-    }
+    class Factory
+        @Inject
+        constructor(
+            private val getPetsUseCase: GetPetsUseCase,
+        ) {
+            fun create(searchFilter: SearchFilter): PetsPagingSource = PetsPagingSource(getPetsUseCase, searchFilter)
+        }
 }

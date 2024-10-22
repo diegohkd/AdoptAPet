@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
 import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.FilterApplied
+import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState.PetType
+import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState.PetTypes
 import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.models.SearchFilter
@@ -19,99 +21,161 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class FilterViewModel @Inject constructor(
-    private val getSearchFilterUseCase: GetSearchFilterUseCase,
-    private val saveSearchFilterUseCase: SaveSearchFilterUseCase,
-) : ViewModel() {
-
-    sealed interface NavAction {
-        data object FilterApplied : NavAction
-    }
-
-    data class UiState(
-        val initialAddress: String = "",
-        val petType: String = "",
-        val isApplyButtonEnabled: Boolean = false,
-        val genericErrorDialogIsVisible: Boolean = false,
-    )
-
-    private val _navAction = MutableStateFlow<Event<NavAction>?>(null)
-    val navAction: StateFlow<Event<NavAction>?> = _navAction.asStateFlow()
-
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    private var petType: String? = null
-    private val address = MutableStateFlow<Address?>(null)
-
-    init {
-        handleApplyButtonEnabledState()
-        loadSavedFilter()
-    }
-
-    fun onFailedToSearchAddress(throwable: Throwable?) {
-        throwable?.let(Timber::e)
-        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-    }
-
-    fun onSearchedAddressSelected(address: Address?) {
-        this.address.value = address
-    }
-
-    fun onPetTypeSelected(type: String) {
-        _uiState.update { it.copy(petType = type) }
-        petType = type
-    }
-
-    fun onApplyClicked() {
-        val address = address.value!!
-
-        viewModelScope.launch {
-            saveSearchFilterUseCase.execute(
-                filter = SearchFilter(
-                    address = address,
-                    petType = petType
-                )
-            )
-                .catchAndLogException {
-                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-                }
-                .collect {
-                    _navAction.value = Event(FilterApplied)
-                }
+class FilterViewModel
+    @Inject
+    constructor(
+        private val getSearchFilterUseCase: GetSearchFilterUseCase,
+        private val saveSearchFilterUseCase: SaveSearchFilterUseCase,
+    ) : ViewModel() {
+        sealed interface NavAction {
+            data object FilterApplied : NavAction
         }
-    }
 
-    fun onDismissGenericErrorDialog() {
-        _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
-    }
+        data class UiState(
+            val initialAddress: String = "",
+            val petType: String = "",
+            val petTypes: PetTypes = PetTypes(),
+            val isApplyButtonEnabled: Boolean = false,
+            val genericErrorDialogIsVisible: Boolean = false,
+        ) {
+            data class PetTypes(
+                val types: List<PetType> = emptyList(),
+                val longestTypeNamePlaceholder: String = "",
+            )
 
-    private fun handleApplyButtonEnabledState() {
-        viewModelScope.launch {
-            address.collect { address ->
-                _uiState.update {
-                    it.copy(isApplyButtonEnabled = address != null)
+            data class PetType(
+                val name: String,
+                val isSelected: Boolean,
+            )
+        }
+
+        private val _navAction = MutableStateFlow<Event<NavAction>?>(null)
+        val navAction: StateFlow<Event<NavAction>?> = _navAction.asStateFlow()
+
+        private val _uiState = MutableStateFlow(UiState())
+        val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+        private var petType: String? = null
+        private val address = MutableStateFlow<Address?>(null)
+
+        private val petTypesNames =
+            listOf(
+                "Dog",
+                "Cat",
+                "Rabbit",
+                "Bird",
+                "Small & Furry",
+                "Horse",
+                "Barnyard",
+                "Scales, Fins & Other",
+            )
+
+        init {
+            handleApplyButtonEnabledState()
+            loadSavedFilter()
+            _uiState.update {
+                it.copy(
+                    petTypes =
+                        PetTypes(
+                            types =
+                                petTypesNames.map { petTypeName ->
+                                    PetType(
+                                        name = petTypeName,
+                                        isSelected = false,
+                                    )
+                                },
+                            longestTypeNamePlaceholder =
+                                petTypesNames.maxBy { petTypesName ->
+                                    petTypesName.length
+                                },
+                        ),
+                )
+            }
+        }
+
+        fun onFailedToSearchAddress(throwable: Throwable?) {
+            throwable?.let(Timber::e)
+            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+        }
+
+        fun onSearchedAddressSelected(address: Address?) {
+            this.address.value = address
+        }
+
+        fun onPetTypeSelected(type: String) {
+            _uiState.update { it.copy(petType = type) }
+            petType = type
+        }
+
+        // TODO allow single selection
+        fun onPetTypeClicked(type: PetType) {
+            _uiState.update {
+//            val type = it.petTypes.types.find { petType -> petType.name == type.name }
+//            val updatedType = type?.copy(isSelected = !type.isSelected)
+                it.copy(
+                    petTypes =
+                        it.petTypes.copy(
+                            it.petTypes.types.map {
+                                if (it == type) {
+                                    it.copy(isSelected = !it.isSelected)
+                                } else {
+                                    it
+                                }
+                            },
+                        ),
+                )
+            }
+        }
+
+        fun onApplyClicked() {
+            val address = address.value!!
+
+            viewModelScope.launch {
+                saveSearchFilterUseCase
+                    .execute(
+                        filter =
+                            SearchFilter(
+                                address = address,
+                                petType = petType,
+                            ),
+                    ).catchAndLogException {
+                        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                    }.collect {
+                        _navAction.value = Event(FilterApplied)
+                    }
+            }
+        }
+
+        fun onDismissGenericErrorDialog() {
+            _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
+        }
+
+        private fun handleApplyButtonEnabledState() {
+            viewModelScope.launch {
+                address.collect { address ->
+                    _uiState.update {
+                        it.copy(isApplyButtonEnabled = address != null)
+                    }
                 }
             }
         }
-    }
 
-    private fun loadSavedFilter() {
-        viewModelScope.launch {
-            getSearchFilterUseCase.execute()
-                .catchAndLogException {
-                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-                }
-                .collect { searchFilter ->
-                    address.value = searchFilter?.address
-                    petType = searchFilter?.petType
-                    _uiState.update {
-                        it.copy(
-                            initialAddress = searchFilter?.address?.addressLine.orEmpty(),
-                            petType = searchFilter?.petType.orEmpty()
-                        )
+        private fun loadSavedFilter() {
+            viewModelScope.launch {
+                getSearchFilterUseCase
+                    .execute()
+                    .catchAndLogException {
+                        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                    }.collect { searchFilter ->
+                        address.value = searchFilter?.address
+                        petType = searchFilter?.petType
+                        _uiState.update {
+                            it.copy(
+                                initialAddress = searchFilter?.address?.addressLine.orEmpty(),
+                                petType = searchFilter?.petType.orEmpty(),
+                            )
+                        }
                     }
-                }
+            }
         }
     }
-}

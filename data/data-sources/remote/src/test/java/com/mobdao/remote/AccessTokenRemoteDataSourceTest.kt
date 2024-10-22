@@ -12,41 +12,46 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class AccessTokenRemoteDataSourceTest {
-
-    private val petFinderConfig = PetFinderConfig(
-        grantType = "grantType",
-        clientId = "clientId",
-        clientSecret = "clientSecret",
-    )
+    private val petFinderConfig =
+        PetFinderConfig(
+            grantType = "grantType",
+            clientId = "clientId",
+            clientSecret = "clientSecret",
+        )
     private val accessToken = "accessToken"
-    private val accessTokenResponse: AccessTokenResponse = mockk {
-        every { accessToken } returns this@AccessTokenRemoteDataSourceTest.accessToken
-    }
+    private val accessTokenResponse: AccessTokenResponse =
+        mockk {
+            every { accessToken } returns this@AccessTokenRemoteDataSourceTest.accessToken
+        }
 
-    private val appConfig: AppConfig = mockk {
-        every { petFinderConfig } returns this@AccessTokenRemoteDataSourceTest.petFinderConfig
-    }
-    private val authService: AuthService = mockk {
-        coEvery {
-            getAccessToken(
-                grantType = "grantType",
-                clientId = "clientId",
-                clientSecret = "clientSecret",
-            )
-        } returns accessTokenResponse
-    }
+    private val appConfig: AppConfig =
+        mockk {
+            every { petFinderConfig } returns this@AccessTokenRemoteDataSourceTest.petFinderConfig
+        }
+    private val authService: AuthService =
+        mockk {
+            coEvery {
+                getAccessToken(
+                    grantType = "grantType",
+                    clientId = "clientId",
+                    clientSecret = "clientSecret",
+                )
+            } returns accessTokenResponse
+        }
 
-    private val tested = AccessTokenRemoteDataSource(
-        appConfig = appConfig,
-        authService = authService,
-    )
+    private val tested =
+        AccessTokenRemoteDataSource(
+            appConfig = appConfig,
+            authService = authService,
+        )
 
     @Test
-    fun `when get new access token then new access token is returned`() = runTest {
-        // given / when
-        val result = tested.getNewAccessToken()
+    fun `when get new access token then new access token is returned`() =
+        runTest {
+            // given / when
+            val result = tested.getNewAccessToken()
 
-        // then
-        assertEquals(result, accessToken)
-    }
+            // then
+            assertEquals(result, accessToken)
+        }
 }

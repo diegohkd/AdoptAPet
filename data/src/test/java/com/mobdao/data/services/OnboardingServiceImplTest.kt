@@ -10,10 +10,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class OnboardingServiceImplTest {
-
-    private val onboardingLocalDataSource: OnboardingLocalDataSource = mockk {
-        justRun { completeOnboarding() }
-    }
+    private val onboardingLocalDataSource: OnboardingLocalDataSource =
+        mockk {
+            justRun { completeOnboarding() }
+        }
 
     private val tested = OnboardingServiceImpl(onboardingLocalDataSource)
 

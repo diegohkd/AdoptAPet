@@ -1,7 +1,11 @@
 package com.mobdao.adoptapet.screens.onboarding
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +30,7 @@ import com.mobdao.domain.models.Address
 @Composable
 fun OnboardingScreen(
     onNavAction: (NavAction) -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
@@ -51,27 +55,30 @@ private fun UiContent(
     onDismissGenericErrorDialog: () -> Unit,
 ) {
     ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .safeDrawingPadding()
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(horizontal = 16.dp),
     ) {
         val (welcomeTextRef, searchBarRef, imageRef, nextButtonRef) = createRefs()
 
         Text(
             text = "Welcome to Adopt a Pet.\nPlease enter a location so we can improve our search for pets.",
-            modifier = Modifier.constrainAs(welcomeTextRef) {
-                centerHorizontallyTo(parent)
-                top.linkTo(parent.top, margin = 54.dp)
-            },
+            modifier =
+                Modifier.constrainAs(welcomeTextRef) {
+                    centerHorizontallyTo(parent)
+                    top.linkTo(parent.top, margin = 54.dp)
+                },
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
         )
         LocationSearchBar(
-            modifier = Modifier.constrainAs(searchBarRef) {
-                centerHorizontallyTo(parent)
-                top.linkTo(welcomeTextRef.bottom, margin = 54.dp)
-            },
+            modifier =
+                Modifier.constrainAs(searchBarRef) {
+                    centerHorizontallyTo(parent)
+                    top.linkTo(welcomeTextRef.bottom, margin = 54.dp)
+                },
             initialAddress = uiState.selectedAddress,
             onAddressSelected = onAddressSelected,
             onError = onFailedToGetAddress,
@@ -79,24 +86,26 @@ private fun UiContent(
         Image(
             painter = painterResource(R.drawable.onboarding_image),
             contentDescription = "",
-            modifier = Modifier
-                .widthIn(max = 400.dp)
-                .fillMaxWidth()
-                .constrainAs(imageRef) {
-                    centerHorizontallyTo(parent)
-                    top.linkTo(searchBarRef.top, margin = 100.dp)
-                },
-            contentScale = ContentScale.FillWidth
+            modifier =
+                Modifier
+                    .widthIn(max = 400.dp)
+                    .fillMaxWidth()
+                    .constrainAs(imageRef) {
+                        centerHorizontallyTo(parent)
+                        top.linkTo(searchBarRef.top, margin = 100.dp)
+                    },
+            contentScale = ContentScale.FillWidth,
         )
         Button(
             onClick = onNextClicked,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-                .constrainAs(nextButtonRef) {
-                    centerHorizontallyTo(parent)
-                    bottom.linkTo(parent.bottom)
-                },
-            enabled = uiState.nextButtonIsEnabled
+            modifier =
+                Modifier
+                    .padding(bottom = 16.dp)
+                    .constrainAs(nextButtonRef) {
+                        centerHorizontallyTo(parent)
+                        bottom.linkTo(parent.bottom)
+                    },
+            enabled = uiState.nextButtonIsEnabled,
         ) {
             Text(text = stringResource(R.string.next))
         }

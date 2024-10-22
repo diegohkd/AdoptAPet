@@ -5,9 +5,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TimberWrapper @Inject constructor() {
-
-    fun plantDebugTree() {
-        Timber.plant(Timber.DebugTree())
+class TimberWrapper
+    @Inject
+    constructor() {
+        fun plantDebugTree() {
+            Timber.plant(Timber.DebugTree())
+        }
     }
-}

@@ -2,10 +2,25 @@ package com.mobdao.adoptapet.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,9 +50,13 @@ import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.common.theme.color.ColorSchema
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
-import com.mobdao.adoptapet.screens.home.HomeViewModel.*
+import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction
+import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
+import com.mobdao.adoptapet.screens.home.HomeViewModel.UiState
 import com.mobdao.adoptapet.utils.extensions.toColorSchema
-import com.mobdao.domain.models.AnimalType.*
+import com.mobdao.domain.models.AnimalType.CAT
+import com.mobdao.domain.models.AnimalType.DOG
+import com.mobdao.domain.models.AnimalType.RABBIT
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -59,7 +78,7 @@ fun HomeScreen(
         viewModel.onPetsListLoadStateUpdate(
             refreshLoadState = petsPagingItems.loadState.refresh,
             appendLoadState = petsPagingItems.loadState.append,
-            itemsCount = petsPagingItems.itemCount
+            itemsCount = petsPagingItems.itemCount,
         )
     }
 
@@ -68,7 +87,7 @@ fun HomeScreen(
         petsPagingItems = petsPagingItems,
         onPetClicked = viewModel::onPetClicked,
         onFilterClicked = viewModel::onFilterClicked,
-        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog
+        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
     )
 }
 
@@ -82,9 +101,10 @@ private fun UiContent(
     onDismissGenericErrorDialog: () -> Unit = {},
 ) {
     ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .safeDrawingPadding()
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .safeDrawingPadding(),
     ) {
         val (
             toolbarRef,
@@ -96,20 +116,22 @@ private fun UiContent(
         ToolBar(
             address = uiState.address,
             onFilterClicked = onFilterClicked,
-            modifier = Modifier.constrainAs(toolbarRef) {
-                start.linkTo(parent.start)
-                top.linkTo(parent.top)
-            }
+            modifier =
+                Modifier.constrainAs(toolbarRef) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                },
         )
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(petListRef) {
-                    start.linkTo(parent.start)
-                    top.linkTo(toolbarRef.bottom)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.fillToConstraints
-                },
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .constrainAs(petListRef) {
+                        start.linkTo(parent.start)
+                        top.linkTo(toolbarRef.bottom)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
+                    },
             contentPadding = PaddingValues(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -119,30 +141,33 @@ private fun UiContent(
             if (uiState.nextPageProgressIndicatorIsVisible) {
                 item {
                     NextPageProgressIndicator(
-                        modifier = Modifier.constrainAs(progressIndicatorRef) {
-                            centerTo(parent)
-                        }
+                        modifier =
+                            Modifier.constrainAs(progressIndicatorRef) {
+                                centerTo(parent)
+                            },
                     )
                 }
             }
         }
         if (uiState.progressIndicatorIsVisible) {
             CircularProgressIndicator(
-                modifier = Modifier.constrainAs(progressIndicatorRef) {
-                    centerTo(parent)
-                }
+                modifier =
+                    Modifier.constrainAs(progressIndicatorRef) {
+                        centerTo(parent)
+                    },
             )
         }
         if (uiState.emptyListPlaceholderIsVisible) {
             EmptyListPlaceholder(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(emptyListPlaceholderRef) {
-                        start.linkTo(parent.start)
-                        top.linkTo(toolbarRef.bottom)
-                        bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
-                    },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .constrainAs(emptyListPlaceholderRef) {
+                            start.linkTo(parent.start)
+                            top.linkTo(toolbarRef.bottom)
+                            bottom.linkTo(parent.bottom)
+                            height = Dimension.fillToConstraints
+                        },
                 onFilterClicked = onFilterClicked,
             )
         }
@@ -160,42 +185,43 @@ private fun ToolBar(
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(56.dp),
     ) {
         val (locationIconRef, locationTextRef, filterRef) = createRefs()
         Icon(
             painter = painterResource(id = R.drawable.location_ic),
             contentDescription = "",
-            modifier = Modifier
-                .constrainAs(locationIconRef) {
-                    start.linkTo(parent.start)
-                    centerVerticallyTo(parent)
-                }
-                .padding(start = 8.dp),
+            modifier =
+                Modifier
+                    .constrainAs(locationIconRef) {
+                        start.linkTo(parent.start)
+                        centerVerticallyTo(parent)
+                    }.padding(start = 8.dp),
         )
         Text(
             text = address,
-            modifier = Modifier
-                .constrainAs(locationTextRef) {
-                    start.linkTo(locationIconRef.end)
-                    centerVerticallyTo(parent)
-                    end.linkTo(filterRef.start)
-                    width = Dimension.fillToConstraints
-                }
-                .padding(horizontal = 8.dp),
+            modifier =
+                Modifier
+                    .constrainAs(locationTextRef) {
+                        start.linkTo(locationIconRef.end)
+                        centerVerticallyTo(parent)
+                        end.linkTo(filterRef.start)
+                        width = Dimension.fillToConstraints
+                    }.padding(horizontal = 8.dp),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
         IconButton(
             onClick = onFilterClicked,
-            modifier = Modifier
-                .constrainAs(filterRef) {
-                    centerVerticallyTo(parent)
-                    end.linkTo(parent.end)
-                }
-                .padding(end = 8.dp),
+            modifier =
+                Modifier
+                    .constrainAs(filterRef) {
+                        centerVerticallyTo(parent)
+                        end.linkTo(parent.end)
+                    }.padding(end = 8.dp),
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.filter_ic),
@@ -206,39 +232,44 @@ private fun ToolBar(
 }
 
 @Composable
-private fun PetItem(pet: Pet, onClick: (pet: Pet) -> Unit) {
+private fun PetItem(
+    pet: Pet,
+    onClick: (pet: Pet) -> Unit,
+) {
     val colorSchema: ColorSchema = remember(pet.type) { pet.type.toColorSchema() }
     AdoptAPetTheme(colorSchema = colorSchema) {
         Card {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(AdoptAPetTheme.petColorScheme.background)
-                    .clickable { onClick(pet) }
-                    .padding(8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(AdoptAPetTheme.petColorScheme.background)
+                        .clickable { onClick(pet) }
+                        .padding(8.dp),
             ) {
                 AsyncImage(
                     model = pet.thumbnailUrl,
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape),
+                    modifier =
+                        Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
                     error = painterResource(id = R.drawable.paw_ic),
                     contentScale = ContentScale.Crop,
                 )
                 Column(
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
                 ) {
                     Text(
                         text = pet.name,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = pet.formattedBreeds(),
                         maxLines = 1,
                         fontSize = 12.sp,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -249,17 +280,21 @@ private fun PetItem(pet: Pet, onClick: (pet: Pet) -> Unit) {
 @Composable
 private fun NextPageProgressIndicator(modifier: Modifier) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
     }
 }
 
 @Composable
-private fun EmptyListPlaceholder(modifier: Modifier, onFilterClicked: () -> Unit) {
+private fun EmptyListPlaceholder(
+    modifier: Modifier,
+    onFilterClicked: () -> Unit,
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -272,7 +307,7 @@ private fun EmptyListPlaceholder(modifier: Modifier, onFilterClicked: () -> Unit
         )
         Button(
             onClick = onFilterClicked,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier.padding(top = 8.dp),
         ) {
             Text(text = stringResource(R.string.update_filters))
         }
@@ -284,48 +319,52 @@ private fun EmptyListPlaceholder(modifier: Modifier, onFilterClicked: () -> Unit
 fun HomeContentPreview() {
     AdoptAPetTheme {
         UiContent(
-            uiState = UiState(
-                address = "Av Dr Esmerino Ribeiro do Valle, 680, Nova Floresta",
-            ),
-            petsPagingItems = flowOf(
-                PagingData.from(
-                    data = listOf(
-                        Pet(
-                            id = "id-1",
-                            type = DOG,
-                            name = "Bibico",
-                            breeds = Pet.Breeds("SRD", ""),
-                            thumbnailUrl = "",
-                        ),
-                        Pet(
-                            id = "id-2",
-                            type = DOG,
-                            name = "Nina",
-                            breeds = Pet.Breeds("SRD", ""),
-                            thumbnailUrl = "",
-                        ),
-                        Pet(
-                            id = "id-3",
-                            type = CAT,
-                            name = "Nilla",
-                            breeds = Pet.Breeds("SRD", ""),
-                            thumbnailUrl = "",
-                        ),
-                        Pet(
-                            id = "id-4",
-                            type = RABBIT,
-                            name = "Pepê",
-                            breeds = Pet.Breeds("SRD", ""),
-                            thumbnailUrl = "",
-                        )
+            uiState =
+                UiState(
+                    address = "Av Dr Esmerino Ribeiro do Valle, 680, Nova Floresta",
+                ),
+            petsPagingItems =
+                flowOf(
+                    PagingData.from(
+                        data =
+                            listOf(
+                                Pet(
+                                    id = "id-1",
+                                    type = DOG,
+                                    name = "Bibico",
+                                    breeds = Pet.Breeds("SRD", ""),
+                                    thumbnailUrl = "",
+                                ),
+                                Pet(
+                                    id = "id-2",
+                                    type = DOG,
+                                    name = "Nina",
+                                    breeds = Pet.Breeds("SRD", ""),
+                                    thumbnailUrl = "",
+                                ),
+                                Pet(
+                                    id = "id-3",
+                                    type = CAT,
+                                    name = "Nilla",
+                                    breeds = Pet.Breeds("SRD", ""),
+                                    thumbnailUrl = "",
+                                ),
+                                Pet(
+                                    id = "id-4",
+                                    type = RABBIT,
+                                    name = "Pepê",
+                                    breeds = Pet.Breeds("SRD", ""),
+                                    thumbnailUrl = "",
+                                ),
+                            ),
+                        sourceLoadStates =
+                            LoadStates(
+                                refresh = LoadState.NotLoading(false),
+                                append = LoadState.NotLoading(false),
+                                prepend = LoadState.NotLoading(false),
+                            ),
                     ),
-                    sourceLoadStates = LoadStates(
-                        refresh = LoadState.NotLoading(false),
-                        append = LoadState.NotLoading(false),
-                        prepend = LoadState.NotLoading(false),
-                    ),
-                )
-            ).collectAsLazyPagingItems()
+                ).collectAsLazyPagingItems(),
         )
     }
 }

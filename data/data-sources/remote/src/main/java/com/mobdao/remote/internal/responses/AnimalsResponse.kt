@@ -1,7 +1,7 @@
 package com.mobdao.remote.internal.responses
 
 internal data class AnimalsResponse(
-    val animals: List<Animal>
+    val animals: List<Animal>,
 )
 
 internal data class Animal(
@@ -18,7 +18,9 @@ internal data class Animal(
     val contact: Contact?,
 )
 
-internal enum class AnimalType(val rawValue: String) {
+internal enum class AnimalType(
+    val rawValue: String,
+) {
     DOG(rawValue = "Dog"),
     CAT(rawValue = "Cat"),
     RABBIT(rawValue = "Rabbit"),

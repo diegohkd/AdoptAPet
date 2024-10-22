@@ -8,7 +8,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SearchFilterLocalDataSourceTest {
-
     private val searchFilter: SearchFilter = mockk()
 
     private val tested = SearchFilterLocalDataSource()

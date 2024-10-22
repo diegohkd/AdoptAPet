@@ -6,7 +6,6 @@ import io.mockk.every
 import io.mockk.mockk
 
 object SearchFilterMockFactory {
-
     fun create(
         address: Address = AddressMockFactory.create(),
         petType: String? = "petType",

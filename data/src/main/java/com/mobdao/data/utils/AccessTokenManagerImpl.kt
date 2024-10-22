@@ -7,15 +7,16 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class AccessTokenManagerImpl @Inject constructor(
-    private val accessTokenRemoteDataSource: AccessTokenRemoteDataSource,
-    private val accessTokenLocalDataSource: AccessTokenLocalDataSource,
-) : AccessTokenManager {
+internal class AccessTokenManagerImpl
+    @Inject
+    constructor(
+        private val accessTokenRemoteDataSource: AccessTokenRemoteDataSource,
+        private val accessTokenLocalDataSource: AccessTokenLocalDataSource,
+    ) : AccessTokenManager {
+        override fun getAccessToken(): String? = accessTokenLocalDataSource.getAccessToken()
 
-    override fun getAccessToken(): String? = accessTokenLocalDataSource.getAccessToken()
-
-    override suspend fun refreshAccessToken() {
-        val accessToken: String = accessTokenRemoteDataSource.getNewAccessToken()
-        accessTokenLocalDataSource.saveAccessToken(accessToken)
+        override suspend fun refreshAccessToken() {
+            val accessToken: String = accessTokenRemoteDataSource.getNewAccessToken()
+            accessTokenLocalDataSource.saveAccessToken(accessToken)
+        }
     }
-}
