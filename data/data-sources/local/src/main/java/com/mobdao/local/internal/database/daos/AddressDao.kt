@@ -8,7 +8,6 @@ import com.mobdao.local.internal.database.entities.Address
 
 @Dao
 internal interface AddressDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(address: List<Address>)
 

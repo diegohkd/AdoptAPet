@@ -14,13 +14,16 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LocationSearchBarViewModelTest {
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
@@ -34,9 +37,10 @@ class LocationSearchBarViewModelTest {
         mockk {
             every { execute("locationQuery") } returns flowOf(autocompleteResult)
         }
-    private val getCurrentLocationUseCase: GetCurrentLocationUseCase = mockk {
-        every { execute() } returns flowOf(currentAddress)
-    }
+    private val getCurrentLocationUseCase: GetCurrentLocationUseCase =
+        mockk {
+            every { execute() } returns flowOf(currentAddress)
+        }
 
     private val tested by lazy {
         LocationSearchBarViewModel(
@@ -53,7 +57,7 @@ class LocationSearchBarViewModelTest {
         // then
         assertEquals(
             tested.locationSearchQuery,
-            "address"
+            "address",
         )
     }
 
@@ -82,7 +86,7 @@ class LocationSearchBarViewModelTest {
         // then
         assertEquals(
             gettingCurrentLocation.subscriptionCount.value,
-            1
+            1,
         )
     }
 
@@ -163,7 +167,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.uiState.value.locationAutocompleteAddresses,
-                emptyList<String>()
+                emptyList<String>(),
             )
         }
 
@@ -181,7 +185,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.locationSearchQuery,
-                "current-address-line"
+                "current-address-line",
             )
         }
 
@@ -198,8 +202,10 @@ class LocationSearchBarViewModelTest {
 
             // then
             assertEquals(
-                tested.addressSelected.value!!.peekContent()!!.address,
-                currentAddress
+                tested.addressSelected.value!!
+                    .peekContent()!!
+                    .address,
+                currentAddress,
             )
         }
 
@@ -211,7 +217,7 @@ class LocationSearchBarViewModelTest {
         // then
         assertEquals(
             tested.locationSearchQuery,
-            "locationQuery"
+            "locationQuery",
         )
     }
 
@@ -242,7 +248,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 autocompletionSearching.subscriptionCount.value,
-                1
+                1,
             )
         }
 
@@ -289,7 +295,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.errorEncountered.value!!.peekContent(),
-                exception
+                exception,
             )
         }
 
@@ -305,7 +311,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.uiState.value.locationAutocompleteAddresses,
-                listOf("addressLine1", "addressLine2")
+                listOf("addressLine1", "addressLine2"),
             )
         }
 
@@ -343,7 +349,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.uiState.value.locationAutocompleteAddresses,
-                emptyList<String>()
+                emptyList<String>(),
             )
         }
 
@@ -360,7 +366,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.locationSearchQuery,
-                "addressLine1"
+                "addressLine1",
             )
         }
 
@@ -376,8 +382,10 @@ class LocationSearchBarViewModelTest {
 
             // then
             assertEquals(
-                tested.addressSelected.value!!.peekContent()!!.address,
-                addressAutocompleteResult1
+                tested.addressSelected.value!!
+                    .peekContent()!!
+                    .address,
+                addressAutocompleteResult1,
             )
         }
 
@@ -394,7 +402,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.locationSearchQuery,
-                ""
+                "",
             )
         }
 
@@ -409,7 +417,11 @@ class LocationSearchBarViewModelTest {
             tested.onClearLocationSearchClicked()
 
             // then
-            assertNull(tested.addressSelected.value!!.peekContent()!!.address)
+            assertNull(
+                tested.addressSelected.value!!
+                    .peekContent()!!
+                    .address,
+            )
         }
 
     @Test
@@ -425,7 +437,7 @@ class LocationSearchBarViewModelTest {
             // then
             assertEquals(
                 tested.uiState.value.locationAutocompleteAddresses,
-                emptyList<String>()
+                emptyList<String>(),
             )
         }
 }

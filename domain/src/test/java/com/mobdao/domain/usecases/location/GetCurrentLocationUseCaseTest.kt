@@ -16,21 +16,23 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GetCurrentLocationUseCaseTest {
-
     private val addressEntity: AddressEntity = AddressEntityMockFactory.create()
     private val address: Address = AddressMockFactory.create()
 
-    private val geoLocationRepository: GeoLocationRepository = mockk {
-        coEvery { getCurrentLocationAddress() } returns addressEntity
-    }
-    private val addressMapper: AddressMapper = mockk {
-        every { map(addressEntity) } returns address
-    }
+    private val geoLocationRepository: GeoLocationRepository =
+        mockk {
+            coEvery { getCurrentLocationAddress() } returns addressEntity
+        }
+    private val addressMapper: AddressMapper =
+        mockk {
+            every { map(addressEntity) } returns address
+        }
 
-    private val tested = GetCurrentLocationUseCase(
-        geoLocationRepository = geoLocationRepository,
-        addressMapper = addressMapper,
-    )
+    private val tested =
+        GetCurrentLocationUseCase(
+            geoLocationRepository = geoLocationRepository,
+            addressMapper = addressMapper,
+        )
 
     @Test(expected = CurrentLocationNotFoundException::class)
     fun `given null location is returned when executed then CurrentLocationNotFoundException is thrown`() =

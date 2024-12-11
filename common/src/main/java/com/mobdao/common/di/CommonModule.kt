@@ -11,9 +11,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 abstract class CommonModule {
-
     companion object {
-
         @Singleton
         @Provides
         fun provideMoshi(moshiFactory: MoshiFactory): Moshi = moshiFactory.create()

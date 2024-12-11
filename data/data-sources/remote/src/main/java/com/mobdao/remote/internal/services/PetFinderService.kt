@@ -5,7 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 internal interface PetFinderService {
-
     @GET("animals")
     suspend fun getAnimals(
         @Query("page")

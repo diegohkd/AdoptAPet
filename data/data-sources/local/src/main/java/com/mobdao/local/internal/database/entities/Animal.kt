@@ -19,10 +19,12 @@ internal data class Animal(
     val distance: Float?,
     val photos: List<Photo>,
     @Embedded
-    val contact: Contact?
+    val contact: Contact?,
 )
 
-internal enum class AnimalType(val rawValue: String) {
+internal enum class AnimalType(
+    val rawValue: String,
+) {
     DOG(rawValue = "Dog"),
     CAT(rawValue = "Cat"),
     RABBIT(rawValue = "Rabbit"),

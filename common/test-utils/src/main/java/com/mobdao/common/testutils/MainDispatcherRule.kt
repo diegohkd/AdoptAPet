@@ -12,20 +12,20 @@ import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
 class MainDispatcherRule(
-    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher(),
 ) : TestWatcher() {
-
     var dispatcherProvider: CoroutineDispatcherProvider = CoroutineDispatcherProvider()
         private set
 
     override fun starting(description: Description?) {
         super.starting(description)
         Dispatchers.setMain(dispatcher)
-        dispatcherProvider = CoroutineDispatcherProvider(
-            main = dispatcher,
-            default = dispatcher,
-            io = dispatcher
-        )
+        dispatcherProvider =
+            CoroutineDispatcherProvider(
+                main = dispatcher,
+                default = dispatcher,
+                io = dispatcher,
+            )
     }
 
     override fun finished(description: Description?) {

@@ -10,7 +10,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DockedSearchBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,12 +53,14 @@ fun LocationSearchBar(
     }
     errorEncounteredEvent?.getContentIfNotHandled()?.let(onError)
 
-    val locationPermissionState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            ACCESS_COARSE_LOCATION,
-            ACCESS_FINE_LOCATION
+    val locationPermissionState =
+        rememberMultiplePermissionsState(
+            permissions =
+                listOf(
+                    ACCESS_COARSE_LOCATION,
+                    ACCESS_FINE_LOCATION,
+                ),
         )
-    )
     LaunchedEffect(locationPermissionState.allPermissionsGranted) {
         viewModel.onLocationPermissionStateUpdated(
             areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
@@ -107,7 +114,7 @@ private fun UiContent(
                 IconButton(onClick = onClearClicked) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = ""
+                        contentDescription = "",
                     )
                 }
             }
@@ -117,10 +124,11 @@ private fun UiContent(
             item {
                 Text(
                     text = stringResource(R.string.current_location),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = onCurrentLocationClicked)
-                        .padding(8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable(onClick = onCurrentLocationClicked)
+                            .padding(8.dp),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                 )
@@ -128,10 +136,11 @@ private fun UiContent(
             if (loading) {
                 item {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator()
                     }
@@ -140,9 +149,10 @@ private fun UiContent(
                 itemsIndexed(autocompleteAddresses) { index, address ->
                     Text(
                         text = address,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clickable { onAutocompleteAddressSelected(index) },
+                        modifier =
+                            Modifier
+                                .padding(8.dp)
+                                .clickable { onAutocompleteAddressSelected(index) },
                     )
                 }
             }

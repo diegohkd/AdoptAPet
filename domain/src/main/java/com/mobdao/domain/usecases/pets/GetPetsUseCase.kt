@@ -9,19 +9,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetPetsUseCase @Inject internal constructor(
-    private val petsRepository: PetsRepository,
-    private val petMapper: PetMapper,
-    private val searchFilterMapper: SearchFilterMapper,
-) {
-
-    fun execute(pageNumber: Int, searchFilter: SearchFilter): Flow<List<Pet>> = flow {
-        emit(
-            petsRepository.getPets(
-                pageNumber = pageNumber,
-                searchFilter = searchFilterMapper.mapToEntity(searchFilter)
-            )
-                .map(petMapper::map)
-        )
+class GetPetsUseCase
+    @Inject
+    internal constructor(
+        private val petsRepository: PetsRepository,
+        private val petMapper: PetMapper,
+        private val searchFilterMapper: SearchFilterMapper,
+    ) {
+        fun execute(
+            pageNumber: Int,
+            searchFilter: SearchFilter,
+        ): Flow<List<Pet>> =
+            flow {
+                emit(
+                    petsRepository
+                        .getPets(
+                            pageNumber = pageNumber,
+                            searchFilter = searchFilterMapper.mapToEntity(searchFilter),
+                        ).map(petMapper::map),
+                )
+            }
     }
-}

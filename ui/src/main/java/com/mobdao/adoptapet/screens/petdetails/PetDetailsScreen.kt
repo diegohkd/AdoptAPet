@@ -1,11 +1,23 @@
 package com.mobdao.adoptapet.screens.petdetails
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,7 +40,9 @@ import com.mobdao.adoptapet.common.theme.color.ColorSchema
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.NavAction
 import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.*
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.Contact
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetCard
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetHeader
 import com.mobdao.adoptapet.utils.extensions.toColorSchema
 import com.mobdao.domain.models.AnimalType
 import com.mobdao.domain.models.AnimalType.DOG
@@ -71,32 +85,35 @@ private fun UiContent(
                             IconButton(onClick = onBackButtonClicked) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Back"
+                                    contentDescription = "Back",
                                 )
                             }
                         },
                     )
-                }
+                },
             ) { internalPadding ->
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(internalPadding),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(internalPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     PetHeader(petHeader = uiState.petHeader)
                     PetCard(
                         petCard = uiState.petCard,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
                     )
                     ContactCard(
                         contact = uiState.contact,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
                     )
                 }
             }
@@ -112,30 +129,35 @@ private fun PetHeader(petHeader: PetHeader) {
     AsyncImage(
         model = petHeader.photoUrl,
         contentDescription = null,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(400.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(400.dp),
         onState = {
             if (it is AsyncImagePainter.State.Error) {
                 it.result.throwable.printStackTrace()
             }
         },
-        contentScale = ContentScale.Crop
+        contentScale = ContentScale.Crop,
     )
     Text(
         text = petHeader.name,
         modifier = Modifier.padding(start = 8.dp, top = 16.dp),
-        fontSize = 32.sp
+        fontSize = 32.sp,
     )
 }
 
 @Composable
-private fun PetCard(petCard: PetCard, modifier: Modifier = Modifier) {
+private fun PetCard(
+    petCard: PetCard,
+    modifier: Modifier = Modifier,
+) {
     Card(modifier = modifier) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -152,30 +174,34 @@ private fun PetCard(petCard: PetCard, modifier: Modifier = Modifier) {
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 VerticalField(name = stringResource(R.string.size), value = petCard.size)
                 VerticalField(
                     name = stringResource(R.string.distance),
-                    value = petCard.distance?.toString().orEmpty()
+                    value = petCard.distance?.toString().orEmpty(),
                 )
             }
             Text(
                 text = petCard.description,
                 modifier = Modifier.padding(top = 4.dp),
-                fontSize = 16.sp
+                fontSize = 16.sp,
             )
         }
     }
 }
 
 @Composable
-private fun ContactCard(contact: Contact, modifier: Modifier = Modifier) {
+private fun ContactCard(
+    contact: Contact,
+    modifier: Modifier = Modifier,
+) {
     Card(modifier = modifier) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = stringResource(R.string.contact), fontSize = 20.sp)
@@ -188,25 +214,33 @@ private fun ContactCard(contact: Contact, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun VerticalField(name: String, value: String, modifier: Modifier = Modifier) {
+private fun VerticalField(
+    name: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = name, fontSize = 20.sp)
         Text(
             text = value,
             modifier = Modifier.padding(top = 4.dp),
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
     }
 }
 
 @Composable
-private fun HorizontalField(name: String, value: String, modifier: Modifier = Modifier) {
+private fun HorizontalField(
+    name: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
     Row(modifier = modifier) {
         Text(text = name, fontSize = 20.sp)
         Text(
             text = value,
             modifier = Modifier.padding(start = 4.dp),
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
     }
 }

@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class PetColorScheme(
-    val background: Color = Color.Unspecified
+    val background: Color = Color.Unspecified,
 )
 
 @Immutable
@@ -20,9 +20,10 @@ data class AdoptAPetColorScheme(
 @Immutable
 data class ColorSchema(
     val light: AdoptAPetColorScheme,
-    val dark: AdoptAPetColorScheme
+    val dark: AdoptAPetColorScheme,
 )
 
-val LocalPetColorScheme: ProvidableCompositionLocal<PetColorScheme> = staticCompositionLocalOf {
-    PetColorScheme()
-}
+val LocalPetColorScheme: ProvidableCompositionLocal<PetColorScheme> =
+    staticCompositionLocalOf {
+        PetColorScheme()
+    }

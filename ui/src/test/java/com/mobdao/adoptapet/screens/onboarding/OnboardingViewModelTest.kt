@@ -7,24 +7,26 @@ import com.mobdao.domain.models.Address
 import com.mobdao.domain.usecases.onboarding.CompleteOnboardingUseCase
 import io.mockk.every
 import io.mockk.mockk
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 
 class OnboardingViewModelTest {
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
 
     private val address: Address = AddressMockFactory.create()
 
-    private val completedOnboardingUseCase: CompleteOnboardingUseCase = mockk {
-        every { execute(address) } returns flowOf(Unit)
-    }
+    private val completedOnboardingUseCase: CompleteOnboardingUseCase =
+        mockk {
+            every { execute(address) } returns flowOf(Unit)
+        }
 
     private val tested by lazy {
         OnboardingViewModel(

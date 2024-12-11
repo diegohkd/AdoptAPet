@@ -12,13 +12,17 @@ import timber.log.Timber
  */
 fun <T> Flow<T>.catchAndLogException(
     message: String = "",
-    action: suspend (Throwable?) -> Unit = {}
-): Flow<T> = catch {
-    Timber.e(it, message)
-    action(it)
-}
+    action: suspend (Throwable?) -> Unit = {},
+): Flow<T> =
+    catch {
+        Timber.e(it, message)
+        action(it)
+    }
 
-fun <T> Flow<T>.makeSureTakesAtLeast(durationInMillis: Long, startTimeInMillis: Long): Flow<T> =
+fun <T> Flow<T>.makeSureTakesAtLeast(
+    durationInMillis: Long,
+    startTimeInMillis: Long,
+): Flow<T> =
     onEach {
         val currentDuration = (System.currentTimeMillis() - startTimeInMillis)
         val delayDuration = (durationInMillis - currentDuration).coerceAtLeast(0L)

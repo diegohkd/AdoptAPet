@@ -8,7 +8,6 @@ import com.mobdao.local.internal.database.entities.Animal
 
 @Dao
 internal interface AnimalDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(animal: List<Animal>)
 

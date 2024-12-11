@@ -7,47 +7,56 @@ import com.mobdao.domain.dataapi.services.OnboardingService
 import com.mobdao.domain.internal.AddressEntity
 import com.mobdao.domain.internal.mappers.AddressMapper
 import com.mobdao.domain.models.Address
-import io.mockk.*
+import io.mockk.coJustRun
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class CompleteOnboardingUseCaseTest {
-
     private val address: Address = AddressMockFactory.create()
     private val addressEntity: AddressEntity = AddressEntityMockFactory.create()
 
-    private val geoLocationRepository: GeoLocationRepository = mockk {
-        coJustRun { cacheCurrentLocationAddress(addressEntity) }
-    }
-    private val onboardingService: OnboardingService = mockk {
-        justRun { saveOnboardingAsCompleted() }
-    }
-    private val addressMapper: AddressMapper = mockk {
-        every { map(address) } returns addressEntity
-    }
+    private val geoLocationRepository: GeoLocationRepository =
+        mockk {
+            coJustRun { cacheCurrentLocationAddress(addressEntity) }
+        }
+    private val onboardingService: OnboardingService =
+        mockk {
+            justRun { saveOnboardingAsCompleted() }
+        }
+    private val addressMapper: AddressMapper =
+        mockk {
+            every { map(address) } returns addressEntity
+        }
 
-    private val tested = CompleteOnboardingUseCase(
-        geoLocationRepository = geoLocationRepository,
-        onboardingService = onboardingService,
-        addressMapper = addressMapper,
-    )
-
-    @Test
-    fun `given address when execute then address is cached as current location`() = runTest {
-        // given / when
-        tested.execute(address).first()
-
-        // then
-        coVerify { geoLocationRepository.cacheCurrentLocationAddress(addressEntity) }
-    }
+    private val tested =
+        CompleteOnboardingUseCase(
+            geoLocationRepository = geoLocationRepository,
+            onboardingService = onboardingService,
+            addressMapper = addressMapper,
+        )
 
     @Test
-    fun `when execute then onboarding is saved as completed`() = runTest {
-        // given / when
-        tested.execute(address).first()
+    fun `given address when execute then address is cached as current location`() =
+        runTest {
+            // given / when
+            tested.execute(address).first()
 
-        // then
-        coVerify { onboardingService.saveOnboardingAsCompleted() }
-    }
+            // then
+            coVerify { geoLocationRepository.cacheCurrentLocationAddress(addressEntity) }
+        }
+
+    @Test
+    fun `when execute then onboarding is saved as completed`() =
+        runTest {
+            // given / when
+            tested.execute(address).first()
+
+            // then
+            coVerify { onboardingService.saveOnboardingAsCompleted() }
+        }
 }

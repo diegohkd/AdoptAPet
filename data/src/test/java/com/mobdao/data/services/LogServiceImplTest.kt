@@ -9,13 +9,14 @@ import io.mockk.verify
 import org.junit.Test
 
 class LogServiceImplTest {
-
-    private val appConfig: AppConfig = mockk {
-        every { isDebugBuild } returns false
-    }
-    private val timber: TimberWrapper = mockk {
-        justRun { plantDebugTree() }
-    }
+    private val appConfig: AppConfig =
+        mockk {
+            every { isDebugBuild } returns false
+        }
+    private val timber: TimberWrapper =
+        mockk {
+            justRun { plantDebugTree() }
+        }
 
     private val tested = LogServiceImpl(appConfig, timber)
 

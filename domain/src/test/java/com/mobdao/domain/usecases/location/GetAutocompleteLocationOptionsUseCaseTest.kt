@@ -15,7 +15,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GetAutocompleteLocationOptionsUseCaseTest {
-
     private val location: String = "location"
     private val autocompleteAddressEntity1: AddressEntity = AddressEntityMockFactory.create()
     private val autocompleteAddressEntity2: AddressEntity = AddressEntityMockFactory.create()
@@ -23,28 +22,33 @@ class GetAutocompleteLocationOptionsUseCaseTest {
     private val autocompleteAddress1: Address = AddressMockFactory.create()
     private val autocompleteAddress2: Address = AddressMockFactory.create()
 
-    private val geoLocationRepository: GeoLocationRepository = mockk {
-        coEvery { autocompleteLocation(location) } returns listOf(
-            autocompleteAddressEntity1,
-            autocompleteAddressEntity2
-        )
-    }
-    private val addressMapper: AddressMapper = mockk {
-        every { map(autocompleteAddressEntity1) } returns autocompleteAddress1
-        every { map(autocompleteAddressEntity2) } returns autocompleteAddress2
-    }
+    private val geoLocationRepository: GeoLocationRepository =
+        mockk {
+            coEvery { autocompleteLocation(location) } returns
+                listOf(
+                    autocompleteAddressEntity1,
+                    autocompleteAddressEntity2,
+                )
+        }
+    private val addressMapper: AddressMapper =
+        mockk {
+            every { map(autocompleteAddressEntity1) } returns autocompleteAddress1
+            every { map(autocompleteAddressEntity2) } returns autocompleteAddress2
+        }
 
-    private val tested = GetAutocompleteLocationOptionsUseCase(
-        geoLocationRepository = geoLocationRepository,
-        addressMapper = addressMapper,
-    )
+    private val tested =
+        GetAutocompleteLocationOptionsUseCase(
+            geoLocationRepository = geoLocationRepository,
+            addressMapper = addressMapper,
+        )
 
     @Test
-    fun `given location when executed then autocomplete address options are returned`() = runTest {
-        // given / when
-        val result: List<Address> = tested.execute(location).first()
+    fun `given location when executed then autocomplete address options are returned`() =
+        runTest {
+            // given / when
+            val result: List<Address> = tested.execute(location).first()
 
-        // then
-        assertEquals(result, listOf(autocompleteAddress1, autocompleteAddress2))
-    }
+            // then
+            assertEquals(result, listOf(autocompleteAddress1, autocompleteAddress2))
+        }
 }

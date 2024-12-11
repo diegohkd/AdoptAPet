@@ -23,27 +23,31 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class PetsPagingSourceTest {
-
-    private val params: LoadParams<Int> = mockk {
-        every { key } returns null
-    }
-    private val pet: PetDomain = PetMockFactory.create(
-        id = "id",
-        type = DOG,
-        name = "name",
-        breeds = BreedsMockFactory.create(
-            primary = "primary",
-            secondary = "secondary",
-        ),
-        photos = listOf(
-            PhotoMockFactory.create(smallUrl = "smallUrl")
-        ),
-    )
+    private val params: LoadParams<Int> =
+        mockk {
+            every { key } returns null
+        }
+    private val pet: PetDomain =
+        PetMockFactory.create(
+            id = "id",
+            type = DOG,
+            name = "name",
+            breeds =
+                BreedsMockFactory.create(
+                    primary = "primary",
+                    secondary = "secondary",
+                ),
+            photos =
+                listOf(
+                    PhotoMockFactory.create(smallUrl = "smallUrl"),
+                ),
+        )
     private val searchFilter: SearchFilter = mockk()
 
-    private val getPetsUseCase: GetPetsUseCase = mockk {
-        every { execute(pageNumber = 1, searchFilter = searchFilter) } returns flowOf(listOf(pet))
-    }
+    private val getPetsUseCase: GetPetsUseCase =
+        mockk {
+            every { execute(pageNumber = 1, searchFilter = searchFilter) } returns flowOf(listOf(pet))
+        }
 
     private val tested by lazy { createTested(searchFilter = searchFilter) }
 
@@ -64,7 +68,7 @@ class PetsPagingSourceTest {
             every {
                 getPetsUseCase.execute(
                     pageNumber = any(),
-                    searchFilter = any()
+                    searchFilter = any(),
                 )
             } returns flow { throw exception }
 
@@ -74,7 +78,7 @@ class PetsPagingSourceTest {
             // then
             assertEquals(
                 result,
-                Error<Int, Pet>(exception)
+                Error<Int, Pet>(exception),
             )
         }
 
@@ -89,47 +93,52 @@ class PetsPagingSourceTest {
         }
 
     @Test
-    fun `given loading first page when load then previous key is null`() = runTest {
-        // given / when
-        val result = tested.load(params)
+    fun `given loading first page when load then previous key is null`() =
+        runTest {
+            // given / when
+            val result = tested.load(params)
 
-        // then
-        assertNull((result as Page).prevKey)
-    }
+            // then
+            assertNull((result as Page).prevKey)
+        }
 
     @Test
-    fun `given loading second page when load then previous key is 1`() = runTest {
-        // given
-        val petsPage2 = listOf(
-            PetMockFactory.create(
-                id = "id-2",
-                name = "name-2",
-                breeds = BreedsMockFactory.create(
-                    primary = "primary",
-                    secondary = "secondary",
-                ),
-                photos = listOf(
-                    PhotoMockFactory.create(smallUrl = "smallUrl")
-                ),
-            )
-        )
-        every {
-            getPetsUseCase.execute(
-                pageNumber = 2,
-                searchFilter = searchFilter
-            )
-        } returns flowOf(petsPage2)
-        every { params.key } returns 2
+    fun `given loading second page when load then previous key is 1`() =
+        runTest {
+            // given
+            val petsPage2 =
+                listOf(
+                    PetMockFactory.create(
+                        id = "id-2",
+                        name = "name-2",
+                        breeds =
+                            BreedsMockFactory.create(
+                                primary = "primary",
+                                secondary = "secondary",
+                            ),
+                        photos =
+                            listOf(
+                                PhotoMockFactory.create(smallUrl = "smallUrl"),
+                            ),
+                    ),
+                )
+            every {
+                getPetsUseCase.execute(
+                    pageNumber = 2,
+                    searchFilter = searchFilter,
+                )
+            } returns flowOf(petsPage2)
+            every { params.key } returns 2
 
-        // when
-        val result = tested.load(params)
+            // when
+            val result = tested.load(params)
 
-        // then
-        assertEquals(
-            (result as Page).prevKey,
-            1
-        )
-    }
+            // then
+            assertEquals(
+                (result as Page).prevKey,
+                1,
+            )
+        }
 
     @Test
     fun `given getting pets returns empty list when load then page result is returned with null next key`() =
@@ -138,7 +147,7 @@ class PetsPagingSourceTest {
             every {
                 getPetsUseCase.execute(
                     pageNumber = any(),
-                    searchFilter = any()
+                    searchFilter = any(),
                 )
             } returns flowOf(emptyList())
 
@@ -158,7 +167,7 @@ class PetsPagingSourceTest {
             // then
             assertEquals(
                 (result as Page).nextKey,
-                2
+                2,
             )
         }
 
@@ -176,17 +185,19 @@ class PetsPagingSourceTest {
                         id = "id",
                         type = DOG,
                         name = "name",
-                        breeds = Pet.Breeds(
-                            primary = "primary",
-                            secondary = "secondary",
-                        ),
-                        thumbnailUrl = "smallUrl"
-                    )
-                )
+                        breeds =
+                            Pet.Breeds(
+                                primary = "primary",
+                                secondary = "secondary",
+                            ),
+                        thumbnailUrl = "smallUrl",
+                    ),
+                ),
             )
         }
 
     private fun createTested(searchFilter: SearchFilter) =
-        PetsPagingSource.Factory(getPetsUseCase = getPetsUseCase)
+        PetsPagingSource
+            .Factory(getPetsUseCase = getPetsUseCase)
             .create(searchFilter = searchFilter)
 }

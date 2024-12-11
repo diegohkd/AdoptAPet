@@ -7,14 +7,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class LogServiceImpl @Inject constructor(
-    private val appConfig: AppConfig,
-    private val timber: TimberWrapper,
-) : LogService {
-
-    override fun init() {
-        if (appConfig.isDebugBuild) {
-            timber.plantDebugTree()
+internal class LogServiceImpl
+    @Inject
+    constructor(
+        private val appConfig: AppConfig,
+        private val timber: TimberWrapper,
+    ) : LogService {
+        override fun init() {
+            if (appConfig.isDebugBuild) {
+                timber.plantDebugTree()
+            }
         }
     }
-}
