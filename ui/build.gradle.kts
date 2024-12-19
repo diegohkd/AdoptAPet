@@ -1,3 +1,9 @@
+import BuildConstants.COMPILE_SDK
+import BuildConstants.MIN_SDK
+import BuildConstants.TARGET_SDK
+import BuildConstants.VERSION_CODE
+import BuildConstants.VERSION_NAME
+
 plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.jetbrains.kotlin.android.get().pluginId)
@@ -8,14 +14,14 @@ plugins {
 
 android {
     namespace = "com.mobdao.adoptapet"
-    compileSdk = BuildConstants.COMPILE_SDK
+    compileSdk = COMPILE_SDK
 
     defaultConfig {
         applicationId = "com.mobdao.adoptapet"
-        minSdk = BuildConstants.MIN_SDK
-        targetSdk = BuildConstants.TARGET_SDK
-        versionCode = BuildConstants.VERSION_CODE
-        versionName = BuildConstants.VERSION_NAME
+        minSdk = MIN_SDK
+        targetSdk = TARGET_SDK
+        versionCode = VERSION_CODE
+        versionName = VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
