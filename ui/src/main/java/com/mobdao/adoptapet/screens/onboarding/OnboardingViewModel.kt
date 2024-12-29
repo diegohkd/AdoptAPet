@@ -3,7 +3,11 @@ package com.mobdao.adoptapet.screens.onboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobdao.adoptapet.common.Event
-import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel.NavAction.Completed
+import com.mobdao.adoptapet.screens.onboarding.OnboardingNavAction.Completed
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.AddressSelected
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.FailedToGetAddress
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.NextClicked
 import com.mobdao.common.kotlin.catchAndLogException
 import com.mobdao.domain.models.Address
 import com.mobdao.domain.usecases.onboarding.CompleteOnboardingUseCase
@@ -17,66 +21,63 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardingViewModel
-    @Inject
-    constructor(
-        private val completedOnboardingUseCase: CompleteOnboardingUseCase,
-    ) : ViewModel() {
-        sealed interface NavAction {
-            data object Completed : NavAction
-        }
+class OnboardingViewModel @Inject constructor(
+    private val completedOnboardingUseCase: CompleteOnboardingUseCase,
+) : ViewModel() {
+    private val _navAction = MutableStateFlow<Event<OnboardingNavAction>?>(null)
+    val navAction: StateFlow<Event<OnboardingNavAction>?> = _navAction.asStateFlow()
 
-        data class UiState(
-            val selectedAddress: String = "",
-            val nextButtonIsEnabled: Boolean = false,
-            val genericErrorDialogIsVisible: Boolean = false,
-        )
+    private val _uiState = MutableStateFlow(OnboardingUiState())
+    val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
 
-        private val _navAction = MutableStateFlow<Event<NavAction>?>(null)
-        val navAction: StateFlow<Event<NavAction>?> = _navAction.asStateFlow()
+    private val address = MutableStateFlow<Address?>(null)
 
-        private val _uiState = MutableStateFlow(UiState())
-        val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    init {
+        handleNextButtonEnabledState()
+    }
 
-        private val address = MutableStateFlow<Address?>(null)
-
-        init {
-            handleNextButtonEnabledState()
-        }
-
-        fun onFailedToGetAddress(throwable: Throwable?) {
-            throwable?.let(Timber::e)
-            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-        }
-
-        fun onAddressSelected(address: Address?) {
-            this.address.value = address
-        }
-
-        fun onNextClicked() {
-            viewModelScope.launch {
-                completedOnboardingUseCase
-                    .execute(address.value!!)
-                    .catchAndLogException {
-                        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-                    }.collect {
-                        _navAction.value = Event(Completed)
-                    }
-            }
-        }
-
-        fun onDismissGenericErrorDialog() {
-            _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
-        }
-
-        private fun handleNextButtonEnabledState() {
-            viewModelScope.launch {
-                address
-                    .collect { address ->
-                        _uiState.update {
-                            it.copy(nextButtonIsEnabled = address != null)
-                        }
-                    }
-            }
+    fun onUiAction(action: OnboardingUiAction) {
+        when (action) {
+            is AddressSelected -> onAddressSelected(address = action.address)
+            is FailedToGetAddress -> onFailedToGetAddress(action.throwable)
+            DismissGenericErrorDialog -> onDismissGenericErrorDialog()
+            NextClicked -> onNextClicked()
         }
     }
+
+    private fun onAddressSelected(address: Address?) {
+        this.address.value = address
+    }
+
+    private fun onDismissGenericErrorDialog() {
+        _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
+    }
+
+    private fun onFailedToGetAddress(throwable: Throwable?) {
+        throwable?.let(Timber::e)
+        _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+    }
+
+    private fun onNextClicked() {
+        viewModelScope.launch {
+            completedOnboardingUseCase
+                .execute(address.value!!)
+                .catchAndLogException {
+                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                }.collect {
+                    _navAction.value = Event(Completed)
+                }
+        }
+    }
+
+    private fun handleNextButtonEnabledState() {
+        viewModelScope.launch {
+            address
+                .collect { address ->
+                    _uiState.update {
+                        it.copy(nextButtonIsEnabled = address != null)
+                    }
+                }
+        }
+    }
+}

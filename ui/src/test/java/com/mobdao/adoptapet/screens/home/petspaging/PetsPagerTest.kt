@@ -3,7 +3,7 @@ package com.mobdao.adoptapet.screens.home.petspaging
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingSource
-import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
+import com.mobdao.adoptapet.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.utils.PagerFactory
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.domain.models.SearchFilter
@@ -30,14 +30,19 @@ class PetsPagerTest {
     var mainCoroutineRule = MainDispatcherRule()
 
     private val petsPagingSource: PetsPagingSource = mockk()
-    private val pager: Pager<Int, Pet> =
+    private val pager: Pager<Int, PetState> =
         mockk {
             every { flow } returns flowOf(mockk())
         }
 
     private val pagerFactory: PagerFactory =
         mockk {
-            every { create<Int, Pet>(config = any(), pagingSourceFactory = any()) } returns pager
+            every {
+                create<Int, PetState>(
+                    config = any(),
+                    pagingSourceFactory = any(),
+                )
+            } returns pager
         }
     private val petsPagingSourceFactory: PetsPagingSource.Factory =
         mockk {
@@ -72,12 +77,12 @@ class PetsPagerTest {
         runTest {
             // given
             every {
-                pagerFactory.create<Int, Pet>(
+                pagerFactory.create<Int, PetState>(
                     config = any(),
                     pagingSourceFactory = any(),
                 )
             } answers {
-                lastArg<() -> PagingSource<Int, Pet>>()()
+                lastArg<() -> PagingSource<Int, PetState>>()()
                 pager
             }
             val searchFilter: SearchFilter = mockk()

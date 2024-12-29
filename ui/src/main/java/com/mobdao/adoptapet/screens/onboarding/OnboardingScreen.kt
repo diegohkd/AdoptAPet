@@ -23,13 +23,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBar
-import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel.NavAction
-import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel.UiState
-import com.mobdao.domain.models.Address
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.AddressSelected
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.FailedToGetAddress
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.NextClicked
 
 @Composable
 fun OnboardingScreen(
-    onNavAction: (NavAction) -> Unit,
+    onNavAction: (OnboardingNavAction) -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -39,20 +40,14 @@ fun OnboardingScreen(
 
     UiContent(
         uiState = uiState,
-        onFailedToGetAddress = viewModel::onFailedToGetAddress,
-        onAddressSelected = viewModel::onAddressSelected,
-        onNextClicked = viewModel::onNextClicked,
-        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
+        onUiAction = viewModel::onUiAction,
     )
 }
 
 @Composable
 private fun UiContent(
-    uiState: UiState,
-    onAddressSelected: (Address?) -> Unit,
-    onFailedToGetAddress: (Throwable?) -> Unit,
-    onNextClicked: () -> Unit,
-    onDismissGenericErrorDialog: () -> Unit,
+    uiState: OnboardingUiState,
+    onUiAction: (OnboardingUiAction) -> Unit = {},
 ) {
     ConstraintLayout(
         modifier =
@@ -80,8 +75,8 @@ private fun UiContent(
                     top.linkTo(welcomeTextRef.bottom, margin = 54.dp)
                 },
             initialAddress = uiState.selectedAddress,
-            onAddressSelected = onAddressSelected,
-            onError = onFailedToGetAddress,
+            onAddressSelected = { onUiAction(AddressSelected(it)) },
+            onError = { throwable -> onUiAction(FailedToGetAddress(throwable)) },
         )
         Image(
             painter = painterResource(R.drawable.onboarding_image),
@@ -97,7 +92,7 @@ private fun UiContent(
             contentScale = ContentScale.FillWidth,
         )
         Button(
-            onClick = onNextClicked,
+            onClick = { onUiAction(NextClicked) },
             modifier =
                 Modifier
                     .padding(bottom = 16.dp)
@@ -112,6 +107,6 @@ private fun UiContent(
     }
 
     if (uiState.genericErrorDialogIsVisible) {
-        GenericErrorDialog(onDismissGenericErrorDialog = onDismissGenericErrorDialog)
+        GenericErrorDialog(onDismissGenericErrorDialog = { onUiAction(DismissGenericErrorDialog) })
     }
 }

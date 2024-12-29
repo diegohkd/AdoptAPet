@@ -40,11 +40,14 @@ import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBar
-import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction
-import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState
-import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState.PetType
-import com.mobdao.adoptapet.screens.filter.FilterViewModel.UiState.PetTypes
-import com.mobdao.domain.models.Address
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.AddressSelected
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.ApplyClicked
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.FailedToGetAddress
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.PetTypeClicked
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.PetTypeSelected
+import com.mobdao.adoptapet.screens.filter.FilterUiState.PetTypeState
+import com.mobdao.adoptapet.screens.filter.FilterUiState.PetTypesState
 
 private val petTypes =
     listOf(
@@ -60,7 +63,7 @@ private val petTypes =
 
 @Composable
 fun FilterScreen(
-    onNavAction: (NavAction) -> Unit,
+    onNavAction: (FilterNavAction) -> Unit,
     viewModel: FilterViewModel = hiltViewModel(),
 ) {
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
@@ -70,25 +73,15 @@ fun FilterScreen(
 
     UiContent(
         uiState = uiState,
-        onFailedToGetAddress = viewModel::onFailedToSearchAddress,
-        onAddressSelected = viewModel::onSearchedAddressSelected,
-        onPetTypeSelected = viewModel::onPetTypeSelected,
-        onPetTypeClicked = viewModel::onPetTypeClicked,
-        onApplyClicked = viewModel::onApplyClicked,
-        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
+        onUiAction = viewModel::onUiAction,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UiContent(
-    uiState: UiState,
-    onFailedToGetAddress: (Throwable?) -> Unit,
-    onAddressSelected: (Address?) -> Unit,
-    onPetTypeSelected: (String) -> Unit,
-    onPetTypeClicked: (PetType) -> Unit,
-    onApplyClicked: () -> Unit,
-    onDismissGenericErrorDialog: () -> Unit,
+    uiState: FilterUiState,
+    onUiAction: (FilterUiAction) -> Unit = {},
 ) {
     var isTypeDropdownExpanded by remember { mutableStateOf(false) }
     Scaffold(
@@ -115,8 +108,8 @@ private fun UiContent(
             LocationSearchBar(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 initialAddress = uiState.initialAddress,
-                onAddressSelected = onAddressSelected,
-                onError = onFailedToGetAddress,
+                onAddressSelected = { onUiAction(AddressSelected(it)) },
+                onError = { error -> onUiAction(FailedToGetAddress(error)) },
             )
             Column(modifier = Modifier.padding(top = 72.dp, start = 16.dp, end = 16.dp)) {
                 Text(text = stringResource(R.string.type))
@@ -138,19 +131,19 @@ private fun UiContent(
                             isTypeDropdownExpanded = false
                         },
                     ) {
-                        petTypes.forEach {
+                        petTypes.forEach { petType ->
                             DropdownMenuItem(
-                                text = { Text(it) },
+                                text = { Text(petType) },
                                 onClick = {
                                     isTypeDropdownExpanded = false
-                                    onPetTypeSelected(it)
+                                    onUiAction(PetTypeSelected(petType))
                                 },
                             )
                         }
                     }
                 }
                 Button(
-                    onClick = onApplyClicked,
+                    onClick = { onUiAction(ApplyClicked) },
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     enabled = uiState.isApplyButtonEnabled,
                 ) {
@@ -158,21 +151,21 @@ private fun UiContent(
                 }
                 PetType(
                     petTypes = uiState.petTypes,
-                    onPetTypeClicked = onPetTypeClicked,
+                    onPetTypeClicked = { onUiAction(PetTypeClicked(it)) },
                 )
             }
         }
     }
 
     if (uiState.genericErrorDialogIsVisible) {
-        GenericErrorDialog(onDismissGenericErrorDialog = onDismissGenericErrorDialog)
+        GenericErrorDialog(onDismissGenericErrorDialog = { onUiAction(DismissGenericErrorDialog) })
     }
 }
 
 @Composable
 private fun PetType(
-    petTypes: PetTypes,
-    onPetTypeClicked: (PetType) -> Unit,
+    petTypes: PetTypesState,
+    onPetTypeClicked: (PetTypeState) -> Unit,
 ) {
     LazyVerticalGrid(
         // TODO set minSize based on screen width?
@@ -201,37 +194,37 @@ private fun PetType(
 private fun PetTypePreview() {
     AdoptAPetTheme {
         PetType(
-            PetTypes(
+            PetTypesState(
                 listOf(
-                    PetType(
+                    PetTypeState(
                         name = "Dog",
                         isSelected = false,
                     ),
-                    PetType(
+                    PetTypeState(
                         name = "Cat",
                         isSelected = false,
                     ),
-                    PetType(
+                    PetTypeState(
                         name = "Rabbit",
                         isSelected = false,
                     ),
-                    PetType(
+                    PetTypeState(
                         name = "Bird",
                         isSelected = false,
                     ),
-                    PetType(
+                    PetTypeState(
                         name = "Small & Furry",
                         isSelected = false,
                     ),
-                    PetType(
+                    PetTypeState(
                         name = "Horse",
                         isSelected = false,
                     ),
-                    PetType(
+                    PetTypeState(
                         name = "Barnyard",
                         isSelected = false,
                     ),
-                    PetType(
+                    PetTypeState(
                         name = "Scales, Fins & Other",
                         isSelected = false,
                     ),

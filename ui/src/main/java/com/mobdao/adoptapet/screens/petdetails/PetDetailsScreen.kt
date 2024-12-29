@@ -38,11 +38,11 @@ import com.mobdao.adoptapet.common.layouts.PetSurface
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.common.theme.color.ColorSchema
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.NavAction
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.Contact
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetCard
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetHeader
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiAction.BackButtonClicked
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiState.ContactState
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiState.PetCardState
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiState.PetHeaderState
 import com.mobdao.adoptapet.utils.extensions.toColorSchema
 import com.mobdao.domain.models.AnimalType
 import com.mobdao.domain.models.AnimalType.DOG
@@ -50,19 +50,18 @@ import com.mobdao.domain.models.AnimalType.DOG
 @Composable
 fun PetDetailsScreen(
     animalType: AnimalType,
-    onNavAction: (NavAction) -> Unit,
+    onNavAction: (PetDetailsNavAction) -> Unit,
     viewModel: PetDetailsViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val navActionEvent: Event<NavAction>? by viewModel.navAction.collectAsStateWithLifecycle()
+    val uiState: PetDetailsUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val navActionEvent: Event<PetDetailsNavAction>? by viewModel.navAction.collectAsStateWithLifecycle()
 
     navActionEvent?.getContentIfNotHandled()?.let(onNavAction)
 
     UiContent(
         animalType = animalType,
         uiState = uiState,
-        onBackButtonClicked = viewModel::onBackButtonClicked,
-        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
+        onUiAction = viewModel::onUiAction,
     )
 }
 
@@ -70,9 +69,8 @@ fun PetDetailsScreen(
 @Composable
 private fun UiContent(
     animalType: AnimalType = DOG,
-    uiState: UiState = UiState(),
-    onBackButtonClicked: () -> Unit = {},
-    onDismissGenericErrorDialog: () -> Unit = {},
+    uiState: PetDetailsUiState = PetDetailsUiState(),
+    onUiAction: (PetDetailsUiAction) -> Unit = {},
 ) {
     val colorSchema: ColorSchema = remember(animalType) { animalType.toColorSchema() }
     AdoptAPetTheme(colorSchema) {
@@ -82,7 +80,7 @@ private fun UiContent(
                     TopAppBar(
                         title = { },
                         navigationIcon = {
-                            IconButton(onClick = onBackButtonClicked) {
+                            IconButton(onClick = { onUiAction(BackButtonClicked) }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = "Back",
@@ -119,13 +117,13 @@ private fun UiContent(
             }
         }
         if (uiState.genericErrorDialogIsVisible) {
-            GenericErrorDialog(onDismissGenericErrorDialog = onDismissGenericErrorDialog)
+            GenericErrorDialog(onDismissGenericErrorDialog = { onUiAction(DismissGenericErrorDialog) })
         }
     }
 }
 
 @Composable
-private fun PetHeader(petHeader: PetHeader) {
+private fun PetHeader(petHeader: PetHeaderState) {
     AsyncImage(
         model = petHeader.photoUrl,
         contentDescription = null,
@@ -149,7 +147,7 @@ private fun PetHeader(petHeader: PetHeader) {
 
 @Composable
 private fun PetCard(
-    petCard: PetCard,
+    petCard: PetCardState,
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier) {
@@ -193,7 +191,7 @@ private fun PetCard(
 
 @Composable
 private fun ContactCard(
-    contact: Contact,
+    contact: ContactState,
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier) {

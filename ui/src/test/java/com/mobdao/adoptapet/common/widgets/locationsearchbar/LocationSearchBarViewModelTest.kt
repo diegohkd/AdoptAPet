@@ -1,5 +1,12 @@
 package com.mobdao.adoptapet.common.widgets.locationsearchbar
 
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.AutocompleteAddressSelected
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.ClearSearchClicked
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.CurrentLocationClicked
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.Init
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.LocationPermissionStateUpdated
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.LocationSearchActiveChanged
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.SearchQueryChanged
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.domain.models.Address
@@ -52,7 +59,7 @@ class LocationSearchBarViewModelTest {
     @Test
     fun `when initialized with initial address then search query is set to the address`() {
         // given / when
-        tested.init(address = "address")
+        tested.onUiAction(Init(initialSearchQuery = "address"))
 
         // then
         assertEquals(
@@ -64,10 +71,10 @@ class LocationSearchBarViewModelTest {
     @Test
     fun `given location permission not granted when current location clicked then location permission is requested`() {
         // given
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = false)
+        tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = false))
 
         // when
-        tested.onCurrentLocationClicked()
+        tested.onUiAction(CurrentLocationClicked)
 
         // then
         assertNotNull(tested.requestLocationPermission.value)
@@ -78,10 +85,10 @@ class LocationSearchBarViewModelTest {
         // given
         val gettingCurrentLocation = MutableSharedFlow<Address>()
         every { getCurrentLocationUseCase.execute() } returns gettingCurrentLocation
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
         // when
-        tested.onCurrentLocationClicked()
+        tested.onUiAction(CurrentLocationClicked)
 
         // then
         assertEquals(
@@ -94,10 +101,10 @@ class LocationSearchBarViewModelTest {
     fun `when current location clicked and current location is fetched then progress indicator is shown`() {
         // given
         every { getCurrentLocationUseCase.execute() } returns flowOf()
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
         // when
-        tested.onCurrentLocationClicked()
+        tested.onUiAction(CurrentLocationClicked)
 
         // then
         assertTrue(tested.uiState.value.progressIndicatorIsVisible)
@@ -107,10 +114,10 @@ class LocationSearchBarViewModelTest {
     fun `when current location clicked and getting current location fails then progress indicator is hidden`() {
         // given
         every { getCurrentLocationUseCase.execute() } returns flow { throw Exception() }
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
         // when
-        tested.onCurrentLocationClicked()
+        tested.onUiAction(CurrentLocationClicked)
 
         // then
         assertFalse(tested.uiState.value.progressIndicatorIsVisible)
@@ -120,10 +127,10 @@ class LocationSearchBarViewModelTest {
     fun `when current location clicked and getting current location fails then error encountered event is emitted`() {
         // given
         every { getCurrentLocationUseCase.execute() } returns flow { throw Exception() }
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
         // when
-        tested.onCurrentLocationClicked()
+        tested.onUiAction(CurrentLocationClicked)
 
         // then
         assertNotNull(tested.errorEncountered.value)
@@ -132,10 +139,10 @@ class LocationSearchBarViewModelTest {
     @Test
     fun `when current location clicked and successfully gets current location then progress indicator is hidden`() {
         // given
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
         // when
-        tested.onCurrentLocationClicked()
+        tested.onUiAction(CurrentLocationClicked)
 
         // then
         assertFalse(tested.uiState.value.progressIndicatorIsVisible)
@@ -144,10 +151,10 @@ class LocationSearchBarViewModelTest {
     @Test
     fun `given search mode is active when current location clicked and successfully gets current location then search mode is deactivated`() {
         // given
-        tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+        tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
         // when
-        tested.onCurrentLocationClicked()
+        tested.onUiAction(CurrentLocationClicked)
 
         // then
         assertFalse(tested.uiState.value.searchModeIsActive)
@@ -157,12 +164,12 @@ class LocationSearchBarViewModelTest {
     fun `given search query returned location results when current location clicked and successfully gets current location then autocomplete results are cleared`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
-            tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+            tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
             // when
-            tested.onCurrentLocationClicked()
+            tested.onUiAction(CurrentLocationClicked)
 
             // then
             assertEquals(
@@ -175,12 +182,12 @@ class LocationSearchBarViewModelTest {
     fun `given search query returned location results when current location clicked and successfully gets current location then search query UI state is updated to current address line`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
-            tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+            tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
             // when
-            tested.onCurrentLocationClicked()
+            tested.onUiAction(CurrentLocationClicked)
 
             // then
             assertEquals(
@@ -193,12 +200,12 @@ class LocationSearchBarViewModelTest {
     fun `given search query returned location results when current location clicked and successfully gets current location then address selected event is emitted`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
-            tested.onLocationPermissionStateUpdated(areAllLocationPermissionsGranted = true)
+            tested.onUiAction(LocationPermissionStateUpdated(areAllLocationPermissionsGranted = true))
 
             // when
-            tested.onCurrentLocationClicked()
+            tested.onUiAction(CurrentLocationClicked)
 
             // then
             assertEquals(
@@ -212,7 +219,7 @@ class LocationSearchBarViewModelTest {
     @Test
     fun `given new search query when location query changed then search query UI state is updated with new query`() {
         // given / when
-        tested.onLocationSearchQueryChanged("locationQuery")
+        tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
 
         // then
         assertEquals(
@@ -225,7 +232,7 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed when less than 1000ms has passed then autocomplete search is not requested`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
 
             // then
             advanceTimeBy(900)
@@ -240,7 +247,7 @@ class LocationSearchBarViewModelTest {
             // given
             val autocompletionSearching = MutableSharedFlow<List<Address>>()
             every { getAutocompleteLocationOptionsUseCase.execute(any()) } returns autocompletionSearching
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
 
             // then
             advanceTimeBy(1100)
@@ -258,7 +265,7 @@ class LocationSearchBarViewModelTest {
             // given
             val autocompletionSearching = MutableSharedFlow<List<Address>>()
             every { getAutocompleteLocationOptionsUseCase.execute(any()) } returns autocompletionSearching
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
 
             // then
             advanceTimeBy(1100)
@@ -272,7 +279,7 @@ class LocationSearchBarViewModelTest {
         runTest {
             // given
             every { getAutocompleteLocationOptionsUseCase.execute(any()) } returns flow { throw Exception() }
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
 
             // then
             advanceTimeBy(1100)
@@ -287,7 +294,7 @@ class LocationSearchBarViewModelTest {
             // given
             val exception = Exception()
             every { getAutocompleteLocationOptionsUseCase.execute(any()) } returns flow { throw exception }
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
 
             // then
             advanceTimeBy(1100)
@@ -303,7 +310,7 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed and searching autocomplete options returns successful results when more than 1000ms has passed then autocomplete options are displayed on the UI`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
 
             // then
             advanceTimeBy(1100)
@@ -318,7 +325,7 @@ class LocationSearchBarViewModelTest {
     @Test
     fun `when search mode active status updated to true then search mode is active`() {
         // given / when
-        tested.onSearchModeActiveChange(isActive = true)
+        tested.onUiAction(LocationSearchActiveChanged(isActive = true))
 
         // then
         assertTrue(tested.uiState.value.searchModeIsActive)
@@ -327,10 +334,10 @@ class LocationSearchBarViewModelTest {
     @Test
     fun `given search mode was active when search mode active status updated to false then search mode is deactivated`() {
         // given
-        tested.onSearchModeActiveChange(isActive = true)
+        tested.onUiAction(LocationSearchActiveChanged(isActive = true))
 
         // when
-        tested.onSearchModeActiveChange(isActive = false)
+        tested.onUiAction(LocationSearchActiveChanged(isActive = false))
 
         // then
         assertFalse(tested.uiState.value.searchModeIsActive)
@@ -340,11 +347,11 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed and searching autocomplete options returns successful results when autocomplete address item clicked then autocomplete results are cleared`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
 
             // when
-            tested.onAddressItemClicked(index = 0)
+            tested.onUiAction(AutocompleteAddressSelected(index = 0))
 
             // then
             assertEquals(
@@ -357,11 +364,11 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed and searching autocomplete options returns successful results when autocomplete address item clicked then location search query UI state is set to the address line clicked`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
 
             // when
-            tested.onAddressItemClicked(index = 0)
+            tested.onUiAction(AutocompleteAddressSelected(index = 0))
 
             // then
             assertEquals(
@@ -374,11 +381,11 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed and searching autocomplete options returns successful results when autocomplete address item clicked then address selected event is emitted`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
 
             // when
-            tested.onAddressItemClicked(index = 0)
+            tested.onUiAction(AutocompleteAddressSelected(index = 0))
 
             // then
             assertEquals(
@@ -393,11 +400,11 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed and searching autocomplete options returns successful when clear location search clicked then location search query UI static is cleared`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
 
             // when
-            tested.onClearLocationSearchClicked()
+            tested.onUiAction(ClearSearchClicked)
 
             // then
             assertEquals(
@@ -410,11 +417,11 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed and searching autocomplete options returns successful when clear location search clicked then address selected event is emitted with null address`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
 
             // when
-            tested.onClearLocationSearchClicked()
+            tested.onUiAction(ClearSearchClicked)
 
             // then
             assertNull(
@@ -428,11 +435,11 @@ class LocationSearchBarViewModelTest {
     fun `given location query changed and searching autocomplete options returns successful when clear location search clicked then autocomplete results are cleared`() =
         runTest {
             // given
-            tested.onLocationSearchQueryChanged("locationQuery")
+            tested.onUiAction(SearchQueryChanged(newQuery = "locationQuery"))
             advanceTimeBy(1100)
 
             // when
-            tested.onClearLocationSearchClicked()
+            tested.onUiAction(ClearSearchClicked)
 
             // then
             assertEquals(

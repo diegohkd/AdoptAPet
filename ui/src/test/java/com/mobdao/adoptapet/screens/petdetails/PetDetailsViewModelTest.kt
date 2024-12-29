@@ -2,10 +2,10 @@ package com.mobdao.adoptapet.screens.petdetails
 
 import androidx.lifecycle.SavedStateHandle
 import com.mobdao.adoptapet.navigation.Destination.PetDetails.PET_ID_ARG
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.Contact
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetCard
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel.UiState.PetHeader
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiState.ContactState
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiState.PetCardState
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsUiState.PetHeaderState
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.ContactMockFactory
@@ -102,10 +102,10 @@ class PetDetailsViewModelTest {
         // when / then
         assertEquals(
             tested.uiState.value,
-            UiState(
-                petHeader = PetHeader(),
-                petCard = PetCard(),
-                contact = Contact(),
+            PetDetailsUiState(
+                petHeader = PetHeaderState(),
+                petCard = PetCardState(),
+                contact = ContactState(),
                 genericErrorDialogIsVisible = true,
             ),
         )
@@ -116,14 +116,14 @@ class PetDetailsViewModelTest {
         // given / when / then
         assertEquals(
             tested.uiState.value,
-            UiState(
+            PetDetailsUiState(
                 petHeader =
-                    PetHeader(
+                    PetHeaderState(
                         photoUrl = "largeUrl",
                         name = "name",
                     ),
                 petCard =
-                    PetCard(
+                    PetCardState(
                         breed = "primary",
                         age = "age",
                         gender = "gender",
@@ -132,7 +132,7 @@ class PetDetailsViewModelTest {
                         distance = 123f,
                     ),
                 contact =
-                    Contact(
+                    ContactState(
                         email = "email",
                         phone = "phone",
                     ),
@@ -148,7 +148,7 @@ class PetDetailsViewModelTest {
         tested
 
         // when
-        tested.onDismissGenericErrorDialog()
+        tested.onUiAction(DismissGenericErrorDialog)
 
         // then
         assertEquals(
