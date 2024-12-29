@@ -3,7 +3,7 @@ package com.mobdao.adoptapet.screens.home.petspaging
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
+import com.mobdao.adoptapet.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.utils.PagerFactory
 import com.mobdao.domain.models.SearchFilter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,13 +24,17 @@ class PetsPager
     ) {
         private val searchFilter = MutableStateFlow<SearchFilter?>(null)
 
-        val items: Flow<PagingData<Pet>> =
+        val items: Flow<PagingData<PetState>> =
             searchFilter
                 .filterNotNull()
                 .flatMapLatest { searchFilter ->
                     pagerFactory
                         .create(
-                            config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
+                            config =
+                                PagingConfig(
+                                    pageSize = ITEMS_PER_PAGE,
+                                    enablePlaceholders = false,
+                                ),
                             pagingSourceFactory = {
                                 petsPagingSourceFactory.create(searchFilter = searchFilter)
                             },

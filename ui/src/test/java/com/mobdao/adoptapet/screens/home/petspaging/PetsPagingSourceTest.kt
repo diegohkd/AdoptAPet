@@ -4,7 +4,8 @@ import androidx.paging.PagingSource.LoadParams
 import androidx.paging.PagingSource.LoadResult
 import androidx.paging.PagingSource.LoadResult.Error
 import androidx.paging.PagingSource.LoadResult.Page
-import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
+import com.mobdao.adoptapet.screens.home.HomeUiState.BreedsState
+import com.mobdao.adoptapet.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.utils.PetDomain
 import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
@@ -46,7 +47,12 @@ class PetsPagingSourceTest {
 
     private val getPetsUseCase: GetPetsUseCase =
         mockk {
-            every { execute(pageNumber = 1, searchFilter = searchFilter) } returns flowOf(listOf(pet))
+            every {
+                execute(
+                    pageNumber = 1,
+                    searchFilter = searchFilter,
+                )
+            } returns flowOf(listOf(pet))
         }
 
     private val tested by lazy { createTested(searchFilter = searchFilter) }
@@ -73,12 +79,12 @@ class PetsPagingSourceTest {
             } returns flow { throw exception }
 
             // when
-            val result: LoadResult<Int, Pet> = tested.load(params)
+            val result: LoadResult<Int, PetState> = tested.load(params)
 
             // then
             assertEquals(
                 result,
-                Error<Int, Pet>(exception),
+                Error<Int, PetState>(exception),
             )
         }
 
@@ -152,7 +158,7 @@ class PetsPagingSourceTest {
             } returns flowOf(emptyList())
 
             // when
-            val result: LoadResult<Int, Pet> = tested.load(params)
+            val result: LoadResult<Int, PetState> = tested.load(params)
 
             // then
             assertNull((result as Page).nextKey)
@@ -162,7 +168,7 @@ class PetsPagingSourceTest {
     fun `given getting pets returns not empty list when load then page result is returned with null next key`() =
         runTest {
             // given / when
-            val result: LoadResult<Int, Pet> = tested.load(params)
+            val result: LoadResult<Int, PetState> = tested.load(params)
 
             // then
             assertEquals(
@@ -175,18 +181,18 @@ class PetsPagingSourceTest {
     fun `given getting pets returns not empty list when load then page result with pets is returned`() =
         runTest {
             // given / when
-            val result: LoadResult<Int, Pet> = tested.load(params)
+            val result: LoadResult<Int, PetState> = tested.load(params)
 
             // then
             assertEquals(
                 (result as Page).data,
                 listOf(
-                    Pet(
+                    PetState(
                         id = "id",
                         type = DOG,
                         name = "name",
                         breeds =
-                            Pet.Breeds(
+                            BreedsState(
                                 primary = "primary",
                                 secondary = "secondary",
                             ),

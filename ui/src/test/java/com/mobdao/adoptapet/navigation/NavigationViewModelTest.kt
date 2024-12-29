@@ -5,10 +5,10 @@ import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.OnboardingS
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.OnboardingToHomeScreen
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.PetDetailsScreen
 import com.mobdao.adoptapet.navigation.NavigationViewModel.NavAction.PreviousScreen
-import com.mobdao.adoptapet.screens.filter.FilterViewModel
-import com.mobdao.adoptapet.screens.home.HomeViewModel
-import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel
-import com.mobdao.adoptapet.screens.petdetails.PetDetailsViewModel
+import com.mobdao.adoptapet.screens.filter.FilterNavAction
+import com.mobdao.adoptapet.screens.home.HomeNavAction
+import com.mobdao.adoptapet.screens.onboarding.OnboardingNavAction
+import com.mobdao.adoptapet.screens.petdetails.PetDetailsNavAction
 import com.mobdao.adoptapet.screens.splash.SplashViewModel
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.domain.models.AnimalType
@@ -95,7 +95,7 @@ class NavigationViewModelTest {
     @Test
     fun `given nav action is Completed when Onboarding nav action received then navigate to Home screen`() {
         // given
-        val navAction = OnboardingViewModel.NavAction.Completed
+        val navAction = OnboardingNavAction.Completed
 
         // when
         tested.onNavAction(navAction)
@@ -111,7 +111,7 @@ class NavigationViewModelTest {
     fun `given nav action is PetClicked when Onboarding nav action received then navigate to Pet Details screen`() {
         // given
         val animalType = mockk<AnimalType>()
-        val navAction = HomeViewModel.NavAction.PetClicked(petId = "petId", type = animalType)
+        val navAction = HomeNavAction.PetClicked(petId = "petId", type = animalType)
 
         // when
         tested.onNavAction(navAction)
@@ -129,7 +129,7 @@ class NavigationViewModelTest {
     @Test
     fun `given nav action is FilterClicked when Onboarding nav action received then navigate to Filter screen`() {
         // given
-        val navAction = HomeViewModel.NavAction.FilterClicked
+        val navAction = HomeNavAction.FilterClicked
 
         // when
         tested.onNavAction(navAction)
@@ -144,7 +144,7 @@ class NavigationViewModelTest {
     @Test
     fun `given nav action is BackButtonClicked when Pet Details nav action received then navigate to PreviousScreen screen`() {
         // given
-        val navAction = PetDetailsViewModel.NavAction.BackButtonClicked
+        val navAction = PetDetailsNavAction.BackButtonClicked
 
         // when
         tested.onNavAction(navAction)
@@ -159,7 +159,7 @@ class NavigationViewModelTest {
     @Test
     fun `given nav action is FilterApplied when Filter nav action received then navigate to PreviousScreen screen`() {
         // given
-        val navAction = FilterViewModel.NavAction.FilterApplied
+        val navAction = FilterNavAction.FilterApplied
 
         // when
         tested.onNavAction(navAction)

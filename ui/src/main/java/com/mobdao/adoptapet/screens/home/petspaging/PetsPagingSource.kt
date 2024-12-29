@@ -2,7 +2,8 @@ package com.mobdao.adoptapet.screens.home.petspaging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.mobdao.adoptapet.screens.home.HomeViewModel
+import com.mobdao.adoptapet.screens.home.HomeUiState.BreedsState
+import com.mobdao.adoptapet.screens.home.HomeUiState.PetState
 import com.mobdao.domain.models.Pet
 import com.mobdao.domain.models.SearchFilter
 import com.mobdao.domain.usecases.pets.GetPetsUseCase
@@ -16,17 +17,17 @@ private const val DEFAULT_INITIAL_PAGE_NUMBER = 1
 class PetsPagingSource private constructor(
     private val getPetsUseCase: GetPetsUseCase,
     private val searchFilter: SearchFilter,
-) : PagingSource<Int, HomeViewModel.Pet>() {
-    override fun getRefreshKey(state: PagingState<Int, HomeViewModel.Pet>): Int? {
+) : PagingSource<Int, PetState>() {
+    override fun getRefreshKey(state: PagingState<Int, PetState>): Int? {
         // Force to always start from first page on refresh
         return null
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, HomeViewModel.Pet> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PetState> {
         val pageNumber: Int = params.key ?: DEFAULT_INITIAL_PAGE_NUMBER
         // TODO handle page size
         return try {
-            val pets: List<HomeViewModel.Pet> =
+            val pets: List<PetState> =
                 getPetsUseCase
                     .execute(pageNumber = pageNumber, searchFilter = searchFilter)
                     .first()
@@ -42,13 +43,13 @@ class PetsPagingSource private constructor(
         }
     }
 
-    private fun Pet.toViewModelModel(): HomeViewModel.Pet =
-        HomeViewModel.Pet(
+    private fun Pet.toViewModelModel(): PetState =
+        PetState(
             id = id,
             type = type,
             name = name,
             breeds =
-                HomeViewModel.Pet.Breeds(
+                BreedsState(
                     primary = breeds.primary,
                     secondary = breeds.secondary,
                 ),

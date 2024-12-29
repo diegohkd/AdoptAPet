@@ -17,20 +17,18 @@ import javax.inject.Inject
 private const val MINIMUM_SPLASH_LOADING_TIME = 1500L
 
 @HiltViewModel
-class SplashViewModel
-    @Inject
-    constructor() : ViewModel() {
-        sealed interface NavAction {
-            data object Completed : NavAction
-        }
+class SplashViewModel @Inject constructor() : ViewModel() {
+    sealed interface NavAction {
+        data object Completed : NavAction
+    }
 
-        private val _navAction = MutableStateFlow<Event<NavAction>?>(null)
-        val navAction: StateFlow<Event<NavAction>?> = _navAction.asStateFlow()
+    private val _navAction = MutableStateFlow<Event<NavAction>?>(null)
+    val navAction: StateFlow<Event<NavAction>?> = _navAction.asStateFlow()
 
-        init {
-            viewModelScope.launch {
-                delay(MINIMUM_SPLASH_LOADING_TIME)
-                _navAction.value = Event(Completed)
-            }
+    init {
+        viewModelScope.launch {
+            delay(MINIMUM_SPLASH_LOADING_TIME)
+            _navAction.value = Event(Completed)
         }
     }
+}

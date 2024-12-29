@@ -30,6 +30,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
+import com.mobdao.adoptapet.common.Event
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.AutocompleteAddressSelected
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.ClearSearchClicked
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.CurrentLocationClicked
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.Init
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.LocationPermissionStateUpdated
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.LocationSearchActiveChanged
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.SearchQueryChanged
+import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarViewModel.SelectedAddressHolder
 import com.mobdao.domain.models.Address
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -42,14 +51,14 @@ fun LocationSearchBar(
     viewModel: LocationSearchBarViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(initialAddress) {
-        viewModel.init(initialAddress)
+        viewModel.onUiAction(Init(initialSearchQuery = initialAddress))
     }
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val addressSelectedEvent by viewModel.addressSelected.collectAsStateWithLifecycle()
-    val errorEncounteredEvent by viewModel.errorEncountered.collectAsStateWithLifecycle()
+    val uiState: LocationSearchBarUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val addressSelectedEvent: Event<SelectedAddressHolder?>? by viewModel.addressSelected.collectAsStateWithLifecycle()
+    val errorEncounteredEvent: Event<Throwable?>? by viewModel.errorEncountered.collectAsStateWithLifecycle()
 
-    addressSelectedEvent?.getContentIfNotHandled()?.let {
-        onAddressSelected(it.address)
+    addressSelectedEvent?.getContentIfNotHandled()?.let { event ->
+        onAddressSelected(event.address)
     }
     errorEncounteredEvent?.getContentIfNotHandled()?.let(onError)
 
@@ -62,8 +71,8 @@ fun LocationSearchBar(
                 ),
         )
     LaunchedEffect(locationPermissionState.allPermissionsGranted) {
-        viewModel.onLocationPermissionStateUpdated(
-            areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted,
+        viewModel.onUiAction(
+            LocationPermissionStateUpdated(areAllLocationPermissionsGranted = locationPermissionState.allPermissionsGranted),
         )
     }
     val askLocationPermissionEvent by viewModel.requestLocationPermission.collectAsStateWithLifecycle()
@@ -73,15 +82,9 @@ fun LocationSearchBar(
 
     UiContent(
         modifier = modifier,
+        uiState = uiState,
         searchQuery = viewModel.locationSearchQuery,
-        active = uiState.searchModeIsActive,
-        loading = uiState.progressIndicatorIsVisible,
-        autocompleteAddresses = uiState.locationAutocompleteAddresses,
-        onSearchQueryChange = viewModel::onLocationSearchQueryChanged,
-        onLocationSearchActiveChange = viewModel::onSearchModeActiveChange,
-        onAutocompleteAddressSelected = viewModel::onAddressItemClicked,
-        onCurrentLocationClicked = viewModel::onCurrentLocationClicked,
-        onClearClicked = viewModel::onClearLocationSearchClicked,
+        onUiAction = viewModel::onUiAction,
     )
 }
 
@@ -89,29 +92,23 @@ fun LocationSearchBar(
 @Composable
 private fun UiContent(
     modifier: Modifier = Modifier,
+    uiState: LocationSearchBarUiState,
     searchQuery: String,
-    active: Boolean,
-    loading: Boolean,
-    onLocationSearchActiveChange: (Boolean) -> Unit,
-    autocompleteAddresses: List<String>,
-    onSearchQueryChange: (String) -> Unit,
-    onAutocompleteAddressSelected: (index: Int) -> Unit,
-    onCurrentLocationClicked: () -> Unit,
-    onClearClicked: () -> Unit,
+    onUiAction: (LocationSearchBarUiAction) -> Unit,
 ) {
     DockedSearchBar(
         query = searchQuery,
-        onQueryChange = onSearchQueryChange,
+        onQueryChange = { query -> onUiAction(SearchQueryChanged(query)) },
         onSearch = { /* no-op*/ },
-        active = active,
-        onActiveChange = onLocationSearchActiveChange,
+        active = uiState.searchModeIsActive,
+        onActiveChange = { isActive -> onUiAction(LocationSearchActiveChanged(isActive)) },
         modifier = modifier.fillMaxWidth(),
         placeholder = {
             Text(text = stringResource(R.string.location))
         },
         trailingIcon = {
             if (searchQuery.isNotEmpty()) {
-                IconButton(onClick = onClearClicked) {
+                IconButton(onClick = { onUiAction(ClearSearchClicked) }) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "",
@@ -127,13 +124,13 @@ private fun UiContent(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .clickable(onClick = onCurrentLocationClicked)
+                            .clickable(onClick = { onUiAction(CurrentLocationClicked) })
                             .padding(8.dp),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                 )
             }
-            if (loading) {
+            if (uiState.progressIndicatorIsVisible) {
                 item {
                     Box(
                         modifier =
@@ -146,13 +143,13 @@ private fun UiContent(
                     }
                 }
             } else {
-                itemsIndexed(autocompleteAddresses) { index, address ->
+                itemsIndexed(uiState.locationAutocompleteAddresses) { index, address ->
                     Text(
                         text = address,
                         modifier =
                             Modifier
                                 .padding(8.dp)
-                                .clickable { onAutocompleteAddressSelected(index) },
+                                .clickable { onUiAction(AutocompleteAddressSelected(index)) },
                     )
                 }
             }

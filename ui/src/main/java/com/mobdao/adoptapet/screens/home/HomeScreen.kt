@@ -50,9 +50,11 @@ import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.common.theme.color.ColorSchema
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
-import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction
-import com.mobdao.adoptapet.screens.home.HomeViewModel.Pet
-import com.mobdao.adoptapet.screens.home.HomeViewModel.UiState
+import com.mobdao.adoptapet.screens.home.HomeUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.home.HomeUiAction.FilterClicked
+import com.mobdao.adoptapet.screens.home.HomeUiAction.PetClicked
+import com.mobdao.adoptapet.screens.home.HomeUiState.BreedsState
+import com.mobdao.adoptapet.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.utils.extensions.toColorSchema
 import com.mobdao.domain.models.AnimalType.CAT
 import com.mobdao.domain.models.AnimalType.DOG
@@ -62,10 +64,10 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    onNavAction: (NavAction) -> Unit,
+    onNavAction: (HomeNavAction) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val petsPagingItems: LazyPagingItems<Pet> = viewModel.items.collectAsLazyPagingItems()
+    val petsPagingItems: LazyPagingItems<PetState> = viewModel.items.collectAsLazyPagingItems()
     val navActionEvent by viewModel.navAction.collectAsStateWithLifecycle()
 
     navActionEvent?.getContentIfNotHandled()?.let(onNavAction)
@@ -85,20 +87,16 @@ fun HomeScreen(
     UiContent(
         uiState = uiState,
         petsPagingItems = petsPagingItems,
-        onPetClicked = viewModel::onPetClicked,
-        onFilterClicked = viewModel::onFilterClicked,
-        onDismissGenericErrorDialog = viewModel::onDismissGenericErrorDialog,
+        onUiAction = viewModel::onUiAction,
     )
 }
 
 // TODO check if passing LazyPagingItems causes extra recompositions
 @Composable
 private fun UiContent(
-    uiState: UiState,
-    petsPagingItems: LazyPagingItems<Pet>,
-    onPetClicked: (pet: Pet) -> Unit = {},
-    onFilterClicked: () -> Unit = {},
-    onDismissGenericErrorDialog: () -> Unit = {},
+    uiState: HomeUiState,
+    petsPagingItems: LazyPagingItems<PetState>,
+    onUiAction: (HomeUiAction) -> Unit = {},
 ) {
     ConstraintLayout(
         modifier =
@@ -115,7 +113,7 @@ private fun UiContent(
 
         ToolBar(
             address = uiState.address,
-            onFilterClicked = onFilterClicked,
+            onFilterClicked = { onUiAction(FilterClicked) },
             modifier =
                 Modifier.constrainAs(toolbarRef) {
                     start.linkTo(parent.start)
@@ -136,7 +134,10 @@ private fun UiContent(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(petsPagingItems.itemCount) { index ->
-                PetItem(pet = petsPagingItems[index]!!, onClick = onPetClicked)
+                PetItem(
+                    pet = petsPagingItems[index]!!,
+                    onClick = { petState -> onUiAction(PetClicked(petState)) },
+                )
             }
             if (uiState.nextPageProgressIndicatorIsVisible) {
                 item {
@@ -168,13 +169,13 @@ private fun UiContent(
                             bottom.linkTo(parent.bottom)
                             height = Dimension.fillToConstraints
                         },
-                onFilterClicked = onFilterClicked,
+                onFilterClicked = { onUiAction(FilterClicked) },
             )
         }
     }
 
     if (uiState.genericErrorDialogIsVisible) {
-        GenericErrorDialog(onDismissGenericErrorDialog = onDismissGenericErrorDialog)
+        GenericErrorDialog(onDismissGenericErrorDialog = { onUiAction(DismissGenericErrorDialog) })
     }
 }
 
@@ -233,8 +234,8 @@ private fun ToolBar(
 
 @Composable
 private fun PetItem(
-    pet: Pet,
-    onClick: (pet: Pet) -> Unit,
+    pet: PetState,
+    onClick: (pet: PetState) -> Unit,
 ) {
     val colorSchema: ColorSchema = remember(pet.type) { pet.type.toColorSchema() }
     AdoptAPetTheme(colorSchema = colorSchema) {
@@ -320,7 +321,7 @@ fun HomeContentPreview() {
     AdoptAPetTheme {
         UiContent(
             uiState =
-                UiState(
+                HomeUiState(
                     address = "Av Dr Esmerino Ribeiro do Valle, 680, Nova Floresta",
                 ),
             petsPagingItems =
@@ -328,32 +329,32 @@ fun HomeContentPreview() {
                     PagingData.from(
                         data =
                             listOf(
-                                Pet(
+                                PetState(
                                     id = "id-1",
                                     type = DOG,
                                     name = "Bibico",
-                                    breeds = Pet.Breeds("SRD", ""),
+                                    breeds = BreedsState("SRD", ""),
                                     thumbnailUrl = "",
                                 ),
-                                Pet(
+                                PetState(
                                     id = "id-2",
                                     type = DOG,
                                     name = "Nina",
-                                    breeds = Pet.Breeds("SRD", ""),
+                                    breeds = BreedsState("SRD", ""),
                                     thumbnailUrl = "",
                                 ),
-                                Pet(
+                                PetState(
                                     id = "id-3",
                                     type = CAT,
                                     name = "Nilla",
-                                    breeds = Pet.Breeds("SRD", ""),
+                                    breeds = BreedsState("SRD", ""),
                                     thumbnailUrl = "",
                                 ),
-                                Pet(
+                                PetState(
                                     id = "id-4",
                                     type = RABBIT,
                                     name = "Pepê",
-                                    breeds = Pet.Breeds("SRD", ""),
+                                    breeds = BreedsState("SRD", ""),
                                     thumbnailUrl = "",
                                 ),
                             ),
@@ -369,7 +370,7 @@ fun HomeContentPreview() {
     }
 }
 
-private fun Pet.formattedBreeds(): String =
+private fun PetState.formattedBreeds(): String =
     if (!breeds.primary.isNullOrBlank()) {
         "${breeds.primary}" + (breeds.secondary?.let { " & $it" } ?: "")
     } else {

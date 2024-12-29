@@ -1,6 +1,10 @@
 package com.mobdao.adoptapet.screens.onboarding
 
-import com.mobdao.adoptapet.screens.onboarding.OnboardingViewModel.NavAction.Completed
+import com.mobdao.adoptapet.screens.onboarding.OnboardingNavAction.Completed
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.AddressSelected
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.FailedToGetAddress
+import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.NextClicked
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.domain.models.Address
@@ -37,7 +41,7 @@ class OnboardingViewModelTest {
     @Test
     fun `when failed to get address then generic error dialog is visible`() {
         // when
-        tested.onFailedToGetAddress(throwable = null)
+        tested.onUiAction(FailedToGetAddress(throwable = null))
 
         // then
         assertTrue(tested.uiState.value.genericErrorDialogIsVisible)
@@ -52,7 +56,7 @@ class OnboardingViewModelTest {
     @Test
     fun `when address selected then next button is visible`() {
         // given / when
-        tested.onAddressSelected(address)
+        tested.onUiAction(AddressSelected(address = address))
 
         // then
         assertTrue(tested.uiState.value.nextButtonIsEnabled)
@@ -62,10 +66,10 @@ class OnboardingViewModelTest {
     fun `given address selected and completing onboarding throws an exception when next clicked then generic error dialog is shown`() {
         // given
         every { completedOnboardingUseCase.execute(any()) } returns flow { throw Exception() }
-        tested.onAddressSelected(address)
+        tested.onUiAction(AddressSelected(address = address))
 
         // when
-        tested.onNextClicked()
+        tested.onUiAction(NextClicked)
 
         // then
         assertTrue(tested.uiState.value.genericErrorDialogIsVisible)
@@ -74,10 +78,10 @@ class OnboardingViewModelTest {
     @Test
     fun `given address selected and completing onboarding is successful when next clicked then Completed nav action is emitted`() {
         // given
-        tested.onAddressSelected(address)
+        tested.onUiAction(AddressSelected(address = address))
 
         // when
-        tested.onNextClicked()
+        tested.onUiAction(NextClicked)
 
         // then
         assertEquals(
@@ -89,10 +93,10 @@ class OnboardingViewModelTest {
     @Test
     fun `given generic error dialog is visible when on dismiss the dialog then it is hidden`() {
         // given
-        tested.onFailedToGetAddress(throwable = null)
+        tested.onUiAction(FailedToGetAddress(throwable = null))
 
         // when
-        tested.onDismissGenericErrorDialog()
+        tested.onUiAction(DismissGenericErrorDialog)
 
         // then
         assertFalse(tested.uiState.value.genericErrorDialogIsVisible)

@@ -1,6 +1,10 @@
 package com.mobdao.adoptapet.screens.filter
 
-import com.mobdao.adoptapet.screens.filter.FilterViewModel.NavAction.FilterApplied
+import com.mobdao.adoptapet.screens.filter.FilterNavAction.FilterApplied
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.ApplyClicked
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.DismissGenericErrorDialog
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.FailedToGetAddress
+import com.mobdao.adoptapet.screens.filter.FilterUiAction.PetTypeSelected
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
@@ -115,7 +119,7 @@ class FilterViewModelTest {
     @Test
     fun `when failed to search address then generic error dialog is visible`() {
         // when
-        tested.onFailedToSearchAddress(throwable = null)
+        tested.onUiAction(FailedToGetAddress(throwable = null))
 
         // then
         assertTrue(tested.uiState.value.genericErrorDialogIsVisible)
@@ -124,7 +128,7 @@ class FilterViewModelTest {
     @Test
     fun `when pet type selected then UI is updated with selected pet type`() {
         // given / when
-        tested.onPetTypeSelected(type = "type")
+        tested.onUiAction(PetTypeSelected(petType = "type"))
 
         // then
         assertEquals(
@@ -147,7 +151,7 @@ class FilterViewModelTest {
         } returns savingSearchFilter
 
         // when
-        tested.onApplyClicked()
+        tested.onUiAction(ApplyClicked)
 
         // then
         assertEquals(
@@ -169,7 +173,7 @@ class FilterViewModelTest {
         } returns flow { throw Exception() }
 
         // when
-        tested.onApplyClicked()
+        tested.onUiAction(ApplyClicked)
 
         // then
         assertTrue(tested.uiState.value.genericErrorDialogIsVisible)
@@ -178,7 +182,7 @@ class FilterViewModelTest {
     @Test
     fun `given search filter selected and saving filter is successful when apply clicked then filter applied nav action is emitted`() {
         // given / when
-        tested.onApplyClicked()
+        tested.onUiAction(ApplyClicked)
 
         // then
         assertEquals(
@@ -191,10 +195,10 @@ class FilterViewModelTest {
     fun `given generic error dialog is visible when it is dismissed then it is hidden`() {
         // given
         every { saveSearchFilterUseCase.execute(any()) } returns flow { throw Exception() }
-        tested.onApplyClicked()
+        tested.onUiAction(ApplyClicked)
 
         // when
-        tested.onDismissGenericErrorDialog()
+        tested.onUiAction(DismissGenericErrorDialog)
 
         // then
         assertFalse(tested.uiState.value.genericErrorDialogIsVisible)

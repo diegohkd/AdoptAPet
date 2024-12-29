@@ -1,8 +1,9 @@
 package com.mobdao.adoptapet.screens.home
 
 import androidx.paging.LoadState.Error
-import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.FilterClicked
-import com.mobdao.adoptapet.screens.home.HomeViewModel.NavAction.PetClicked
+import com.mobdao.adoptapet.screens.home.HomeNavAction.FilterClicked
+import com.mobdao.adoptapet.screens.home.HomeNavAction.PetClicked
+import com.mobdao.adoptapet.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.screens.home.petspaging.PetsPager
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
@@ -183,13 +184,13 @@ class HomeViewModelTest {
     fun `when Pet is clicked then Pet clicked nav action is emitted`() {
         // given
         val animalType: AnimalType = mockk<AnimalType>()
-        val pet: HomeViewModel.Pet =
+        val pet: PetState =
             mockk {
                 every { id } returns "pet-id"
                 every { type } returns animalType
             }
         // when
-        tested.onPetClicked(pet = pet)
+        tested.onUiAction(HomeUiAction.PetClicked(pet = pet))
 
         // then
         assertEquals(
@@ -201,7 +202,7 @@ class HomeViewModelTest {
     @Test
     fun `when filter button is clicked then filter clicked nav action is emitted`() {
         // when
-        tested.onFilterClicked()
+        tested.onUiAction(HomeUiAction.FilterClicked)
 
         // then
         assertEquals(
@@ -220,7 +221,7 @@ class HomeViewModelTest {
         )
 
         // when
-        tested.onDismissGenericErrorDialog()
+        tested.onUiAction(HomeUiAction.DismissGenericErrorDialog)
 
         // then
         assertFalse(tested.uiState.value.genericErrorDialogIsVisible)
