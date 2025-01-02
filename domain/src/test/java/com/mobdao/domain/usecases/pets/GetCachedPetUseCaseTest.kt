@@ -1,11 +1,12 @@
 package com.mobdao.domain.usecases.pets
 
-import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.entities.PetEntityMockFactory
-import com.mobdao.domain.dataapi.repositories.PetsRepository
-import com.mobdao.domain.internal.PetEntity
-import com.mobdao.domain.internal.mappers.PetMapper
-import com.mobdao.domain.models.Pet
+import com.mobdao.adoptapet.common.testutils.domain.PetMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.entities.PetEntityMockFactory
+import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
+import com.mobdao.adoptapet.domain.internal.PetEntity
+import com.mobdao.adoptapet.domain.internal.mappers.PetMapper
+import com.mobdao.adoptapet.domain.models.Pet
+import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

@@ -1,10 +1,10 @@
 package com.mobdao.local.internal.common
 
-import com.mobdao.domain.entities.Address
-import com.mobdao.domain.entities.AnimalType
-import com.mobdao.domain.entities.Breeds
-import com.mobdao.domain.entities.Contact
-import com.mobdao.domain.entities.Photo
+import com.mobdao.adoptapet.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.AnimalType
+import com.mobdao.adoptapet.domain.entities.Breeds
+import com.mobdao.adoptapet.domain.entities.Contact
+import com.mobdao.adoptapet.domain.entities.Photo
 
 internal typealias DomainEntityAnimalType = AnimalType
 internal typealias DomainEntityContact = Contact

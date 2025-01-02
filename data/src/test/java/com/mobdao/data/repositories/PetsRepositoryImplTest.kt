@@ -1,9 +1,9 @@
 package com.mobdao.data.repositories
 
-import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.entities.SearchFilterEntityMockFactory
-import com.mobdao.domain.entities.Pet
-import com.mobdao.domain.entities.SearchFilter
+import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.entities.SearchFilterEntityMockFactory
+import com.mobdao.adoptapet.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.SearchFilter
 import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.remote.AnimalRemoteDataSource
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates

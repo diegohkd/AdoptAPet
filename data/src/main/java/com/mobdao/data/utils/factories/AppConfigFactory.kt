@@ -1,8 +1,8 @@
 package com.mobdao.data.utils.factories
 
-import com.mobdao.common.config.AppConfig
-import com.mobdao.common.config.GeoapifyConfig
-import com.mobdao.common.config.PetFinderConfig
+import com.mobdao.adoptapet.common.config.AppConfig
+import com.mobdao.adoptapet.common.config.GeoapifyConfig
+import com.mobdao.adoptapet.common.config.PetFinderConfig
 import com.mobdao.data.BuildConfig
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,6 +1,6 @@
 package com.mobdao.local
 
-import com.mobdao.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.SearchFilter
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

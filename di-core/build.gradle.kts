@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mobdao.di"
+    namespace = "com.mobdao.adoptapet.dicore"
 }
 
 dependencies {

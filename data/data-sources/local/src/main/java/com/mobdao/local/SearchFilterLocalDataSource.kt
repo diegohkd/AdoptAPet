@@ -1,6 +1,6 @@
 package com.mobdao.local
 
-import com.mobdao.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.SearchFilter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

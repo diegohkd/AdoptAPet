@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mobdao.common.testutils"
+    namespace = "com.mobdao.adoptapet.common.testutils"
 }
 
 dependencies {

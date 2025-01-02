@@ -2,10 +2,10 @@ package com.mobdao.remote
 
 import android.location.Location
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
-import com.mobdao.common.config.AppConfig
-import com.mobdao.common.config.GeoapifyConfig
-import com.mobdao.domain.entities.Address
-import com.mobdao.domain.entities.GeoCoordinates
+import com.mobdao.adoptapet.common.config.AppConfig
+import com.mobdao.adoptapet.common.config.GeoapifyConfig
+import com.mobdao.adoptapet.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.GeoCoordinates
 import com.mobdao.remote.internal.responses.GeocodeResponse
 import com.mobdao.remote.internal.services.GeoapifyService
 import com.mobdao.remote.internal.utils.mappers.EntityMapper
