@@ -3,7 +3,7 @@ package com.mobdao.domain.usecases.filter
 import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.SearchFilterEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
-import com.mobdao.adoptapet.domain.internal.SearchFilterEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.adoptapet.domain.internal.mappers.SearchFilterMapper
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.filter.ObserveSearchFilterUseCase
@@ -16,7 +16,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-class ObserveSearchFilterUseCaseTest {
+class ObserveSearchFilterEntityUseCaseTest {
     private val searchFilterEntity: SearchFilterEntity = SearchFilterEntityMockFactory.create()
     private val searchFilterUseCaseModel: SearchFilter = SearchFilterMockFactory.create()
 

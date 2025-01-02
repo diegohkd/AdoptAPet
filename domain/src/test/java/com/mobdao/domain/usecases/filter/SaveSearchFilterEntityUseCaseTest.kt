@@ -5,8 +5,8 @@ import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
-import com.mobdao.adoptapet.domain.internal.AddressEntity
-import com.mobdao.adoptapet.domain.internal.SearchFilterEntity
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.adoptapet.domain.internal.mappers.AddressMapper
 import com.mobdao.adoptapet.domain.internal.mappers.SearchFilterMapper
 import com.mobdao.adoptapet.domain.models.Address
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class SaveSearchFilterUseCaseTest {
+class SaveSearchFilterEntityUseCaseTest {
     private val address: Address = AddressMockFactory.create()
     private val searchFilter: SearchFilter =
         SearchFilterMockFactory.create(

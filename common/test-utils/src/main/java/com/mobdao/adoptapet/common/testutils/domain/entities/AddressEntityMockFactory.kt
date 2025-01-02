@@ -1,6 +1,6 @@
 package com.mobdao.adoptapet.common.testutils.domain.entities
 
-import com.mobdao.adoptapet.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.AddressEntity
 import io.mockk.every
 import io.mockk.mockk
 
@@ -9,7 +9,7 @@ object AddressEntityMockFactory {
         addressLine: String = "addressLine",
         latitude: Double = -21.312261,
         longitude: Double = -46.699523,
-    ): Address =
+    ): AddressEntity =
         mockk {
             every { this@mockk.addressLine } returns addressLine
             every { this@mockk.latitude } returns latitude

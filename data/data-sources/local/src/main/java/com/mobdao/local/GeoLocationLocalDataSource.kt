@@ -1,6 +1,6 @@
 package com.mobdao.local
 
-import com.mobdao.local.internal.common.DomainEntityAddress
+import com.mobdao.adoptapet.domain.entities.AddressEntity
 import com.mobdao.local.internal.common.mappers.EntityMapper
 import com.mobdao.local.internal.database.daos.AddressDao
 import kotlinx.coroutines.Dispatchers
@@ -15,15 +15,15 @@ class GeoLocationLocalDataSource
         private val addressDao: AddressDao,
         private val entityMapper: EntityMapper,
     ) {
-        suspend fun saveCurrentAddress(address: DomainEntityAddress) {
+        suspend fun saveCurrentAddress(address: AddressEntity) {
             withContext(Dispatchers.IO) {
                 addressDao.nukeTable()
-                addressDao.insertAll(listOf(entityMapper.toDbEntity(address)))
+                addressDao.insertAll(listOf(entityMapper.toDbModel(address)))
             }
         }
 
-        suspend fun getCurrentAddress(): DomainEntityAddress? =
+        suspend fun getCurrentAddress(): AddressEntity? =
             withContext(Dispatchers.IO) {
-                addressDao.getAll().firstOrNull()?.let(entityMapper::toDomainEntity)
+                addressDao.getAll().firstOrNull()?.let(entityMapper::toEntity)
             }
     }

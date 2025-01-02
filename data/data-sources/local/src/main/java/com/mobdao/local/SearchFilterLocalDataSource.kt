@@ -1,6 +1,6 @@
 package com.mobdao.local
 
-import com.mobdao.adoptapet.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -11,13 +11,13 @@ class SearchFilterLocalDataSource
     @Inject
     internal constructor() {
         // In-memory caching
-        private val searchFilter = MutableStateFlow<SearchFilter?>(null)
+        private val searchFilter = MutableStateFlow<SearchFilterEntity?>(null)
 
-        fun saveSearchFilter(searchFilter: SearchFilter?) {
+        fun saveSearchFilter(searchFilter: SearchFilterEntity?) {
             this.searchFilter.value = searchFilter
         }
 
-        fun getSearchFilter(): SearchFilter? = searchFilter.value
+        fun getSearchFilter(): SearchFilterEntity? = searchFilter.value
 
-        fun observeSearchFilter(): StateFlow<SearchFilter?> = searchFilter
+        fun observeSearchFilter(): StateFlow<SearchFilterEntity?> = searchFilter
     }

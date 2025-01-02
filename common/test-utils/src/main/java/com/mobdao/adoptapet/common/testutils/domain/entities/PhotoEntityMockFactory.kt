@@ -1,6 +1,6 @@
 package com.mobdao.adoptapet.common.testutils.domain.entities
 
-import com.mobdao.adoptapet.domain.entities.Photo
+import com.mobdao.adoptapet.domain.entities.PhotoEntity
 import io.mockk.every
 import io.mockk.mockk
 
@@ -10,7 +10,7 @@ object PhotoEntityMockFactory {
         mediumUrl: String = "mediumUrl",
         largeUrl: String = "largeUrl",
         fullUrl: String = "fullUrl",
-    ): Photo =
+    ): PhotoEntity =
         mockk {
             every { this@mockk.smallUrl } returns smallUrl
             every { this@mockk.mediumUrl } returns mediumUrl

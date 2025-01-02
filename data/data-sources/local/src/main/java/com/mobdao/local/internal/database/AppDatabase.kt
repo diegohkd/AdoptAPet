@@ -5,12 +5,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.mobdao.local.internal.database.daos.AddressDao
 import com.mobdao.local.internal.database.daos.AnimalDao
-import com.mobdao.local.internal.database.entities.Address
-import com.mobdao.local.internal.database.entities.Animal
+import com.mobdao.local.internal.database.entities.AddressDbModel
+import com.mobdao.local.internal.database.entities.AnimalDbModel
 import com.mobdao.local.internal.database.typeconverters.PhotoTypeConverter
 
 @Database(
-    entities = [Animal::class, Address::class],
+    entities = [AnimalDbModel::class, AddressDbModel::class],
     version = 1,
 )
 @TypeConverters(PhotoTypeConverter::class)

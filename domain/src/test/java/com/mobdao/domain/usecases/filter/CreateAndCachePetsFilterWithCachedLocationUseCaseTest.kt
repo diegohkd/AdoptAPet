@@ -4,7 +4,8 @@ import com.mobdao.adoptapet.common.exceptions.LocationNotFoundException
 import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
-import com.mobdao.adoptapet.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.adoptapet.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
 import io.mockk.coEvery
 import io.mockk.justRun
@@ -15,7 +16,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class CreateAndCachePetsFilterWithCachedLocationUseCaseTest {
-    private val address: Address = AddressEntityMockFactory.create()
+    private val address: AddressEntity = AddressEntityMockFactory.create()
 
     private val geoLocationRepository: GeoLocationRepository =
         mockk {
@@ -50,11 +51,7 @@ class CreateAndCachePetsFilterWithCachedLocationUseCaseTest {
 
             // then
             verify {
-                searchFilterRepository.saveSearchFilter(
-                    com.mobdao.adoptapet.domain.internal.SearchFilterEntity(
-                        address = address,
-                    ),
-                )
+                searchFilterRepository.saveSearchFilter(SearchFilterEntity(address = address))
             }
         }
 }

@@ -1,9 +1,9 @@
 package com.mobdao.data.repositories
 
 import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
-import com.mobdao.adoptapet.domain.entities.Address
-import com.mobdao.adoptapet.domain.entities.Pet
-import com.mobdao.adoptapet.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.PetEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.remote.AnimalRemoteDataSource
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
@@ -19,9 +19,9 @@ class PetsRepositoryImpl
     ) : PetsRepository {
         override suspend fun getPets(
             pageNumber: Int,
-            searchFilter: SearchFilter,
-        ): List<Pet> {
-            val pets: List<Pet> =
+            searchFilter: SearchFilterEntity,
+        ): List<PetEntity> {
+            val pets: List<PetEntity> =
                 animalRemoteDataSource.getPets(
                     pageNumber = pageNumber,
                     locationCoordinates = searchFilter.address.toLocationCoordinates(),
@@ -31,13 +31,13 @@ class PetsRepositoryImpl
             return pets
         }
 
-        override suspend fun getCachedPetById(petId: String): Pet? = animalLocalDataSource.getPetById(petId = petId)
+        override suspend fun getCachedPetById(petId: String): PetEntity? = animalLocalDataSource.getPetById(petId = petId)
 
-        private suspend fun saveToDatabase(pets: List<Pet>) {
+        private suspend fun saveToDatabase(pets: List<PetEntity>) {
             animalLocalDataSource.savePets(pets)
         }
 
-        private fun Address.toLocationCoordinates(): GeoCoordinates =
+        private fun AddressEntity.toLocationCoordinates(): GeoCoordinates =
             GeoCoordinates(
                 latitude = latitude,
                 longitude = longitude,

@@ -5,24 +5,24 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "animal")
-internal data class Animal(
+internal data class AnimalDbModel(
     @PrimaryKey
     val id: String,
-    val type: AnimalType,
+    val type: AnimalTypeDbModel,
     val name: String,
     @Embedded
-    val breeds: Breeds,
+    val breeds: BreedsDbModel,
     val age: String,
     val size: String,
     val gender: String,
     val description: String,
     val distance: Float?,
-    val photos: List<Photo>,
+    val photos: List<PhotoDbModel>,
     @Embedded
-    val contact: Contact?,
+    val contact: ContactDbModel?,
 )
 
-internal enum class AnimalType(
+internal enum class AnimalTypeDbModel(
     val rawValue: String,
 ) {
     DOG(rawValue = "Dog"),
@@ -35,19 +35,19 @@ internal enum class AnimalType(
     BARNYARD(rawValue = "Barnyard"),
 }
 
-internal data class Photo(
+internal data class PhotoDbModel(
     val smallUrl: String,
     val mediumUrl: String,
     val largeUrl: String,
     val fullUrl: String,
 )
 
-internal data class Breeds(
+internal data class BreedsDbModel(
     val primaryBreed: String?,
     val secondaryBreed: String?,
 )
 
-data class Contact(
+data class ContactDbModel(
     val email: String,
     val phone: String,
 )

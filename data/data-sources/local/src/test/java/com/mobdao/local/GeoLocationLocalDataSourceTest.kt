@@ -1,9 +1,9 @@
 package com.mobdao.local
 
-import com.mobdao.local.internal.common.DomainEntityAddress
+import com.mobdao.adoptapet.domain.entities.AddressEntity
 import com.mobdao.local.internal.common.mappers.EntityMapper
 import com.mobdao.local.internal.database.daos.AddressDao
-import com.mobdao.local.internal.database.entities.Address
+import com.mobdao.local.internal.database.entities.AddressDbModel
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerifyOrder
@@ -14,9 +14,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GeoLocationLocalDataSourceTest {
-    private val address1: DomainEntityAddress = mockk()
-    private val dbAddress1: Address = mockk()
-    private val dbAddress2: Address = mockk()
+    private val address1: AddressEntity = mockk()
+    private val dbAddress1: AddressDbModel = mockk()
+    private val dbAddress2: AddressDbModel = mockk()
 
     private val addressDao: AddressDao =
         mockk {
@@ -26,8 +26,8 @@ class GeoLocationLocalDataSourceTest {
         }
     private val entityMapper: EntityMapper =
         mockk {
-            every { toDbEntity(address1) } returns dbAddress1
-            every { toDomainEntity(dbAddress1) } returns address1
+            every { this@mockk.toDbModel(address1) } returns dbAddress1
+            every { toEntity(dbAddress1) } returns address1
         }
 
     private val tested = GeoLocationLocalDataSource(addressDao, entityMapper)
@@ -49,7 +49,7 @@ class GeoLocationLocalDataSourceTest {
     fun `when get current address then current address is returned`() =
         runTest {
             // when
-            val result: DomainEntityAddress? = tested.getCurrentAddress()
+            val result: AddressEntity? = tested.getCurrentAddress()
 
             // then
             assertEquals(result, address1)

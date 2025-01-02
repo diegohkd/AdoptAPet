@@ -4,8 +4,8 @@ import android.location.Location
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.mobdao.adoptapet.common.config.AppConfig
 import com.mobdao.adoptapet.common.config.GeoapifyConfig
-import com.mobdao.adoptapet.domain.entities.Address
-import com.mobdao.adoptapet.domain.entities.GeoCoordinates
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.GeoCoordinatesEntity
 import com.mobdao.remote.internal.responses.GeocodeResponse
 import com.mobdao.remote.internal.services.GeoapifyService
 import com.mobdao.remote.internal.utils.mappers.EntityMapper
@@ -28,8 +28,8 @@ class GeoLocationRemoteDataSourceTest {
             every { apiKey } returns "apiKey"
         }
     private val geocodeResponse: GeocodeResponse = mockk()
-    private val address1: Address = mockk()
-    private val address2: Address = mockk()
+    private val address1: AddressEntity = mockk()
+    private val address2: AddressEntity = mockk()
     private val addresses = listOf(address1, address2)
 
     private val fusedLocationClient: FusedLocationProviderClientWrapper =
@@ -75,12 +75,12 @@ class GeoLocationRemoteDataSourceTest {
     fun `when get current location coordinates then current location coordinates is returned`() =
         runTest {
             // when
-            val result: GeoCoordinates = tested.getCurrentLocationCoordinates()
+            val result: GeoCoordinatesEntity = tested.getCurrentLocationCoordinates()
 
             // then
             assertEquals(
                 result,
-                GeoCoordinates(
+                GeoCoordinatesEntity(
                     latitude = -123.0,
                     longitude = 345.0,
                 ),
@@ -91,10 +91,10 @@ class GeoLocationRemoteDataSourceTest {
     fun `given geo coordinates when get location address then reverse geocode is applied and matching addresses are returned`() =
         runTest {
             // given
-            val geoCoordinates = GeoCoordinates(latitude = -123.0, longitude = 456.0)
+            val geoCoordinates = GeoCoordinatesEntity(latitude = -123.0, longitude = 456.0)
 
             // when
-            val result: List<Address> = tested.getLocationAddress(geoCoordinates = geoCoordinates)
+            val result: List<AddressEntity> = tested.getLocationAddress(geoCoordinates = geoCoordinates)
 
             // then
             assertEquals(
@@ -107,7 +107,7 @@ class GeoLocationRemoteDataSourceTest {
     fun `given location query when get autocomplete address then autocomplete options are fetched and matching addresses are returned`() =
         runTest {
             // when
-            val result: List<Address> = tested.autocompleteLocation(location = "location")
+            val result: List<AddressEntity> = tested.autocompleteLocation(location = "location")
 
             // then
             assertEquals(

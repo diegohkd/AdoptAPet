@@ -1,6 +1,6 @@
 package com.mobdao.remote
 
-import com.mobdao.adoptapet.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.PetEntity
 import com.mobdao.remote.internal.services.PetFinderService
 import com.mobdao.remote.internal.utils.mappers.EntityMapper
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class AnimalRemoteDataSource
             pageNumber: Int,
             locationCoordinates: GeoCoordinates?,
             animalType: String?,
-        ): List<Pet> {
+        ): List<PetEntity> {
             val location =
                 locationCoordinates?.let {
                     "${it.latitude},${it.longitude}"

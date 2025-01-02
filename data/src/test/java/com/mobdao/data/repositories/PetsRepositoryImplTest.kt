@@ -2,8 +2,8 @@ package com.mobdao.data.repositories
 
 import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.SearchFilterEntityMockFactory
-import com.mobdao.adoptapet.domain.entities.Pet
-import com.mobdao.adoptapet.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.PetEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.remote.AnimalRemoteDataSource
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
@@ -22,13 +22,13 @@ class PetsRepositoryImplTest {
             latitude = 123.0,
             longitude = 123.0,
         )
-    private val searchFilter: SearchFilter =
+    private val searchFilter: SearchFilterEntity =
         SearchFilterEntityMockFactory.create(
             address = address,
             petType = "petType",
         )
-    private val pet1: Pet = mockk()
-    private val pet2: Pet = mockk()
+    private val pet1: PetEntity = mockk()
+    private val pet2: PetEntity = mockk()
     private val pets = listOf(pet1, pet2)
 
     private val animalRemoteDataSource: AnimalRemoteDataSource =
@@ -74,7 +74,7 @@ class PetsRepositoryImplTest {
     fun `given search filter when get pets then pets are returned`() =
         runTest {
             // given / when
-            val result: List<Pet> =
+            val result: List<PetEntity> =
                 tested.getPets(
                     pageNumber = 1,
                     searchFilter = searchFilter,
@@ -91,7 +91,7 @@ class PetsRepositoryImplTest {
             coEvery { animalLocalDataSource.getPetById("unknown-id") } returns null
 
             // when
-            val result: Pet? = tested.getCachedPetById(petId = "unknown-id")
+            val result: PetEntity? = tested.getCachedPetById(petId = "unknown-id")
 
             // then
             assertNull(result)
@@ -101,7 +101,7 @@ class PetsRepositoryImplTest {
     fun `given known Pet ID when get Pet by ID then Pet with same ID is returned`() =
         runTest {
             // given / when
-            val result: Pet? = tested.getCachedPetById(petId = "id-1")
+            val result: PetEntity? = tested.getCachedPetById(petId = "id-1")
 
             // then
             assertEquals(result, pet1)
