@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mobdao.common"
+    namespace = "com.mobdao.adoptapet.common"
 }
 
 dependencies {

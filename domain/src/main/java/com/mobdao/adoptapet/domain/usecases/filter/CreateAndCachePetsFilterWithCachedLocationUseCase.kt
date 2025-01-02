@@ -1,10 +1,10 @@
 package com.mobdao.adoptapet.domain.usecases.filter
 
+import com.mobdao.adoptapet.common.exceptions.LocationNotFoundException
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.adoptapet.domain.entities.Address
 import com.mobdao.adoptapet.domain.internal.SearchFilterEntity
-import com.mobdao.common.exceptions.LocationNotFoundException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

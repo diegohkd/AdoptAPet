@@ -1,10 +1,10 @@
 package com.mobdao.adoptapet.domain.usecases.location
 
+import com.mobdao.adoptapet.common.exceptions.CurrentLocationNotFoundException
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.internal.AddressEntity
 import com.mobdao.adoptapet.domain.internal.mappers.AddressMapper
 import com.mobdao.adoptapet.domain.models.Address
-import com.mobdao.common.exceptions.CurrentLocationNotFoundException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

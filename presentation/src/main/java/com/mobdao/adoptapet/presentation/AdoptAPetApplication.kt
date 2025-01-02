@@ -1,8 +1,8 @@
 package com.mobdao.adoptapet.presentation
 
 import android.app.Application
+import com.mobdao.adoptapet.common.kotlin.catchAndLogException
 import com.mobdao.adoptapet.domain.usecases.InitializeAppOnAppCreatedUseCase
-import com.mobdao.common.kotlin.catchAndLogException
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel

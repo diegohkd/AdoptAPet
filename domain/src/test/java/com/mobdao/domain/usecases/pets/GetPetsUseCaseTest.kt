@@ -1,5 +1,9 @@
 package com.mobdao.domain.usecases.pets
 
+import com.mobdao.adoptapet.common.testutils.domain.PetMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.entities.PetEntityMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.entities.SearchFilterEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
 import com.mobdao.adoptapet.domain.internal.PetEntity
 import com.mobdao.adoptapet.domain.internal.SearchFilterEntity
@@ -8,10 +12,6 @@ import com.mobdao.adoptapet.domain.internal.mappers.SearchFilterMapper
 import com.mobdao.adoptapet.domain.models.Pet
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.pets.GetPetsUseCase
-import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.entities.PetEntityMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.entities.SearchFilterEntityMockFactory
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

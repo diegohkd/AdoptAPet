@@ -1,11 +1,11 @@
 package com.mobdao.data.di
 
+import com.mobdao.adoptapet.common.config.AppConfig
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.adoptapet.domain.dataapi.services.LogService
 import com.mobdao.adoptapet.domain.dataapi.services.OnboardingService
-import com.mobdao.common.config.AppConfig
 import com.mobdao.data.repositories.GeoLocationRepositoryImpl
 import com.mobdao.data.repositories.PetsRepositoryImpl
 import com.mobdao.data.repositories.SearchFilterRepositoryImpl

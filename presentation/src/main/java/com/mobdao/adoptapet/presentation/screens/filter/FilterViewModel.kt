@@ -2,6 +2,7 @@ package com.mobdao.adoptapet.presentation.screens.filter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mobdao.adoptapet.common.kotlin.catchAndLogException
 import com.mobdao.adoptapet.domain.models.Address
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.filter.GetSearchFilterUseCase
@@ -16,7 +17,6 @@ import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeCl
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeSelected
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeState
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypesState
-import com.mobdao.common.kotlin.catchAndLogException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

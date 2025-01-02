@@ -1,5 +1,8 @@
 package com.mobdao.adoptapet.presentation.screens.filter
 
+import com.mobdao.adoptapet.common.testutils.MainDispatcherRule
+import com.mobdao.adoptapet.common.testutils.domain.AddressMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
 import com.mobdao.adoptapet.domain.models.Address
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.filter.GetSearchFilterUseCase
@@ -9,9 +12,6 @@ import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.ApplyClic
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.FailedToGetAddress
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeSelected
-import com.mobdao.common.testutils.MainDispatcherRule
-import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

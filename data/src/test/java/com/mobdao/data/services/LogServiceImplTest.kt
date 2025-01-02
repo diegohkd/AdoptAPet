@@ -1,6 +1,6 @@
 package com.mobdao.data.services
 
-import com.mobdao.common.config.AppConfig
+import com.mobdao.adoptapet.common.config.AppConfig
 import com.mobdao.data.utils.wrappers.TimberWrapper
 import io.mockk.every
 import io.mockk.justRun

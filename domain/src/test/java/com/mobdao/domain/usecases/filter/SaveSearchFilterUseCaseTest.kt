@@ -1,5 +1,8 @@
 package com.mobdao.domain.usecases.filter
 
+import com.mobdao.adoptapet.common.testutils.domain.AddressMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.adoptapet.domain.internal.AddressEntity
@@ -9,9 +12,6 @@ import com.mobdao.adoptapet.domain.internal.mappers.SearchFilterMapper
 import com.mobdao.adoptapet.domain.models.Address
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.filter.SaveSearchFilterUseCase
-import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every

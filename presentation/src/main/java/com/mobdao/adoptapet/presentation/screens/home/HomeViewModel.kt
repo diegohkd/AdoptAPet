@@ -7,6 +7,7 @@ import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.NotLoading
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.mobdao.adoptapet.common.kotlin.catchAndLogException
 import com.mobdao.adoptapet.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
 import com.mobdao.adoptapet.domain.usecases.filter.ObserveSearchFilterUseCase
 import com.mobdao.adoptapet.presentation.common.Event
@@ -16,7 +17,6 @@ import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction.PetClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.presentation.screens.home.petspaging.PetsPager
-import com.mobdao.common.kotlin.catchAndLogException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

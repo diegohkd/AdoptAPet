@@ -1,6 +1,11 @@
 package com.mobdao.adoptapet.presentation.screens.petdetails
 
 import androidx.lifecycle.SavedStateHandle
+import com.mobdao.adoptapet.common.testutils.MainDispatcherRule
+import com.mobdao.adoptapet.common.testutils.domain.BreedsMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.ContactMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.PetMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.PhotoMockFactory
 import com.mobdao.adoptapet.domain.models.Pet
 import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
 import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_ID_ARG
@@ -8,11 +13,6 @@ import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.D
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetCardState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
-import com.mobdao.common.testutils.MainDispatcherRule
-import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.ContactMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

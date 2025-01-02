@@ -1,6 +1,9 @@
 package com.mobdao.adoptapet.presentation.screens.home
 
 import androidx.paging.LoadState.Error
+import com.mobdao.adoptapet.common.testutils.MainDispatcherRule
+import com.mobdao.adoptapet.common.testutils.domain.AddressMockFactory
+import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
 import com.mobdao.adoptapet.domain.models.AnimalType
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
@@ -9,9 +12,6 @@ import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction.FilterClicke
 import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction.PetClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.presentation.screens.home.petspaging.PetsPager
-import com.mobdao.common.testutils.MainDispatcherRule
-import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
-import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk

@@ -1,6 +1,6 @@
 package com.mobdao.remote.internal.utils.factories
 
-import com.mobdao.common.config.AppConfig
+import com.mobdao.adoptapet.common.config.AppConfig
 import com.mobdao.remote.internal.utils.adapters.AnimalTypeAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

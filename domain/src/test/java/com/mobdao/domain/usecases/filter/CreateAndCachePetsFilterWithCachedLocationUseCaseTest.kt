@@ -1,11 +1,11 @@
 package com.mobdao.domain.usecases.filter
 
+import com.mobdao.adoptapet.common.exceptions.LocationNotFoundException
+import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.adoptapet.domain.entities.Address
 import com.mobdao.adoptapet.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
-import com.mobdao.common.exceptions.LocationNotFoundException
-import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
 import io.mockk.coEvery
 import io.mockk.justRun
 import io.mockk.mockk
