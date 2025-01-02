@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mobdao.dataapi"
+    namespace = "com.mobdao.adoptapet.dataapi"
 }
 
 dependencies {

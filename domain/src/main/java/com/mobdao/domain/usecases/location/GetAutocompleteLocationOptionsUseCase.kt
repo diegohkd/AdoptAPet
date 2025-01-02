@@ -1,6 +1,6 @@
 package com.mobdao.domain.usecases.location
 
-import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
+import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.domain.internal.mappers.AddressMapper
 import com.mobdao.domain.models.Address
 import kotlinx.coroutines.flow.Flow

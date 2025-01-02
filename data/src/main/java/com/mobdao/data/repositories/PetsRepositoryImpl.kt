@@ -1,9 +1,9 @@
 package com.mobdao.data.repositories
 
+import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
 import com.mobdao.adoptapet.domain.entities.Address
 import com.mobdao.adoptapet.domain.entities.Pet
 import com.mobdao.adoptapet.domain.entities.SearchFilter
-import com.mobdao.domain.dataapi.repositories.PetsRepository
 import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.remote.AnimalRemoteDataSource
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates

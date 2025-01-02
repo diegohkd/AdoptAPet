@@ -1,4 +1,4 @@
-package com.mobdao.domain.dataapi.repositories
+package com.mobdao.adoptapet.domain.dataapi.repositories
 
 import com.mobdao.adoptapet.domain.entities.Address
 

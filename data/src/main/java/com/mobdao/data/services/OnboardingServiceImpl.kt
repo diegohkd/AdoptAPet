@@ -1,6 +1,6 @@
 package com.mobdao.data.services
 
-import com.mobdao.domain.dataapi.services.OnboardingService
+import com.mobdao.adoptapet.domain.dataapi.services.OnboardingService
 import com.mobdao.local.OnboardingLocalDataSource
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,6 +1,6 @@
 package com.mobdao.domain.usecases
 
-import com.mobdao.domain.dataapi.services.LogService
+import com.mobdao.adoptapet.domain.dataapi.services.LogService
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify

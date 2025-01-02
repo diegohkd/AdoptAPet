@@ -1,10 +1,10 @@
 package com.mobdao.domain.usecases.filter
 
+import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
+import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.adoptapet.domain.entities.Address
 import com.mobdao.common.exceptions.LocationNotFoundException
 import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
-import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
-import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
 import com.mobdao.domain.internal.SearchFilterEntity
 import io.mockk.coEvery
 import io.mockk.justRun

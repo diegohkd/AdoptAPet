@@ -1,5 +1,10 @@
 package com.mobdao.data.di
 
+import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
+import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
+import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
+import com.mobdao.adoptapet.domain.dataapi.services.LogService
+import com.mobdao.adoptapet.domain.dataapi.services.OnboardingService
 import com.mobdao.common.config.AppConfig
 import com.mobdao.data.repositories.GeoLocationRepositoryImpl
 import com.mobdao.data.repositories.PetsRepositoryImpl
@@ -8,11 +13,6 @@ import com.mobdao.data.services.LogServiceImpl
 import com.mobdao.data.services.OnboardingServiceImpl
 import com.mobdao.data.utils.AccessTokenManagerImpl
 import com.mobdao.data.utils.factories.AppConfigFactory
-import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
-import com.mobdao.domain.dataapi.repositories.PetsRepository
-import com.mobdao.domain.dataapi.repositories.SearchFilterRepository
-import com.mobdao.domain.dataapi.services.LogService
-import com.mobdao.domain.dataapi.services.OnboardingService
 import com.mobdao.remote.AccessTokenManager
 import dagger.Binds
 import dagger.Module
