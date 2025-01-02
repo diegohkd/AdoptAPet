@@ -1,4 +1,4 @@
-package com.mobdao.domain.entities
+package com.mobdao.adoptapet.domain.entities
 
 // TODO rename to PetsFilter
 data class SearchFilter(

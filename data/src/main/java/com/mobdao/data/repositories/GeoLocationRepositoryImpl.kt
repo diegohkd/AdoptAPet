@@ -1,8 +1,8 @@
 package com.mobdao.data.repositories
 
+import com.mobdao.adoptapet.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.GeoCoordinates
 import com.mobdao.domain.dataapi.repositories.GeoLocationRepository
-import com.mobdao.domain.entities.Address
-import com.mobdao.domain.entities.GeoCoordinates
 import com.mobdao.local.GeoLocationLocalDataSource
 import com.mobdao.remote.GeoLocationRemoteDataSource
 import javax.inject.Inject

@@ -1,9 +1,9 @@
 package com.mobdao.domain.internal
 
-import com.mobdao.domain.entities.Address
-import com.mobdao.domain.entities.AnimalType
-import com.mobdao.domain.entities.Pet
-import com.mobdao.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.AnimalType
+import com.mobdao.adoptapet.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.SearchFilter
 
 internal typealias PetEntity = Pet
 internal typealias AnimalTypeEntity = AnimalType

@@ -1,6 +1,6 @@
 package com.mobdao.common.testutils.mockfactories.domain.entities
 
-import com.mobdao.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.Address
 import io.mockk.every
 import io.mockk.mockk
 

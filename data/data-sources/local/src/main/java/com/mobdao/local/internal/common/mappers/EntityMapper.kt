@@ -1,6 +1,6 @@
 package com.mobdao.local.internal.common.mappers
 
-import com.mobdao.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.Pet
 import com.mobdao.local.internal.common.DomainEntityAddress
 import com.mobdao.local.internal.common.DomainEntityAnimalType
 import com.mobdao.local.internal.common.DomainEntityBreeds

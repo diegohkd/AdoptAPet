@@ -1,6 +1,6 @@
 package com.mobdao.remote
 
-import com.mobdao.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.Pet
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
 import com.mobdao.remote.internal.responses.Animal
 import com.mobdao.remote.internal.responses.AnimalsResponse

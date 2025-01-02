@@ -1,4 +1,4 @@
-package com.mobdao.domain.entities
+package com.mobdao.adoptapet.domain.entities
 
 data class Pet(
     val id: String,

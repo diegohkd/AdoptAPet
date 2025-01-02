@@ -1,8 +1,9 @@
 package com.mobdao.remote.internal.utils.mappers
 
-import com.mobdao.domain.entities.Address
-import com.mobdao.domain.entities.Pet
-import com.mobdao.domain.entities.Photo
+import com.mobdao.adoptapet.domain.entities.Address
+import com.mobdao.adoptapet.domain.entities.Breeds
+import com.mobdao.adoptapet.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.Photo
 import com.mobdao.remote.internal.responses.Animal
 import com.mobdao.remote.internal.responses.AnimalType.BARNYARD
 import com.mobdao.remote.internal.responses.AnimalType.BIRD
@@ -40,7 +41,7 @@ internal class EntityMapper
                             },
                         name = name,
                         breeds =
-                            com.mobdao.domain.entities.Breeds(
+                            Breeds(
                                 primary = breeds.primary,
                                 secondary = breeds.secondary,
                             ),
