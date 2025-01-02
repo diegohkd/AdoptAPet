@@ -193,45 +193,47 @@ private fun PetType(
 @Preview
 private fun PetTypePreview() {
     AdoptAPetTheme {
-        PetType(
-            PetTypesState(
-                listOf(
-                    PetTypeState(
-                        name = "Dog",
-                        isSelected = false,
+        UiContent(
+            FilterUiState(
+                petTypes =
+                    PetTypesState(
+                        listOf(
+                            PetTypeState(
+                                name = "Dog",
+                                isSelected = false,
+                            ),
+                            PetTypeState(
+                                name = "Cat",
+                                isSelected = false,
+                            ),
+                            PetTypeState(
+                                name = "Rabbit",
+                                isSelected = false,
+                            ),
+                            PetTypeState(
+                                name = "Bird",
+                                isSelected = false,
+                            ),
+                            PetTypeState(
+                                name = "Small & Furry",
+                                isSelected = false,
+                            ),
+                            PetTypeState(
+                                name = "Horse",
+                                isSelected = false,
+                            ),
+                            PetTypeState(
+                                name = "Barnyard",
+                                isSelected = false,
+                            ),
+                            PetTypeState(
+                                name = "Scales, Fins & Other",
+                                isSelected = false,
+                            ),
+                        ),
+                        longestTypeNamePlaceholder = "Scales, Fins & Other",
                     ),
-                    PetTypeState(
-                        name = "Cat",
-                        isSelected = false,
-                    ),
-                    PetTypeState(
-                        name = "Rabbit",
-                        isSelected = false,
-                    ),
-                    PetTypeState(
-                        name = "Bird",
-                        isSelected = false,
-                    ),
-                    PetTypeState(
-                        name = "Small & Furry",
-                        isSelected = false,
-                    ),
-                    PetTypeState(
-                        name = "Horse",
-                        isSelected = false,
-                    ),
-                    PetTypeState(
-                        name = "Barnyard",
-                        isSelected = false,
-                    ),
-                    PetTypeState(
-                        name = "Scales, Fins & Other",
-                        isSelected = false,
-                    ),
-                ),
-                longestTypeNamePlaceholder = "Scales, Fins & Other",
             ),
-            {},
         )
     }
 }

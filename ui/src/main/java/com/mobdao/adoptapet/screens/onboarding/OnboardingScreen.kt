@@ -15,12 +15,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobdao.adoptapet.R
+import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBar
 import com.mobdao.adoptapet.screens.onboarding.OnboardingUiAction.AddressSelected
@@ -108,5 +110,15 @@ private fun UiContent(
 
     if (uiState.genericErrorDialogIsVisible) {
         GenericErrorDialog(onDismissGenericErrorDialog = { onUiAction(DismissGenericErrorDialog) })
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UiContentPreview() {
+    AdoptAPetTheme {
+        UiContent(
+            uiState = OnboardingUiState(),
+        )
     }
 }
