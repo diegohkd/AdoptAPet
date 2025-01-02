@@ -21,8 +21,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +33,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mobdao.adoptapet.R
 import com.mobdao.adoptapet.common.Event
+import com.mobdao.adoptapet.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.AutocompleteAddressSelected
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.ClearSearchClicked
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUiAction.CurrentLocationClicked
@@ -41,13 +44,39 @@ import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarUi
 import com.mobdao.adoptapet.common.widgets.locationsearchbar.LocationSearchBarViewModel.SelectedAddressHolder
 import com.mobdao.domain.models.Address
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationSearchBar(
     modifier: Modifier = Modifier,
     initialAddress: String = "",
+    previewUiState: LocationSearchBarUiState = LocationSearchBarUiState(),
+    previewSearchQuery: String = "",
+    onAddressSelected: (Address?) -> Unit = {},
+    onError: (Throwable?) -> Unit = {}, // TODO is it ok to pass throwable?
+) {
+    if (LocalInspectionMode.current) {
+        UiContent(
+            modifier = modifier,
+            uiState = previewUiState,
+            searchQuery = previewSearchQuery,
+            onUiAction = {},
+        )
+    } else {
+        LocationSearchBar(
+            modifier = modifier,
+            initialAddress = initialAddress,
+            onAddressSelected = onAddressSelected,
+            onError = onError,
+        )
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun LocationSearchBar(
+    modifier: Modifier = Modifier,
+    initialAddress: String = "",
     onAddressSelected: (Address?) -> Unit,
-    onError: (Throwable?) -> Unit, // TODO is it ok to pass throwable?
+    onError: (Throwable?) -> Unit,
     viewModel: LocationSearchBarViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(initialAddress) {
@@ -154,5 +183,13 @@ private fun UiContent(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun UiContentPreview() {
+    AdoptAPetTheme {
+        LocationSearchBar()
     }
 }
