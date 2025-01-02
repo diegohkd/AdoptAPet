@@ -1,4 +1,4 @@
-package com.mobdao.domain.usecases.onboarding
+package com.mobdao.adoptapet.domain.usecases.onboarding
 
 import com.mobdao.adoptapet.domain.dataapi.services.OnboardingService
 import kotlinx.coroutines.flow.Flow

@@ -2,6 +2,8 @@ package com.mobdao.adoptapet.presentation.screens.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mobdao.adoptapet.domain.models.Address
+import com.mobdao.adoptapet.domain.usecases.onboarding.CompleteOnboardingUseCase
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingNavAction.Completed
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.AddressSelected
@@ -9,8 +11,6 @@ import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.D
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.FailedToGetAddress
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.NextClicked
 import com.mobdao.common.kotlin.catchAndLogException
-import com.mobdao.domain.models.Address
-import com.mobdao.domain.usecases.onboarding.CompleteOnboardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

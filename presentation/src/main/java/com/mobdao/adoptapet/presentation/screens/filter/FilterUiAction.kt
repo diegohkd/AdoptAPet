@@ -1,7 +1,7 @@
 package com.mobdao.adoptapet.presentation.screens.filter
 
+import com.mobdao.adoptapet.domain.models.Address
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeState
-import com.mobdao.domain.models.Address
 
 sealed interface FilterUiAction {
     data class AddressSelected(

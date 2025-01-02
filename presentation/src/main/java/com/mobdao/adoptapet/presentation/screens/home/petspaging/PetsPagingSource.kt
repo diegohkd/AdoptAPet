@@ -2,11 +2,11 @@ package com.mobdao.adoptapet.presentation.screens.home.petspaging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.mobdao.adoptapet.domain.models.Pet
+import com.mobdao.adoptapet.domain.models.SearchFilter
+import com.mobdao.adoptapet.domain.usecases.pets.GetPetsUseCase
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.BreedsState
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
-import com.mobdao.domain.models.Pet
-import com.mobdao.domain.models.SearchFilter
-import com.mobdao.domain.usecases.pets.GetPetsUseCase
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import javax.inject.Inject

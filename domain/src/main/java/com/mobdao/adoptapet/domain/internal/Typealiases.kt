@@ -1,4 +1,4 @@
-package com.mobdao.domain.internal
+package com.mobdao.adoptapet.domain.internal
 
 import com.mobdao.adoptapet.domain.entities.Address
 import com.mobdao.adoptapet.domain.entities.AnimalType

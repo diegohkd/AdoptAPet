@@ -2,6 +2,6 @@
 
 package com.mobdao.adoptapet.presentation.utils
 
-import com.mobdao.domain.models.Pet
+import com.mobdao.adoptapet.domain.models.Pet
 
 typealias PetDomain = Pet

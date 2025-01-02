@@ -1,5 +1,7 @@
 package com.mobdao.adoptapet.presentation.navigation
 
+import com.mobdao.adoptapet.domain.models.AnimalType
+import com.mobdao.adoptapet.domain.usecases.onboarding.HasCompletedOnboardingUseCase
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.FilterScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingToHomeScreen
@@ -11,8 +13,6 @@ import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingNavAction
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsNavAction
 import com.mobdao.adoptapet.presentation.screens.splash.SplashViewModel
 import com.mobdao.common.testutils.MainDispatcherRule
-import com.mobdao.domain.models.AnimalType
-import com.mobdao.domain.usecases.onboarding.HasCompletedOnboardingUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

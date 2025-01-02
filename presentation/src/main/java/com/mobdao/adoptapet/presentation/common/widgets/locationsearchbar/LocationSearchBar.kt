@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.mobdao.adoptapet.domain.models.Address
 import com.mobdao.adoptapet.presentation.R
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.common.theme.AdoptAPetTheme
@@ -42,7 +43,6 @@ import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.Locati
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.LocationSearchActiveChanged
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.SearchQueryChanged
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarViewModel.SelectedAddressHolder
-import com.mobdao.domain.models.Address
 
 @Composable
 fun LocationSearchBar(

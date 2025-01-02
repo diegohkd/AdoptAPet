@@ -1,6 +1,6 @@
 package com.mobdao.adoptapet.presentation.screens.home
 
-import com.mobdao.domain.models.AnimalType
+import com.mobdao.adoptapet.domain.models.AnimalType
 
 sealed interface HomeNavAction {
     data class PetClicked(

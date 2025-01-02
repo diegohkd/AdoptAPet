@@ -1,8 +1,8 @@
-package com.mobdao.domain.usecases.filter
+package com.mobdao.adoptapet.domain.usecases.filter
 
 import com.mobdao.adoptapet.domain.dataapi.repositories.SearchFilterRepository
-import com.mobdao.domain.internal.mappers.SearchFilterMapper
-import com.mobdao.domain.models.SearchFilter
+import com.mobdao.adoptapet.domain.internal.mappers.SearchFilterMapper
+import com.mobdao.adoptapet.domain.models.SearchFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

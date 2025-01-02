@@ -1,6 +1,8 @@
 package com.mobdao.adoptapet.presentation.screens.petdetails
 
 import androidx.lifecycle.SavedStateHandle
+import com.mobdao.adoptapet.domain.models.Pet
+import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
 import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_ID_ARG
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
@@ -11,8 +13,6 @@ import com.mobdao.common.testutils.mockfactories.domain.BreedsMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.ContactMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PetMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.PhotoMockFactory
-import com.mobdao.domain.models.Pet
-import com.mobdao.domain.usecases.pets.GetCachedPetUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

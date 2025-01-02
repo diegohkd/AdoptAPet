@@ -1,10 +1,10 @@
-package com.mobdao.domain.usecases.pets
+package com.mobdao.adoptapet.domain.usecases.pets
 
 import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
-import com.mobdao.domain.internal.mappers.PetMapper
-import com.mobdao.domain.internal.mappers.SearchFilterMapper
-import com.mobdao.domain.models.Pet
-import com.mobdao.domain.models.SearchFilter
+import com.mobdao.adoptapet.domain.internal.mappers.PetMapper
+import com.mobdao.adoptapet.domain.internal.mappers.SearchFilterMapper
+import com.mobdao.adoptapet.domain.models.Pet
+import com.mobdao.adoptapet.domain.models.SearchFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

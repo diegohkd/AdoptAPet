@@ -2,6 +2,8 @@ package com.mobdao.adoptapet.presentation.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mobdao.adoptapet.domain.models.AnimalType
+import com.mobdao.adoptapet.domain.usecases.onboarding.HasCompletedOnboardingUseCase
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.FilterScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingScreen
@@ -17,8 +19,6 @@ import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingNavAction
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsNavAction
 import com.mobdao.adoptapet.presentation.screens.splash.SplashViewModel
 import com.mobdao.common.kotlin.catchAndLogException
-import com.mobdao.domain.models.AnimalType
-import com.mobdao.domain.usecases.onboarding.HasCompletedOnboardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

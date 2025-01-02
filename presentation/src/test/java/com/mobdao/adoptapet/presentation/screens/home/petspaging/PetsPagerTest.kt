@@ -3,10 +3,10 @@ package com.mobdao.adoptapet.presentation.screens.home.petspaging
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingSource
+import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.presentation.utils.PagerFactory
 import com.mobdao.common.testutils.MainDispatcherRule
-import com.mobdao.domain.models.SearchFilter
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

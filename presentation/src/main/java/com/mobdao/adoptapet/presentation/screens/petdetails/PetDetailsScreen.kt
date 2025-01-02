@@ -32,6 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import com.mobdao.adoptapet.domain.models.AnimalType
+import com.mobdao.adoptapet.domain.models.AnimalType.DOG
 import com.mobdao.adoptapet.presentation.R
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.common.layouts.PetSurface
@@ -44,8 +46,6 @@ import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.Co
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetCardState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
 import com.mobdao.adoptapet.presentation.utils.extensions.toColorSchema
-import com.mobdao.domain.models.AnimalType
-import com.mobdao.domain.models.AnimalType.DOG
 
 @Composable
 fun PetDetailsScreen(

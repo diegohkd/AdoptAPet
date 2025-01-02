@@ -2,11 +2,12 @@ package com.mobdao.domain.usecases.onboarding
 
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.services.OnboardingService
+import com.mobdao.adoptapet.domain.internal.AddressEntity
+import com.mobdao.adoptapet.domain.internal.mappers.AddressMapper
+import com.mobdao.adoptapet.domain.models.Address
+import com.mobdao.adoptapet.domain.usecases.onboarding.CompleteOnboardingUseCase
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.entities.AddressEntityMockFactory
-import com.mobdao.domain.internal.AddressEntity
-import com.mobdao.domain.internal.mappers.AddressMapper
-import com.mobdao.domain.models.Address
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every

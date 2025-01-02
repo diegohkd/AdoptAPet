@@ -1,5 +1,9 @@
 package com.mobdao.adoptapet.presentation.screens.filter
 
+import com.mobdao.adoptapet.domain.models.Address
+import com.mobdao.adoptapet.domain.models.SearchFilter
+import com.mobdao.adoptapet.domain.usecases.filter.GetSearchFilterUseCase
+import com.mobdao.adoptapet.domain.usecases.filter.SaveSearchFilterUseCase
 import com.mobdao.adoptapet.presentation.screens.filter.FilterNavAction.FilterApplied
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.ApplyClicked
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.DismissGenericErrorDialog
@@ -8,10 +12,6 @@ import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeSe
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
 import com.mobdao.common.testutils.mockfactories.domain.SearchFilterMockFactory
-import com.mobdao.domain.models.Address
-import com.mobdao.domain.models.SearchFilter
-import com.mobdao.domain.usecases.filter.GetSearchFilterUseCase
-import com.mobdao.domain.usecases.filter.SaveSearchFilterUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

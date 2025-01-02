@@ -1,10 +1,10 @@
 package com.mobdao.common.testutils.mockfactories.domain
 
-import com.mobdao.domain.models.AnimalType
-import com.mobdao.domain.models.Breeds
-import com.mobdao.domain.models.Contact
-import com.mobdao.domain.models.Pet
-import com.mobdao.domain.models.Photo
+import com.mobdao.adoptapet.domain.models.AnimalType
+import com.mobdao.adoptapet.domain.models.Breeds
+import com.mobdao.adoptapet.domain.models.Contact
+import com.mobdao.adoptapet.domain.models.Pet
+import com.mobdao.adoptapet.domain.models.Photo
 import io.mockk.every
 import io.mockk.mockk
 

@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mobdao.adoptapet.domain.models.Address
+import com.mobdao.adoptapet.domain.usecases.location.GetAutocompleteLocationOptionsUseCase
+import com.mobdao.adoptapet.domain.usecases.location.GetCurrentLocationUseCase
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.AutocompleteAddressSelected
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.ClearSearchClicked
@@ -13,9 +16,6 @@ import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.Locati
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.LocationPermissionStateUpdated
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.LocationSearchActiveChanged
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.SearchQueryChanged
-import com.mobdao.domain.models.Address
-import com.mobdao.domain.usecases.location.GetAutocompleteLocationOptionsUseCase
-import com.mobdao.domain.usecases.location.GetCurrentLocationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job

@@ -1,4 +1,4 @@
-package com.mobdao.domain.usecases
+package com.mobdao.adoptapet.domain.usecases
 
 import com.mobdao.adoptapet.domain.dataapi.services.LogService
 import kotlinx.coroutines.flow.Flow

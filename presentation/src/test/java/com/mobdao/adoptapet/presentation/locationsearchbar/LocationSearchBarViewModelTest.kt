@@ -1,5 +1,8 @@
 package com.mobdao.adoptapet.presentation.locationsearchbar
 
+import com.mobdao.adoptapet.domain.models.Address
+import com.mobdao.adoptapet.domain.usecases.location.GetAutocompleteLocationOptionsUseCase
+import com.mobdao.adoptapet.domain.usecases.location.GetCurrentLocationUseCase
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.AutocompleteAddressSelected
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.ClearSearchClicked
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarUiAction.CurrentLocationClicked
@@ -10,9 +13,6 @@ import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.Locati
 import com.mobdao.adoptapet.presentation.common.widgets.locationsearchbar.LocationSearchBarViewModel
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
-import com.mobdao.domain.models.Address
-import com.mobdao.domain.usecases.location.GetAutocompleteLocationOptionsUseCase
-import com.mobdao.domain.usecases.location.GetCurrentLocationUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

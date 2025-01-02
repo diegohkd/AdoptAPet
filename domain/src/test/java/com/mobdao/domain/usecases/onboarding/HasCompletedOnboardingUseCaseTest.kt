@@ -1,6 +1,7 @@
 package com.mobdao.domain.usecases.onboarding
 
 import com.mobdao.adoptapet.domain.dataapi.services.OnboardingService
+import com.mobdao.adoptapet.domain.usecases.onboarding.HasCompletedOnboardingUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first

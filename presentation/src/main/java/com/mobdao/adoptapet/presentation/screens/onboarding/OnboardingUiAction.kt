@@ -1,6 +1,6 @@
 package com.mobdao.adoptapet.presentation.screens.onboarding
 
-import com.mobdao.domain.models.Address
+import com.mobdao.adoptapet.domain.models.Address
 
 sealed interface OnboardingUiAction {
     data class AddressSelected(

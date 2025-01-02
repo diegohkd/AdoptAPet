@@ -3,6 +3,7 @@ package com.mobdao.adoptapet.presentation.screens.petdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_ID_ARG
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsNavAction.BackButtonClicked
@@ -10,7 +11,6 @@ import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.D
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
 import com.mobdao.common.kotlin.catchAndLogException
-import com.mobdao.domain.usecases.pets.GetCachedPetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

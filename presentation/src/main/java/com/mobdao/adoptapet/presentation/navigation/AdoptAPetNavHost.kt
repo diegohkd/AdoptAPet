@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.mobdao.adoptapet.domain.models.AnimalType
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_TYPE_ARG
@@ -23,7 +24,6 @@ import com.mobdao.adoptapet.presentation.screens.home.HomeScreen
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingScreen
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsScreen
 import com.mobdao.adoptapet.presentation.screens.splash.SplashScreen
-import com.mobdao.domain.models.AnimalType
 
 @Composable
 fun AdoptAPetNavHost(

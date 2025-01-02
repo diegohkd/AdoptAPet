@@ -1,19 +1,19 @@
-package com.mobdao.domain.internal.mappers
+package com.mobdao.adoptapet.domain.internal.mappers
 
-import com.mobdao.domain.internal.AnimalTypeEntity
-import com.mobdao.domain.internal.PetEntity
-import com.mobdao.domain.models.AnimalType.BARNYARD
-import com.mobdao.domain.models.AnimalType.BIRD
-import com.mobdao.domain.models.AnimalType.CAT
-import com.mobdao.domain.models.AnimalType.DOG
-import com.mobdao.domain.models.AnimalType.HORSE
-import com.mobdao.domain.models.AnimalType.RABBIT
-import com.mobdao.domain.models.AnimalType.SCALES_FINS_AND_OTHER
-import com.mobdao.domain.models.AnimalType.SMALL_AND_FURRY
-import com.mobdao.domain.models.Breeds
-import com.mobdao.domain.models.Contact
-import com.mobdao.domain.models.Pet
-import com.mobdao.domain.models.Photo
+import com.mobdao.adoptapet.domain.internal.AnimalTypeEntity
+import com.mobdao.adoptapet.domain.internal.PetEntity
+import com.mobdao.adoptapet.domain.models.AnimalType.BARNYARD
+import com.mobdao.adoptapet.domain.models.AnimalType.BIRD
+import com.mobdao.adoptapet.domain.models.AnimalType.CAT
+import com.mobdao.adoptapet.domain.models.AnimalType.DOG
+import com.mobdao.adoptapet.domain.models.AnimalType.HORSE
+import com.mobdao.adoptapet.domain.models.AnimalType.RABBIT
+import com.mobdao.adoptapet.domain.models.AnimalType.SCALES_FINS_AND_OTHER
+import com.mobdao.adoptapet.domain.models.AnimalType.SMALL_AND_FURRY
+import com.mobdao.adoptapet.domain.models.Breeds
+import com.mobdao.adoptapet.domain.models.Contact
+import com.mobdao.adoptapet.domain.models.Pet
+import com.mobdao.adoptapet.domain.models.Photo
 import javax.inject.Inject
 import javax.inject.Singleton
 

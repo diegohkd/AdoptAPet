@@ -1,5 +1,7 @@
 package com.mobdao.adoptapet.presentation.screens.onboarding
 
+import com.mobdao.adoptapet.domain.models.Address
+import com.mobdao.adoptapet.domain.usecases.onboarding.CompleteOnboardingUseCase
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingNavAction.Completed
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.AddressSelected
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.DismissGenericErrorDialog
@@ -7,8 +9,6 @@ import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.F
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingUiAction.NextClicked
 import com.mobdao.common.testutils.MainDispatcherRule
 import com.mobdao.common.testutils.mockfactories.domain.AddressMockFactory
-import com.mobdao.domain.models.Address
-import com.mobdao.domain.usecases.onboarding.CompleteOnboardingUseCase
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals

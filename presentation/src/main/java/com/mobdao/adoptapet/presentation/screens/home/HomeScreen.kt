@@ -46,6 +46,9 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.mobdao.adoptapet.domain.models.AnimalType.CAT
+import com.mobdao.adoptapet.domain.models.AnimalType.DOG
+import com.mobdao.adoptapet.domain.models.AnimalType.RABBIT
 import com.mobdao.adoptapet.presentation.R
 import com.mobdao.adoptapet.presentation.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.presentation.common.theme.color.ColorSchema
@@ -56,9 +59,6 @@ import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.PetClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.BreedsState
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
 import com.mobdao.adoptapet.presentation.utils.extensions.toColorSchema
-import com.mobdao.domain.models.AnimalType.CAT
-import com.mobdao.domain.models.AnimalType.DOG
-import com.mobdao.domain.models.AnimalType.RABBIT
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
