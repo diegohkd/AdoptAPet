@@ -15,6 +15,7 @@ data class HomeUiState(
         val name: String,
         val breeds: BreedsState,
         val thumbnailUrl: String,
+        val distance: Float? = null,
     )
 
     data class BreedsState(

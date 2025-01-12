@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.location.Location
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.mobdao.adoptapet.common.config.AppConfig
-import com.mobdao.adoptapet.domain.entities.Address
-import com.mobdao.adoptapet.domain.entities.GeoCoordinates
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.GeoCoordinatesEntity
 import com.mobdao.remote.internal.services.GeoapifyService
 import com.mobdao.remote.internal.utils.mappers.EntityMapper
 import com.mobdao.remote.internal.utils.wrappers.FusedLocationProviderClientWrapper
@@ -26,15 +26,15 @@ class GeoLocationRemoteDataSource
         private val geoapifyKey: String by lazy { appConfig.geoapifyConfig.apiKey }
 
         @SuppressLint("MissingPermission")
-        suspend fun getCurrentLocationCoordinates(): GeoCoordinates {
+        suspend fun getCurrentLocationCoordinates(): GeoCoordinatesEntity {
             val location: Location = fusedLocationClient.getCurrentLocation(PRIORITY_HIGH_ACCURACY)
-            return GeoCoordinates(
+            return GeoCoordinatesEntity(
                 latitude = location.latitude,
                 longitude = location.longitude,
             )
         }
 
-        suspend fun getLocationAddress(geoCoordinates: GeoCoordinates): List<Address> =
+        suspend fun getLocationAddress(geoCoordinates: GeoCoordinatesEntity): List<AddressEntity> =
             geoapifyService
                 .reverseGeocode(
                     apiKey = geoapifyKey,
@@ -43,7 +43,7 @@ class GeoLocationRemoteDataSource
                     format = REVERSE_GEOCODE_RESPONSE_FORMAT,
                 ).let(entityMapper::toAddresses)
 
-        suspend fun autocompleteLocation(location: String): List<Address> =
+        suspend fun autocompleteLocation(location: String): List<AddressEntity> =
             geoapifyService
                 .autocomplete(
                     apiKey = geoapifyKey,

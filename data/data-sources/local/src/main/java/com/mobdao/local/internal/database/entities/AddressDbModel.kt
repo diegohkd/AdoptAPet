@@ -6,7 +6,7 @@ import androidx.room.Entity
     tableName = "address",
     primaryKeys = ["latitude", "longitude"],
 )
-internal data class Address(
+internal data class AddressDbModel(
     val latitude: Double,
     val longitude: Double,
     val addressLine: String,

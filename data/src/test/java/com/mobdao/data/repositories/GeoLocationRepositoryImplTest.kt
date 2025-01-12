@@ -1,7 +1,7 @@
 package com.mobdao.data.repositories
 
-import com.mobdao.adoptapet.domain.entities.Address
-import com.mobdao.adoptapet.domain.entities.GeoCoordinates
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.GeoCoordinatesEntity
 import com.mobdao.local.GeoLocationLocalDataSource
 import com.mobdao.remote.GeoLocationRemoteDataSource
 import io.mockk.coEvery
@@ -14,9 +14,9 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class GeoLocationRepositoryImplTest {
-    private val currentGeoCoordinates: GeoCoordinates = mockk()
-    private val locationAddress1: Address = mockk()
-    private val locationAddress2: Address = mockk()
+    private val currentGeoCoordinates: GeoCoordinatesEntity = mockk()
+    private val locationAddress1: AddressEntity = mockk()
+    private val locationAddress2: AddressEntity = mockk()
     private val addresses = listOf(locationAddress1, locationAddress2)
 
     private val geoLocationRemoteDataSource: GeoLocationRemoteDataSource =
@@ -44,7 +44,7 @@ class GeoLocationRepositoryImplTest {
             coEvery { geoLocationRemoteDataSource.getLocationAddress(currentGeoCoordinates) } returns emptyList()
 
             // when
-            val result: Address? = tested.getCurrentLocationAddress()
+            val result: AddressEntity? = tested.getCurrentLocationAddress()
 
             // then
             assertNull(result)
@@ -54,7 +54,7 @@ class GeoLocationRepositoryImplTest {
     fun `given current geo coordinates returns non-empty list of reversed geocoding when get current location address then first address found is returned`() =
         runTest {
             // given / when
-            val result: Address? = tested.getCurrentLocationAddress()
+            val result: AddressEntity? = tested.getCurrentLocationAddress()
 
             // then
             assertEquals(result, locationAddress1)
@@ -74,17 +74,17 @@ class GeoLocationRepositoryImplTest {
     fun `given location is empty when autocomplete location then empty list is returned`() =
         runTest {
             // given / when
-            val result: List<Address> = tested.autocompleteLocation(location = "")
+            val result: List<AddressEntity> = tested.autocompleteLocation(location = "")
 
             // then
-            assertEquals(result, emptyList<Address>())
+            assertEquals(result, emptyList<AddressEntity>())
         }
 
     @Test
     fun `given location is not empty when autocomplete location then autocomplete options are returned`() =
         runTest {
             // given / when
-            val result: List<Address> = tested.autocompleteLocation(location = "location")
+            val result: List<AddressEntity> = tested.autocompleteLocation(location = "location")
 
             // then
             assertEquals(result, listOf(locationAddress1, locationAddress2))

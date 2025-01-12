@@ -1,9 +1,9 @@
 package com.mobdao.remote.internal.utils.mappers
 
-import com.mobdao.adoptapet.domain.entities.Address
-import com.mobdao.adoptapet.domain.entities.Breeds
-import com.mobdao.adoptapet.domain.entities.Pet
-import com.mobdao.adoptapet.domain.entities.Photo
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.BreedsEntity
+import com.mobdao.adoptapet.domain.entities.PetEntity
+import com.mobdao.adoptapet.domain.entities.PhotoEntity
 import com.mobdao.remote.internal.responses.Animal
 import com.mobdao.remote.internal.responses.AnimalType.BARNYARD
 import com.mobdao.remote.internal.responses.AnimalType.BIRD
@@ -23,10 +23,10 @@ import javax.inject.Singleton
 internal class EntityMapper
     @Inject
     constructor() {
-        fun toPets(animals: List<Animal>): List<Pet> =
+        fun toPets(animals: List<Animal>): List<PetEntity> =
             animals.map { animal ->
                 with(animal) {
-                    Pet(
+                    PetEntity(
                         id = id,
                         type =
                             when (type) {
@@ -41,7 +41,7 @@ internal class EntityMapper
                             },
                         name = name,
                         breeds =
-                            Breeds(
+                            BreedsEntity(
                                 primary = breeds.primary,
                                 secondary = breeds.secondary,
                             ),
@@ -52,7 +52,7 @@ internal class EntityMapper
                         distance = distance,
                         photos =
                             photos.map { photo ->
-                                Photo(
+                                PhotoEntity(
                                     smallUrl = photo.small,
                                     mediumUrl = photo.medium,
                                     largeUrl = photo.large,
@@ -68,10 +68,10 @@ internal class EntityMapper
                 }
             }
 
-        fun toAddresses(geocodeResponse: GeocodeResponse): List<Address> =
+        fun toAddresses(geocodeResponse: GeocodeResponse): List<AddressEntity> =
             geocodeResponse.results.map { geocodeResult ->
                 with(geocodeResult) {
-                    Address(
+                    AddressEntity(
                         addressLine = formatted,
                         latitude = lat,
                         longitude = lon,

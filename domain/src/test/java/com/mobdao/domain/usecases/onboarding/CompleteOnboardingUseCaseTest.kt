@@ -4,7 +4,7 @@ import com.mobdao.adoptapet.common.testutils.domain.AddressMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.GeoLocationRepository
 import com.mobdao.adoptapet.domain.dataapi.services.OnboardingService
-import com.mobdao.adoptapet.domain.internal.AddressEntity
+import com.mobdao.adoptapet.domain.entities.AddressEntity
 import com.mobdao.adoptapet.domain.internal.mappers.AddressMapper
 import com.mobdao.adoptapet.domain.models.Address
 import com.mobdao.adoptapet.domain.usecases.onboarding.CompleteOnboardingUseCase

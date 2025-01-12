@@ -5,8 +5,8 @@ import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.PetEntityMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.SearchFilterEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
-import com.mobdao.adoptapet.domain.internal.PetEntity
-import com.mobdao.adoptapet.domain.internal.SearchFilterEntity
+import com.mobdao.adoptapet.domain.entities.PetEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.adoptapet.domain.internal.mappers.PetMapper
 import com.mobdao.adoptapet.domain.internal.mappers.SearchFilterMapper
 import com.mobdao.adoptapet.domain.models.Pet

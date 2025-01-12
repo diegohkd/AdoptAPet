@@ -1,7 +1,7 @@
 package com.mobdao.adoptapet.domain.internal.mappers
 
-import com.mobdao.adoptapet.domain.internal.AnimalTypeEntity
-import com.mobdao.adoptapet.domain.internal.PetEntity
+import com.mobdao.adoptapet.domain.entities.AnimalTypeEntity
+import com.mobdao.adoptapet.domain.entities.PetEntity
 import com.mobdao.adoptapet.domain.models.AnimalType.BARNYARD
 import com.mobdao.adoptapet.domain.models.AnimalType.BIRD
 import com.mobdao.adoptapet.domain.models.AnimalType.CAT

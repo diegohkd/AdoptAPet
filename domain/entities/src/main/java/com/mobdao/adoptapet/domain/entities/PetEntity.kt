@@ -1,20 +1,20 @@
 package com.mobdao.adoptapet.domain.entities
 
-data class Pet(
+data class PetEntity(
     val id: String,
-    val type: AnimalType,
+    val type: AnimalTypeEntity,
     val name: String,
-    val breeds: Breeds,
+    val breeds: BreedsEntity,
     val age: String,
     val size: String,
     val gender: String,
     val description: String,
     val distance: Float?,
-    val photos: List<Photo>,
-    val contact: Contact?,
+    val photos: List<PhotoEntity>,
+    val contact: ContactEntity?,
 )
 
-enum class AnimalType {
+enum class AnimalTypeEntity {
     DOG,
     CAT,
     RABBIT,
@@ -25,12 +25,12 @@ enum class AnimalType {
     BARNYARD,
 }
 
-data class Breeds(
+data class BreedsEntity(
     val primary: String?,
     val secondary: String?,
 )
 
-data class Contact(
+data class ContactEntity(
     val email: String,
     val phone: String,
 )

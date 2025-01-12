@@ -1,6 +1,6 @@
 package com.mobdao.adoptapet.domain.internal.mappers
 
-import com.mobdao.adoptapet.domain.internal.AddressEntity
+import com.mobdao.adoptapet.domain.entities.AddressEntity
 import com.mobdao.adoptapet.domain.models.Address
 import javax.inject.Inject
 import javax.inject.Singleton

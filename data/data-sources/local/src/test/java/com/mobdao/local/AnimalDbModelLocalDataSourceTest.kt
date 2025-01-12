@@ -1,10 +1,10 @@
 package com.mobdao.local
 
 import com.mobdao.adoptapet.common.testutils.domain.entities.PetEntityMockFactory
-import com.mobdao.adoptapet.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.PetEntity
 import com.mobdao.local.internal.common.mappers.EntityMapper
 import com.mobdao.local.internal.database.daos.AnimalDao
-import com.mobdao.local.internal.database.entities.Animal
+import com.mobdao.local.internal.database.entities.AnimalDbModel
 import com.mobdao.local.mockfactories.AnimalDbEntityMockFactory
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -14,12 +14,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class AnimalLocalDataSourceTest {
-    private val pet1: Pet = PetEntityMockFactory.create()
-    private val pet2: Pet = PetEntityMockFactory.create()
+class AnimalDbModelLocalDataSourceTest {
+    private val pet1: PetEntity = PetEntityMockFactory.create()
+    private val pet2: PetEntity = PetEntityMockFactory.create()
     private val pets = listOf(pet1, pet2)
-    private val animal1: Animal = AnimalDbEntityMockFactory.create()
-    private val animal2: Animal = AnimalDbEntityMockFactory.create()
+    private val animal1: AnimalDbModel = AnimalDbEntityMockFactory.create()
+    private val animal2: AnimalDbModel = AnimalDbEntityMockFactory.create()
     private val animals = listOf(animal1, animal2)
 
     private val animalDao: AnimalDao =
@@ -29,8 +29,8 @@ class AnimalLocalDataSourceTest {
         }
     private val entityMapper: EntityMapper =
         mockk {
-            coEvery { toAnimal(pets) } returns animals
-            coEvery { toPet(animal1) } returns pet1
+            coEvery { toDbModel(pets) } returns animals
+            coEvery { toEntity(animal1) } returns pet1
         }
 
     private val tested = AnimalLocalDataSource(animalDao, entityMapper)
@@ -49,7 +49,7 @@ class AnimalLocalDataSourceTest {
     fun `given pet ID when get pet by ID then pet is retrieved from DB`() =
         runTest {
             // given / when
-            val result: Pet? = tested.getPetById(petId = "id")
+            val result: PetEntity? = tested.getPetById(petId = "id")
 
             // then
             assertEquals(result, pet1)

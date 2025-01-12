@@ -1,6 +1,6 @@
 package com.mobdao.remote
 
-import com.mobdao.adoptapet.domain.entities.Pet
+import com.mobdao.adoptapet.domain.entities.PetEntity
 import com.mobdao.remote.AnimalRemoteDataSource.GeoCoordinates
 import com.mobdao.remote.internal.responses.Animal
 import com.mobdao.remote.internal.responses.AnimalsResponse
@@ -21,8 +21,8 @@ class AnimalRemoteDataSourceTest {
         mockk {
             every { animals } returns this@AnimalRemoteDataSourceTest.animals
         }
-    private val pet1: Pet = mockk()
-    private val pet2: Pet = mockk()
+    private val pet1: PetEntity = mockk()
+    private val pet2: PetEntity = mockk()
     private val pets = listOf(pet1, pet2)
 
     private val petFinderService: PetFinderService =
@@ -46,7 +46,7 @@ class AnimalRemoteDataSourceTest {
     fun `given page number, coordinates and animal type when get pets then pets are returned`() =
         runTest {
             // given / when
-            val result: List<Pet> =
+            val result: List<PetEntity> =
                 tested.getPets(
                     pageNumber = 1,
                     locationCoordinates =

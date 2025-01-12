@@ -11,8 +11,9 @@ import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
 import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_ID_ARG
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
-import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetCardState
+import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetDetailsCardState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
+import com.mobdao.adoptapet.presentation.utils.PetUtils
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,6 +29,7 @@ class PetDetailsViewModelTest {
     var mainCoroutineRule = MainDispatcherRule()
 
     private val petId: String = "pet-id"
+    private val description: String = "description"
     private val pet: Pet =
         PetMockFactory.create(
             name = "name",
@@ -35,7 +37,7 @@ class PetDetailsViewModelTest {
             age = "age",
             size = "size",
             gender = "gender",
-            description = "description",
+            description = description,
             distance = 123f,
             photos = listOf(PhotoMockFactory.create(largeUrl = "largeUrl")),
             contact =
@@ -53,11 +55,16 @@ class PetDetailsViewModelTest {
         mockk {
             every { execute("pet-id") } returns flowOf(pet)
         }
+    private val petUtils: PetUtils =
+        mockk {
+            every { formattedDescriptionWorkaround(description = any()) } returns description
+        }
 
     private val tested by lazy {
         PetDetailsViewModel(
             savedStateHandle = savedStateHandle,
             getCachedPetUseCase = getCachedPetUseCase,
+            petUtils = petUtils,
         )
     }
 
@@ -104,7 +111,7 @@ class PetDetailsViewModelTest {
             tested.uiState.value,
             PetDetailsUiState(
                 petHeader = PetHeaderState(),
-                petCard = PetCardState(),
+                petCard = PetDetailsCardState(),
                 contact = ContactState(),
                 genericErrorDialogIsVisible = true,
             ),
@@ -123,7 +130,7 @@ class PetDetailsViewModelTest {
                         name = "name",
                     ),
                 petCard =
-                    PetCardState(
+                    PetDetailsCardState(
                         breed = "primary",
                         age = "age",
                         gender = "gender",

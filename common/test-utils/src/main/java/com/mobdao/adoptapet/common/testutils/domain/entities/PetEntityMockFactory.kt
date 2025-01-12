@@ -1,8 +1,8 @@
 package com.mobdao.adoptapet.common.testutils.domain.entities
 
-import com.mobdao.adoptapet.domain.entities.Breeds
-import com.mobdao.adoptapet.domain.entities.Pet
-import com.mobdao.adoptapet.domain.entities.Photo
+import com.mobdao.adoptapet.domain.entities.BreedsEntity
+import com.mobdao.adoptapet.domain.entities.PetEntity
+import com.mobdao.adoptapet.domain.entities.PhotoEntity
 import io.mockk.every
 import io.mockk.mockk
 
@@ -10,9 +10,9 @@ object PetEntityMockFactory {
     fun create(
         id: String = "id",
         name: String = "name",
-        breeds: Breeds = BreedsEntityMockFactory.create(),
-        photos: List<Photo> = listOf(PhotoEntityMockFactory.create()),
-    ): Pet =
+        breeds: BreedsEntity = BreedsEntityMockFactory.create(),
+        photos: List<PhotoEntity> = listOf(PhotoEntityMockFactory.create()),
+    ): PetEntity =
         mockk {
             every { this@mockk.id } returns id
             every { this@mockk.name } returns name

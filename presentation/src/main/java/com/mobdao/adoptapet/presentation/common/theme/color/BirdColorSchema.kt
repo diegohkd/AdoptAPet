@@ -8,7 +8,11 @@ val BirdColorSchema =
     ColorSchema(
         light =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFFE9E0EB)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFFE9E0EB),
+                        petCardBackground = Color(0xFFECDDF6),
+                    ),
                 materialColorScheme =
                     lightColorScheme(
                         primary = Color(0xFF6D538B),
@@ -50,7 +54,11 @@ val BirdColorSchema =
             ),
         dark =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFF4A454E)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFF4A454E),
+                        petCardBackground = Color(0xFFECDDF6),
+                    ),
                 materialColorScheme =
                     darkColorScheme(
                         primary = Color(0xFFD9BAFA),

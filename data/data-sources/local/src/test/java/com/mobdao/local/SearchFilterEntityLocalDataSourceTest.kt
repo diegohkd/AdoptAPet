@@ -1,14 +1,14 @@
 package com.mobdao.local
 
-import com.mobdao.adoptapet.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class SearchFilterLocalDataSourceTest {
-    private val searchFilter: SearchFilter = mockk()
+class SearchFilterEntityLocalDataSourceTest {
+    private val searchFilter: SearchFilterEntity = mockk()
 
     private val tested = SearchFilterLocalDataSource()
 
@@ -18,7 +18,7 @@ class SearchFilterLocalDataSourceTest {
         tested.saveSearchFilter(searchFilter)
 
         // when
-        val result: SearchFilter? = tested.getSearchFilter()
+        val result: SearchFilterEntity? = tested.getSearchFilter()
 
         // then
         assertEquals(result, searchFilter)
@@ -31,7 +31,7 @@ class SearchFilterLocalDataSourceTest {
             val observingSearchFilter = tested.observeSearchFilter()
             tested.saveSearchFilter(searchFilter)
             observingSearchFilter.first()
-            val searchFilter2: SearchFilter = mockk()
+            val searchFilter2: SearchFilterEntity = mockk()
 
             // when
             tested.saveSearchFilter(searchFilter2)

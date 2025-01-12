@@ -8,7 +8,11 @@ val RabbitColorSchema =
     ColorSchema(
         light =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFFDEE3EB)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFFDEE3EB),
+                        petCardBackground = Color(0xFF3A4857),
+                    ),
                 materialColorScheme =
                     lightColorScheme(
                         primary = Color(0xFF2E628C),
@@ -50,7 +54,11 @@ val RabbitColorSchema =
             ),
         dark =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFF42474E)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFF42474E),
+                        petCardBackground = Color(0xFF3A4857),
+                    ),
                 materialColorScheme =
                     darkColorScheme(
                         primary = Color(0xFF9ACBFA),

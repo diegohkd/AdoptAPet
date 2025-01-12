@@ -11,6 +11,7 @@ import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsNavAction.
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
+import com.mobdao.adoptapet.presentation.utils.PetUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class PetDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getCachedPetUseCase: GetCachedPetUseCase,
+    private val petUtils: PetUtils,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PetDetailsUiState())
     val uiState: StateFlow<PetDetailsUiState> = _uiState.asStateFlow()
@@ -57,11 +59,11 @@ class PetDetailsViewModel @Inject constructor(
                                         name = pet.name,
                                     ),
                                 petCard =
-                                    PetDetailsUiState.PetCardState(
+                                    PetDetailsUiState.PetDetailsCardState(
                                         breed = pet.breeds.primary.orEmpty(),
                                         age = pet.age,
                                         gender = pet.gender,
-                                        description = pet.description,
+                                        description = petUtils.formattedDescriptionWorkaround(pet.description),
                                         size = pet.size,
                                         distance = pet.distance,
                                     ),

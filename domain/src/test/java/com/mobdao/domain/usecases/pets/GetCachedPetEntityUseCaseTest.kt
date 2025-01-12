@@ -3,7 +3,7 @@ package com.mobdao.domain.usecases.pets
 import com.mobdao.adoptapet.common.testutils.domain.PetMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.PetEntityMockFactory
 import com.mobdao.adoptapet.domain.dataapi.repositories.PetsRepository
-import com.mobdao.adoptapet.domain.internal.PetEntity
+import com.mobdao.adoptapet.domain.entities.PetEntity
 import com.mobdao.adoptapet.domain.internal.mappers.PetMapper
 import com.mobdao.adoptapet.domain.models.Pet
 import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
@@ -15,7 +15,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class GetCachedPetUseCaseTest {
+class GetCachedPetEntityUseCaseTest {
     private val petId: String = "petId"
     private val petEntity: PetEntity = PetEntityMockFactory.create()
     private val pet: Pet = PetMockFactory.create()

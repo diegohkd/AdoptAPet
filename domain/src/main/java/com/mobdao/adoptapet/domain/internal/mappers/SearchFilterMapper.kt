@@ -1,7 +1,7 @@
 package com.mobdao.adoptapet.domain.internal.mappers
 
-import com.mobdao.adoptapet.domain.internal.AddressEntity
-import com.mobdao.adoptapet.domain.internal.SearchFilterEntity
+import com.mobdao.adoptapet.domain.entities.AddressEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.adoptapet.domain.models.Address
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import javax.inject.Inject

@@ -2,8 +2,8 @@
 
 package com.mobdao.remote.internal.utils
 
-import com.mobdao.adoptapet.domain.entities.AnimalType
-import com.mobdao.adoptapet.domain.entities.Contact
+import com.mobdao.adoptapet.domain.entities.AnimalTypeEntity
+import com.mobdao.adoptapet.domain.entities.ContactEntity
 
-internal typealias DomainEntityAnimalType = AnimalType
-internal typealias DomainEntityContact = Contact
+internal typealias DomainEntityAnimalType = AnimalTypeEntity
+internal typealias DomainEntityContact = ContactEntity

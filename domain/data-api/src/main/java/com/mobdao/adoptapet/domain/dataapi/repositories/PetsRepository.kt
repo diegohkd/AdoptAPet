@@ -1,13 +1,13 @@
 package com.mobdao.adoptapet.domain.dataapi.repositories
 
-import com.mobdao.adoptapet.domain.entities.Pet
-import com.mobdao.adoptapet.domain.entities.SearchFilter
+import com.mobdao.adoptapet.domain.entities.PetEntity
+import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 
 interface PetsRepository {
     suspend fun getPets(
         pageNumber: Int,
-        searchFilter: SearchFilter,
-    ): List<Pet>
+        searchFilter: SearchFilterEntity,
+    ): List<PetEntity>
 
-    suspend fun getCachedPetById(petId: String): Pet?
+    suspend fun getCachedPetById(petId: String): PetEntity?
 }

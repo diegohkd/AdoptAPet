@@ -9,7 +9,7 @@ androidx-coreKtx = "1.15.0"
 androidx-hiltNavigationCompose = "1.2.0"
 androidx-lifecycleRuntimeKtx = "2.8.7"
 androidx-room = "2.6.1"
-coilCompose = "2.7.0"
+coilCompose = "3.0.4"
 constraintlayoutCompose = "1.1.0"
 coroutines = "1.9.0"
 hiltAndroid = "2.52"
@@ -97,7 +97,13 @@ androidx-room-roomKtx = { group = "androidx.room", name = "room-ktx", version.re
 androidx-room-roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 
 # Coil Compose: Jetpack Compose library for image loading with Coil.
-coilKt-coilCompose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
+coilKt-coilCompose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilCompose" }
+
+# Coil Network OkHttp: Integration library for Coil that uses OkHttp as the network stack, providing enhanced control over network requests, caching, and interceptors.
+coilKt-coilNetworkOkhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilCompose" }
+
+# Coil Test: Library for testing image loading with Coil, providing utilities to mock image requests and verify loading behavior in unit and instrumentation tests.
+coilKt-coilTest = { group = "io.coil-kt.coil3", name = "coil-test", version.ref = "coilCompose" }
 
 # Accompanist Permissions: A Jetpack Compose library for handling runtime permissions in a declarative way.
 google-accompanist-accompanistPermissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }

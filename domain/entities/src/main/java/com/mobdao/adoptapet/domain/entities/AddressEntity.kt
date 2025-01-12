@@ -1,6 +1,7 @@
 package com.mobdao.adoptapet.domain.entities
 
-data class GeoCoordinates(
+data class AddressEntity(
+    val addressLine: String,
     val latitude: Double,
     val longitude: Double,
 )
