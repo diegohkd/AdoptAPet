@@ -8,7 +8,11 @@ val SmallAndFurryColorSchema =
     ColorSchema(
         light =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFFF5DDDA)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFFF5DDDA),
+                        petCardBackground = Color(0xFF5D3F3B),
+                    ),
                 materialColorScheme =
                     lightColorScheme(
                         primary = Color(0xFF904A42),
@@ -50,7 +54,11 @@ val SmallAndFurryColorSchema =
             ),
         dark =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFF534341)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFF534341),
+                        petCardBackground = Color(0xFF5D3F3B),
+                    ),
                 materialColorScheme =
                     darkColorScheme(
                         primary = Color(0xFFFFB4AA),

@@ -17,4 +17,5 @@
     <string name="contact">Contact</string>
     <string name="email_field">Email: </string>
     <string name="phone_field">Phone: </string>
+    <string name="miles">%s mi</string>
 </resources>

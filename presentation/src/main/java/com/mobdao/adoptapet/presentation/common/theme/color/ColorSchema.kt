@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 @Immutable
 data class PetColorScheme(
     val background: Color = Color.Unspecified,
+    val petCardBackground: Color = Color.Unspecified,
 )
 
 @Immutable

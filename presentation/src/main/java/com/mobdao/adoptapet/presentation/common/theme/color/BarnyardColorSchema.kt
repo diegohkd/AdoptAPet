@@ -8,7 +8,11 @@ val BarnyardColorSchema =
     ColorSchema(
         light =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFFE9E2D0)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFFE9E2D0),
+                        petCardBackground = Color(0xFFECE3BC),
+                    ),
                 materialColorScheme =
                     lightColorScheme(
                         primary = Color(0xFF6B5F10),
@@ -50,7 +54,11 @@ val BarnyardColorSchema =
             ),
         dark =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFF4A4739)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFF4A4739),
+                        petCardBackground = Color(0xFFECE3BC),
+                    ),
                 materialColorScheme =
                     darkColorScheme(
                         primary = Color(0xFFD8C770),

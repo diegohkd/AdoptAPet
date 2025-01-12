@@ -8,7 +8,11 @@ val DogColorSchema =
     ColorSchema(
         light =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFFDBE5DF)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFFDBE5DF),
+                        petCardBackground = Color(0xFFCDE9DE),
+                    ),
                 materialColorScheme =
                     lightColorScheme(
                         primary = Color(0xFF0F6B57),
@@ -50,7 +54,11 @@ val DogColorSchema =
             ),
         dark =
             AdoptAPetColorScheme(
-                petColorScheme = PetColorScheme(background = Color(0xFF3F4945)),
+                petColorScheme =
+                    PetColorScheme(
+                        background = Color(0xFF3F4945),
+                        petCardBackground = Color(0xFFCDE9DE),
+                    ),
                 materialColorScheme =
                     darkColorScheme(
                         primary = Color(0xFF86D6BE),
