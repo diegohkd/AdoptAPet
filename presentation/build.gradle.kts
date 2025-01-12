@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.androidx.navigation.navigationCompose)
     implementation(libs.androidx.lifecycle.lifecycleRuntimeCompose)
     implementation(libs.coilKt.coilCompose)
+    implementation(libs.coilKt.coilNetworkOkhttp)
+    implementation(libs.coilKt.coilTest)
     implementation(libs.androidx.hilt.hiltNavigationCompose)
     implementation(libs.google.dagger.hiltAndroid)
     kapt(libs.google.dagger.hiltAndroidCompiler)

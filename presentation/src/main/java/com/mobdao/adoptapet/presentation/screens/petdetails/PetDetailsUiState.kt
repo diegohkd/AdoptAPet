@@ -2,7 +2,7 @@ package com.mobdao.adoptapet.presentation.screens.petdetails
 
 data class PetDetailsUiState(
     val petHeader: PetHeaderState = PetHeaderState(),
-    val petCard: PetCardState = PetCardState(),
+    val petCard: PetDetailsCardState = PetDetailsCardState(),
     val contact: ContactState = ContactState(),
     val genericErrorDialogIsVisible: Boolean = false,
 ) {
@@ -11,7 +11,7 @@ data class PetDetailsUiState(
         val name: String = "",
     )
 
-    data class PetCardState(
+    data class PetDetailsCardState(
         val breed: String = "",
         val age: String = "",
         val gender: String = "",

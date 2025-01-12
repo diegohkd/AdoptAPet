@@ -1,10 +1,10 @@
 package com.mobdao.adoptapet.presentation.screens.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,14 +42,16 @@ import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.AsyncImage
 import com.mobdao.adoptapet.domain.models.AnimalType.CAT
 import com.mobdao.adoptapet.domain.models.AnimalType.DOG
 import com.mobdao.adoptapet.domain.models.AnimalType.RABBIT
 import com.mobdao.adoptapet.presentation.R
 import com.mobdao.adoptapet.presentation.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.presentation.common.theme.color.ColorSchema
+import com.mobdao.adoptapet.presentation.common.widgets.AdoptAPetAsyncImage
+import com.mobdao.adoptapet.presentation.common.widgets.DetailCard
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
+import com.mobdao.adoptapet.presentation.common.widgets.PetBackgroundCard
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.FilterClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.PetClicked
@@ -239,42 +238,75 @@ private fun PetItem(
 ) {
     val colorSchema: ColorSchema = remember(pet.type) { pet.type.toColorSchema() }
     AdoptAPetTheme(colorSchema = colorSchema) {
-        Card {
+        PetBackgroundCard {
             Row(
                 modifier =
                     Modifier
+                        .padding(8.dp)
                         .fillMaxWidth()
-                        .background(AdoptAPetTheme.petColorScheme.background)
-                        .clickable { onClick(pet) }
-                        .padding(8.dp),
+                        .height(intrinsicSize = IntrinsicSize.Max)
+                        .clickable { onClick(pet) },
             ) {
-                AsyncImage(
-                    model = pet.thumbnailUrl,
-                    contentDescription = null,
+                DetailCard {
+                    AdoptAPetAsyncImage(
+                        imageUrl = pet.thumbnailUrl,
+                        modifier = Modifier.size(110.dp),
+                        error = painterResource(id = R.drawable.paw_ic),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+
+                DetailCard(
                     modifier =
                         Modifier
-                            .size(80.dp)
-                            .clip(CircleShape),
-                    error = painterResource(id = R.drawable.paw_ic),
-                    contentScale = ContentScale.Crop,
-                )
-                Column(
-                    modifier = Modifier.padding(8.dp),
+                            .padding(start = 8.dp)
+                            .fillMaxSize(),
                 ) {
-                    Text(
-                        text = pet.name,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Text(
-                        text = pet.formattedBreeds(),
-                        maxLines = 1,
-                        fontSize = 12.sp,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                    ) {
+                        Text(
+                            text = pet.name,
+                            maxLines = 1,
+                            fontSize = 18.sp,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            text = pet.formattedBreeds(),
+                            maxLines = 1,
+                            fontSize = 12.sp,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        pet.distance?.let {
+                            Text(
+                                text = stringResource(R.string.miles, it.toString()),
+                                maxLines = 1,
+                                fontSize = 12.sp,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PetItemPreview() {
+    AdoptAPetTheme {
+        PetItem(
+            pet =
+                PetState(
+                    id = "id-1",
+                    type = DOG,
+                    name = "Bibico",
+                    breeds = BreedsState("SRD", ""),
+                    thumbnailUrl = "",
+                ),
+            onClick = {},
+        )
     }
 }
 
@@ -315,7 +347,7 @@ private fun EmptyListPlaceholder(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun HomeContentPreview() {
     AdoptAPetTheme {
@@ -370,9 +402,10 @@ fun HomeContentPreview() {
     }
 }
 
+// TODO move this to the ViewModel layer
 private fun PetState.formattedBreeds(): String =
     if (!breeds.primary.isNullOrBlank()) {
-        "${breeds.primary}" + (breeds.secondary?.let { " & $it" } ?: "")
+        "${breeds.primary}" + (breeds.secondary?.takeIf { it.isNotBlank() }?.let { " & $it" } ?: "")
     } else {
         ""
     }

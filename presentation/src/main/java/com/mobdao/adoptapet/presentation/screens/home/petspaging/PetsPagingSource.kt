@@ -54,6 +54,7 @@ class PetsPagingSource private constructor(
                     secondary = breeds.secondary,
                 ),
             thumbnailUrl = photos.firstOrNull()?.smallUrl.orEmpty(),
+            distance = distance,
         )
 
     @Singleton

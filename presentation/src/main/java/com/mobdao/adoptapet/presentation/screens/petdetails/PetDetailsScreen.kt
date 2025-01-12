@@ -1,8 +1,15 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.mobdao.adoptapet.presentation.screens.petdetails
 
+import android.content.res.Configuration
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,13 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import com.mobdao.adoptapet.domain.models.AnimalType
 import com.mobdao.adoptapet.domain.models.AnimalType.DOG
 import com.mobdao.adoptapet.presentation.R
@@ -39,11 +45,14 @@ import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.common.layouts.PetSurface
 import com.mobdao.adoptapet.presentation.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.presentation.common.theme.color.ColorSchema
+import com.mobdao.adoptapet.presentation.common.widgets.AdoptAPetAsyncImage
+import com.mobdao.adoptapet.presentation.common.widgets.DetailCard
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
+import com.mobdao.adoptapet.presentation.common.widgets.PetBackgroundCard
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.BackButtonClicked
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
-import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetCardState
+import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetDetailsCardState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
 import com.mobdao.adoptapet.presentation.utils.extensions.toColorSchema
 
@@ -69,7 +78,7 @@ fun PetDetailsScreen(
 @Composable
 private fun UiContent(
     animalType: AnimalType = DOG,
-    uiState: PetDetailsUiState = PetDetailsUiState(),
+    uiState: PetDetailsUiState,
     onUiAction: (PetDetailsUiAction) -> Unit = {},
 ) {
     val colorSchema: ColorSchema = remember(animalType) { animalType.toColorSchema() }
@@ -99,7 +108,8 @@ private fun UiContent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     PetHeader(petHeader = uiState.petHeader)
-                    PetCard(
+
+                    PetDetailsCard(
                         petCard = uiState.petCard,
                         modifier =
                             Modifier
@@ -124,20 +134,18 @@ private fun UiContent(
 
 @Composable
 private fun PetHeader(petHeader: PetHeaderState) {
-    AsyncImage(
-        model = petHeader.photoUrl,
-        contentDescription = null,
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(400.dp),
-        onState = {
-            if (it is AsyncImagePainter.State.Error) {
-                it.result.throwable.printStackTrace()
-            }
-        },
-        contentScale = ContentScale.Crop,
-    )
+    PetBackgroundCard(modifier = Modifier.padding(start = 20.dp, top = 8.dp, end = 20.dp)) {
+        DetailCard(modifier = Modifier.padding(16.dp)) {
+            AdoptAPetAsyncImage(
+                imageUrl = petHeader.photoUrl,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
+                contentScale = ContentScale.Crop,
+            )
+        }
+    }
     Text(
         text = petHeader.name,
         modifier = Modifier.padding(start = 8.dp, top = 16.dp),
@@ -146,45 +154,60 @@ private fun PetHeader(petHeader: PetHeaderState) {
 }
 
 @Composable
-private fun PetCard(
-    petCard: PetCardState,
+private fun PetDetailsCard(
+    petCard: PetDetailsCardState,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier) {
+    PetBackgroundCard(modifier = modifier) {
         Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            VerticalField(name = stringResource(R.string.breeds), value = petCard.breed)
-            Row(
+            VerticalField(
+                name = stringResource(R.string.breeds),
+                value = petCard.breed,
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+            )
+            Row(
+                modifier = Modifier.height(intrinsicSize = IntrinsicSize.Max),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                VerticalField(name = stringResource(R.string.age), value = petCard.age)
+                VerticalField(
+                    name = stringResource(R.string.age),
+                    value = petCard.age,
+                    modifier = Modifier.weight(1f),
+                )
                 VerticalField(
                     name = stringResource(R.string.gender),
                     value = petCard.gender,
+                    modifier = Modifier.weight(1f),
                 )
             }
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.height(intrinsicSize = IntrinsicSize.Max),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                VerticalField(name = stringResource(R.string.size), value = petCard.size)
+                VerticalField(
+                    name = stringResource(R.string.size),
+                    value = petCard.size,
+                    modifier = Modifier.weight(1f),
+                )
                 VerticalField(
                     name = stringResource(R.string.distance),
-                    value = petCard.distance?.toString().orEmpty(),
+                    value = stringResource(R.string.miles, petCard.distance?.toString().orEmpty()),
+                    modifier = Modifier.weight(1f),
                 )
             }
-            Text(
-                text = petCard.description,
-                modifier = Modifier.padding(top = 4.dp),
-                fontSize = 16.sp,
-            )
+
+            if (petCard.description.isNotBlank()) {
+                DetailCard {
+                    Text(
+                        text = petCard.description,
+                        modifier = Modifier.padding(12.dp),
+                        fontSize = 16.sp,
+                    )
+                }
+            }
         }
     }
 }
@@ -194,18 +217,26 @@ private fun ContactCard(
     contact: ContactState,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier) {
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(text = stringResource(R.string.contact), fontSize = 20.sp)
-            Column(modifier = Modifier.fillMaxWidth()) {
-                HorizontalField(name = stringResource(R.string.email_field), value = contact.email)
-                HorizontalField(name = stringResource(R.string.phone_field), value = contact.phone)
+    PetBackgroundCard(modifier = modifier) {
+        DetailCard(modifier = modifier) {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(text = stringResource(R.string.contact), fontSize = 20.sp, fontWeight = Bold)
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    HorizontalField(
+                        name = stringResource(R.string.email_field),
+                        value = contact.email,
+                    )
+                    HorizontalField(
+                        name = stringResource(R.string.phone_field),
+                        value = contact.phone,
+                    )
+                }
             }
         }
     }
@@ -217,13 +248,21 @@ private fun VerticalField(
     value: String,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = name, fontSize = 20.sp)
-        Text(
-            text = value,
-            modifier = Modifier.padding(top = 4.dp),
-            fontSize = 16.sp,
-        )
+    DetailCard(modifier = modifier.fillMaxHeight()) {
+        Column(
+            modifier =
+                modifier
+                    .padding(8.dp)
+                    .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(text = name, fontSize = 20.sp, fontWeight = Bold)
+            Text(
+                text = value,
+                modifier = Modifier.padding(top = 4.dp),
+                fontSize = 16.sp,
+            )
+        }
     }
 }
 
@@ -234,7 +273,7 @@ private fun HorizontalField(
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
-        Text(text = name, fontSize = 20.sp)
+        Text(text = name, fontSize = 20.sp, fontWeight = Bold)
         Text(
             text = value,
             modifier = Modifier.padding(start = 4.dp),
@@ -243,10 +282,54 @@ private fun HorizontalField(
     }
 }
 
-@Preview
+@Preview(heightDp = 1100)
 @Composable
 private fun PetDetailsScreenPreview() {
     AdoptAPetTheme {
-        UiContent()
+        UiContent(
+            uiState =
+                PetDetailsUiState(
+                    petHeader =
+                        PetHeaderState(
+                            photoUrl = "",
+                            name = "Bob",
+                        ),
+                    petCard =
+                        PetDetailsCardState(
+                            breed = "Bulldog",
+                            age = "Baby",
+                            gender = "Male",
+                            size = "Medium",
+                            distance = 44.38f,
+                            description = LoremIpsum(10).values.first(),
+                        ),
+                ),
+        )
+    }
+}
+
+@Preview(heightDp = 1100, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun PetDetailsScreen2Preview() {
+    AdoptAPetTheme {
+        UiContent(
+            uiState =
+                PetDetailsUiState(
+                    petHeader =
+                        PetHeaderState(
+                            photoUrl = "",
+                            name = "Bob",
+                        ),
+                    petCard =
+                        PetDetailsCardState(
+                            breed = "Bulldog",
+                            age = "Baby",
+                            gender = "Male",
+                            size = "Medium",
+                            distance = 44.38f,
+                            description = LoremIpsum(10).values.first(),
+                        ),
+                ),
+        )
     }
 }

@@ -197,6 +197,7 @@ class PetsPagingSourceTest {
                                 secondary = "secondary",
                             ),
                         thumbnailUrl = "smallUrl",
+                        distance = 123.0f,
                     ),
                 ),
             )
