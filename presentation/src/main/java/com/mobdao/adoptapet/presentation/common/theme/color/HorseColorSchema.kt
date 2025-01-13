@@ -11,7 +11,7 @@ val HorseColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFFF3DFD1),
-                        petCardBackground = Color(0xFF5A422E),
+                        petCardBackground = Color(0xFFFFDCC2),
                     ),
                 materialColorScheme =
                     lightColorScheme(
@@ -57,7 +57,7 @@ val HorseColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFF51443B),
-                        petCardBackground = Color(0xFF5A422E),
+                        petCardBackground = Color(0xFF9E8E82),
                     ),
                 materialColorScheme =
                     darkColorScheme(

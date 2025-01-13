@@ -57,7 +57,7 @@ val CatColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFF524344),
-                        petCardBackground = Color(0xFFFFDADB),
+                        petCardBackground = Color(0xFF9F8C8D),
                     ),
                 materialColorScheme =
                     darkColorScheme(

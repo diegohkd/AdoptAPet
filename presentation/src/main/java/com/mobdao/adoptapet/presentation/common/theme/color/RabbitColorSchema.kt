@@ -11,7 +11,7 @@ val RabbitColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFFDEE3EB),
-                        petCardBackground = Color(0xFF3A4857),
+                        petCardBackground = Color(0xFFCDE5FF),
                     ),
                 materialColorScheme =
                     lightColorScheme(
@@ -57,7 +57,7 @@ val RabbitColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFF42474E),
-                        petCardBackground = Color(0xFF3A4857),
+                        petCardBackground = Color(0xFF8C9198),
                     ),
                 materialColorScheme =
                     darkColorScheme(

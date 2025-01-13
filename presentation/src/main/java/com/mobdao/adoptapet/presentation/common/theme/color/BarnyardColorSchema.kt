@@ -57,7 +57,7 @@ val BarnyardColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFF4A4739),
-                        petCardBackground = Color(0xFFECE3BC),
+                        petCardBackground = Color(0xFF969180),
                     ),
                 materialColorScheme =
                     darkColorScheme(

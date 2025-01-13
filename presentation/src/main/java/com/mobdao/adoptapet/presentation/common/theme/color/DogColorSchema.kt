@@ -57,7 +57,7 @@ val DogColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFF3F4945),
-                        petCardBackground = Color(0xFFCDE9DE),
+                        petCardBackground = Color(0xFF89938E),
                     ),
                 materialColorScheme =
                     darkColorScheme(
