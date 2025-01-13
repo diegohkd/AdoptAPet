@@ -11,7 +11,7 @@ val SmallAndFurryColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFFF5DDDA),
-                        petCardBackground = Color(0xFF5D3F3B),
+                        petCardBackground = Color(0xFFFFDAD5),
                     ),
                 materialColorScheme =
                     lightColorScheme(
@@ -57,7 +57,7 @@ val SmallAndFurryColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFF534341),
-                        petCardBackground = Color(0xFF5D3F3B),
+                        petCardBackground = Color(0xFFA08C8A),
                     ),
                 materialColorScheme =
                     darkColorScheme(

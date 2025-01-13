@@ -57,7 +57,7 @@ val BirdColorSchema =
                 petColorScheme =
                     PetColorScheme(
                         background = Color(0xFF4A454E),
-                        petCardBackground = Color(0xFFECDDF6),
+                        petCardBackground = Color(0xFF958E98),
                     ),
                 materialColorScheme =
                     darkColorScheme(
