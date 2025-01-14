@@ -8,10 +8,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.mobdao.adoptapet.domain.models.AnimalType
 import com.mobdao.adoptapet.presentation.common.Event
+import com.mobdao.adoptapet.presentation.common.utils.extensions.composableHorizontalAnimated
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
-import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_TYPE_ARG
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.FilterScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingScreen
@@ -38,71 +39,65 @@ fun AdoptAPetNavHost(
             val navOptions =
                 NavOptions
                     .Builder()
-                    .setPopUpTo(Destination.Splash.route, inclusive = true)
+                    .setPopUpTo(route = Destination.Splash, inclusive = true)
                     .build()
-            navController.navigate(route = Destination.Home.route, navOptions = navOptions)
+            navController.navigate(route = Destination.Home, navOptions = navOptions)
         }
         OnboardingScreen -> {
             val navOptions =
                 NavOptions
                     .Builder()
-                    .setPopUpTo(Destination.Splash.route, inclusive = true)
+                    .setPopUpTo(route = Destination.Splash, inclusive = true)
                     .build()
-            navController.navigate(route = Destination.Onboarding.route, navOptions = navOptions)
+            navController.navigate(route = Destination.Onboarding, navOptions = navOptions)
         }
         OnboardingToHomeScreen -> {
             val navOptions =
                 NavOptions
                     .Builder()
-                    .setPopUpTo(Destination.Onboarding.route, inclusive = true)
+                    .setPopUpTo(route = Destination.Onboarding, inclusive = true)
                     .build()
-            navController.navigate(route = Destination.Home.route, navOptions = navOptions)
+            navController.navigate(route = Destination.Home, navOptions = navOptions)
         }
         is PetDetailsScreen ->
             navController.navigate(
                 route =
-                    Destination.PetDetails.buildRouteWithArgs(
+                    Destination.PetDetails(
                         petId = navDestination.petId,
-                        petType = navDestination.type.name,
+                        petType = navDestination.type,
                     ),
             )
-        FilterScreen -> navController.navigate(route = Destination.Filter.route)
+        FilterScreen -> navController.navigate(route = Destination.Filter)
         PreviousScreen -> navController.popBackStack()
         null -> {}
     }
 
     NavHost(
         navController = navController,
-        startDestination = Destination.Splash.route,
+        startDestination = Destination.Splash,
     ) {
-        composable(route = Destination.Splash.route) {
+        composable<Destination.Splash> {
             SplashScreen(onNavAction = viewModel::onNavAction)
         }
-        composable(route = Destination.Onboarding.route) {
+        composable<Destination.Onboarding> {
             OnboardingScreen(onNavAction = viewModel::onNavAction)
         }
-        composable(route = Destination.Home.route) {
+        composable<Destination.Home> {
             HomeScreen(onNavAction = viewModel::onNavAction)
         }
-        composable(
-            route = Destination.PetDetails.route,
-            arguments = Destination.PetDetails.arguments,
-        ) {
+        composableHorizontalAnimated<Destination.PetDetails> {
             /*
              * TODO improve this? One solution would be creating a different screen for each animal
              *  type, but that will require a ton of boilerplate
              */
-            val animalType: AnimalType =
-                AnimalType.fromName(
-                    name = it.arguments?.getString(PET_TYPE_ARG),
-                ) ?: return@composable
+            val animalType: AnimalType = it.toRoute<Destination.PetDetails>().petType
 
             PetDetailsScreen(
                 animalType = animalType,
                 onNavAction = viewModel::onNavAction,
             )
         }
-        composable(route = Destination.Filter.route) {
+        composableHorizontalAnimated<Destination.Filter> {
             FilterScreen(onNavAction = viewModel::onNavAction)
         }
     }

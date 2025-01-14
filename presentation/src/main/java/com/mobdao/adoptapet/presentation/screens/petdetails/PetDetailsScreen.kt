@@ -45,6 +45,7 @@ import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.common.layouts.PetSurface
 import com.mobdao.adoptapet.presentation.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.presentation.common.theme.color.ColorSchema
+import com.mobdao.adoptapet.presentation.common.utils.extensions.toColorSchema
 import com.mobdao.adoptapet.presentation.common.widgets.AdoptAPetAsyncImage
 import com.mobdao.adoptapet.presentation.common.widgets.DetailCard
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
@@ -54,7 +55,6 @@ import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.D
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetDetailsCardState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
-import com.mobdao.adoptapet.presentation.utils.extensions.toColorSchema
 
 @Composable
 fun PetDetailsScreen(

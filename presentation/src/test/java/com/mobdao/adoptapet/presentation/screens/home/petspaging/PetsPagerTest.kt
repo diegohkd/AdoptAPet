@@ -5,8 +5,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingSource
 import com.mobdao.adoptapet.common.testutils.MainDispatcherRule
 import com.mobdao.adoptapet.domain.models.SearchFilter
+import com.mobdao.adoptapet.presentation.common.utils.factories.PagerFactory
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
-import com.mobdao.adoptapet.presentation.utils.PagerFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

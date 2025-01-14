@@ -1,41 +1,24 @@
 package com.mobdao.adoptapet.presentation.navigation
 
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import com.mobdao.adoptapet.domain.models.AnimalType
+import kotlinx.serialization.Serializable
 
 sealed interface Destination {
-    val route: String
+    @Serializable
+    data object Splash : Destination
 
-    data object Splash : Destination {
-        override val route: String = "splash"
-    }
+    @Serializable
+    data object Onboarding : Destination
 
-    data object Onboarding : Destination {
-        override val route: String = "onboarding"
-    }
+    @Serializable
+    data object Home : Destination
 
-    data object Home : Destination {
-        override val route: String = "home"
-    }
+    @Serializable
+    data class PetDetails(
+        val petId: String,
+        val petType: AnimalType,
+    ) : Destination
 
-    data object PetDetails : Destination {
-        const val PET_ID_ARG = "pedId"
-        const val PET_TYPE_ARG = "pedType"
-        val arguments =
-            listOf(
-                navArgument(PET_ID_ARG) { type = NavType.StringType },
-            )
-
-        private const val HOST: String = "pet_details"
-        override val route: String = "$HOST?$PET_ID_ARG={$PET_ID_ARG}&$PET_TYPE_ARG={$PET_TYPE_ARG}"
-
-        fun buildRouteWithArgs(
-            petId: String,
-            petType: String,
-        ): String = "$HOST?$PET_ID_ARG=$petId&$PET_TYPE_ARG=$petType"
-    }
-
-    data object Filter : Destination {
-        override val route: String = "filter"
-    }
+    @Serializable
+    data object Filter : Destination
 }

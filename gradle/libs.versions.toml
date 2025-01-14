@@ -17,6 +17,7 @@ javapoet = "1.13.0"
 junit = "4.13.2"
 junitParams = "1.1.1"
 kotlinGradlePlugin = "2.0.0"
+kotlinSerialization = "1.7.2"
 loggingInterceptor = "4.12.0"
 lottieCompose = "6.5.2"
 mockk = "1.13.10"
@@ -36,6 +37,7 @@ devToolsKsp = "2.0.0-1.0.21"
 gradlePlugin = "8.3.2"
 hiltPlugin = "2.51"
 kotlinPlugin = "2.0.0"
+kotlinSerializationPlugin = "1.9.22"
 ktlintPlugin = "9.3.0"
 
 [libraries]
@@ -150,6 +152,9 @@ moshi-moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", versi
 # Moshi Kotlin Codegen: Annotation processor for Moshi Kotlin.
 moshi-moshiKotlinCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
 
+# Kotlinx Serialization JSON: Kotlin library for JSON serialization and deserialization.
+kotlinx-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+
 # OkHttp Logging Interceptor: A library for logging HTTP requests and responses.
 okhttp3-loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 
@@ -183,6 +188,9 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 
 # Ktlint: Plugin for enforcing Kotlin coding style using ktlint.
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
+
+# Kotlin Serialization Plugin: Provides support for Kotlin's built-in serialization library, allowing you to easily serialize and deserialize Kotlin objects to and from formats like JSON.
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationPlugin" }
 
 [bundles]
 unitTest = [
