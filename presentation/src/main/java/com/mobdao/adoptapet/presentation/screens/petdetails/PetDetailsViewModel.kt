@@ -3,15 +3,16 @@ package com.mobdao.adoptapet.presentation.screens.petdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.mobdao.adoptapet.common.kotlin.catchAndLogException
 import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
 import com.mobdao.adoptapet.presentation.common.Event
-import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_ID_ARG
+import com.mobdao.adoptapet.presentation.common.utils.PetUtils
+import com.mobdao.adoptapet.presentation.navigation.Destination
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsNavAction.BackButtonClicked
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
-import com.mobdao.adoptapet.presentation.utils.PetUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,50 +34,46 @@ class PetDetailsViewModel @Inject constructor(
     val navAction: StateFlow<Event<PetDetailsNavAction>?> = _navAction.asStateFlow()
 
     init {
-        val petId: String? = savedStateHandle[PET_ID_ARG]
+        val petId: String = savedStateHandle.toRoute<Destination.PetDetails>().petId
 
-        if (petId != null) {
-            viewModelScope.launch {
-                getCachedPetUseCase
-                    .execute(petId)
-                    .catchAndLogException {
+        viewModelScope.launch {
+            getCachedPetUseCase
+                .execute(petId)
+                .catchAndLogException {
+                    _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                }.collect { pet ->
+                    if (pet == null) {
                         _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-                    }.collect { pet ->
-                        if (pet == null) {
-                            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-                            return@collect
-                        }
-                        _uiState.value =
-                            _uiState.value.copy(
-                                petHeader =
-                                    PetHeaderState(
-                                        photoUrl =
-                                            pet.photos
-                                                .firstOrNull()
-                                                ?.largeUrl
-                                                .orEmpty(),
-                                        // TODO improve
-                                        name = pet.name,
-                                    ),
-                                petCard =
-                                    PetDetailsUiState.PetDetailsCardState(
-                                        breed = pet.breeds.primary.orEmpty(),
-                                        age = pet.age,
-                                        gender = pet.gender,
-                                        description = petUtils.formattedDescriptionWorkaround(pet.description),
-                                        size = pet.size,
-                                        distance = pet.distance,
-                                    ),
-                                contact =
-                                    ContactState(
-                                        email = pet.contact.email,
-                                        phone = pet.contact.phone,
-                                    ),
-                            )
+                        return@collect
                     }
-            }
-        } else {
-            _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
+                    _uiState.value =
+                        _uiState.value.copy(
+                            petHeader =
+                                PetHeaderState(
+                                    photoUrl =
+                                        pet.photos
+                                            .firstOrNull()
+                                            ?.largeUrl
+                                            .orEmpty(),
+                                    // TODO improve
+                                    name = pet.name,
+                                ),
+                            petCard =
+                                PetDetailsUiState.PetDetailsCardState(
+                                    breed = pet.breeds.primary.orEmpty(),
+                                    age = pet.age,
+                                    gender = pet.gender,
+                                    description = petUtils.formattedDescriptionWorkaround(pet.description),
+                                    size = pet.size,
+                                    distance = pet.distance,
+                                ),
+                            contact =
+                                ContactState(
+                                    email = pet.contact.email,
+                                    phone = pet.contact.phone,
+                                ),
+                        )
+                }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.mobdao.adoptapet.presentation.utils.extensions
+package com.mobdao.adoptapet.presentation.common.utils.extensions
 
 import com.mobdao.adoptapet.domain.models.AnimalType
 import com.mobdao.adoptapet.domain.models.AnimalType.BARNYARD

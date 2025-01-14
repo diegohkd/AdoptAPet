@@ -8,11 +8,11 @@ import com.mobdao.adoptapet.common.testutils.domain.BreedsMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.PetMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.PhotoMockFactory
 import com.mobdao.adoptapet.domain.models.AnimalType.DOG
+import com.mobdao.adoptapet.domain.models.Pet
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.pets.GetPetsUseCase
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.BreedsState
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
-import com.mobdao.adoptapet.presentation.utils.PetDomain
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -28,7 +28,7 @@ class PetsPagingSourceTest {
         mockk {
             every { key } returns null
         }
-    private val pet: PetDomain =
+    private val pet: Pet =
         PetMockFactory.create(
             id = "id",
             type = DOG,

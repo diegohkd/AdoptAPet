@@ -48,6 +48,7 @@ import com.mobdao.adoptapet.domain.models.AnimalType.RABBIT
 import com.mobdao.adoptapet.presentation.R
 import com.mobdao.adoptapet.presentation.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.presentation.common.theme.color.ColorSchema
+import com.mobdao.adoptapet.presentation.common.utils.extensions.toColorSchema
 import com.mobdao.adoptapet.presentation.common.widgets.AdoptAPetAsyncImage
 import com.mobdao.adoptapet.presentation.common.widgets.DetailCard
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
@@ -57,7 +58,6 @@ import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.FilterClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.PetClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.BreedsState
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
-import com.mobdao.adoptapet.presentation.utils.extensions.toColorSchema
 import kotlinx.coroutines.flow.flowOf
 
 @Composable

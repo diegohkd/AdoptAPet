@@ -1,4 +1,4 @@
-package com.mobdao.adoptapet.presentation.utils
+package com.mobdao.adoptapet.presentation.common.utils
 
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY

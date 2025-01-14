@@ -1,4 +1,4 @@
-package com.mobdao.adoptapet.presentation.utils
+package com.mobdao.adoptapet.presentation.common.utils.factories
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager

@@ -1,6 +1,7 @@
 package com.mobdao.adoptapet.presentation.screens.petdetails
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.mobdao.adoptapet.common.testutils.MainDispatcherRule
 import com.mobdao.adoptapet.common.testutils.domain.BreedsMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.ContactMockFactory
@@ -8,18 +9,22 @@ import com.mobdao.adoptapet.common.testutils.domain.PetMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.PhotoMockFactory
 import com.mobdao.adoptapet.domain.models.Pet
 import com.mobdao.adoptapet.domain.usecases.pets.GetCachedPetUseCase
-import com.mobdao.adoptapet.presentation.navigation.Destination.PetDetails.PET_ID_ARG
+import com.mobdao.adoptapet.presentation.common.utils.PetUtils
+import com.mobdao.adoptapet.presentation.navigation.Destination
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.ContactState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetDetailsCardState
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsUiState.PetHeaderState
-import com.mobdao.adoptapet.presentation.utils.PetUtils
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -28,7 +33,10 @@ class PetDetailsViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainDispatcherRule()
 
-    private val petId: String = "pet-id"
+    private val petDetailsDestination: Destination.PetDetails =
+        mockk {
+            every { petId } returns "pet-id"
+        }
     private val description: String = "description"
     private val pet: Pet =
         PetMockFactory.create(
@@ -47,10 +55,11 @@ class PetDetailsViewModelTest {
                 ),
         )
 
-    private val savedStateHandle: SavedStateHandle =
+    private val savedStateHandle: SavedStateHandle by lazy {
         mockk {
-            every { get<String>(PET_ID_ARG) } returns petId
+            every { toRoute<Destination.PetDetails>() } returns petDetailsDestination
         }
+    }
     private val getCachedPetUseCase: GetCachedPetUseCase =
         mockk {
             every { execute("pet-id") } returns flowOf(pet)
@@ -68,25 +77,14 @@ class PetDetailsViewModelTest {
         )
     }
 
-    @Test
-    fun `given pet ID is null when initialized then generic error dialog is shown`() {
-        // given
-        every { savedStateHandle.get<String>(PET_ID_ARG) } returns null
-
-        // when / then
-        assertEquals(
-            tested.uiState.value.genericErrorDialogIsVisible,
-            true,
-        )
+    @Before
+    fun setUp() {
+        mockkStatic("androidx.navigation.SavedStateHandleKt")
     }
 
-    @Test
-    fun `given pet ID not null when initialized then generic error dialog is not shown`() {
-        // given / when / then
-        assertEquals(
-            tested.uiState.value.genericErrorDialogIsVisible,
-            false,
-        )
+    @After
+    fun tearDown() {
+        unmockkStatic("androidx.navigation.SavedStateHandleKt")
     }
 
     @Test
@@ -151,7 +149,7 @@ class PetDetailsViewModelTest {
     @Test
     fun `given generic error dialog is shown when dismiss generic error dialog then generic error dialog is not shown`() {
         // given
-        every { savedStateHandle.get<String>(PET_ID_ARG) } returns null
+        every { getCachedPetUseCase.execute(any()) } returns flow { throw RuntimeException() }
         tested
 
         // when

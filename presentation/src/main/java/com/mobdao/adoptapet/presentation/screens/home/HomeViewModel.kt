@@ -11,7 +11,7 @@ import com.mobdao.adoptapet.common.kotlin.catchAndLogException
 import com.mobdao.adoptapet.domain.usecases.filter.CreateAndCachePetsFilterWithCachedLocationUseCase
 import com.mobdao.adoptapet.domain.usecases.filter.ObserveSearchFilterUseCase
 import com.mobdao.adoptapet.presentation.common.Event
-import com.mobdao.adoptapet.presentation.common.extensions.isLoading
+import com.mobdao.adoptapet.presentation.common.utils.extensions.isLoading
 import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction.FilterClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction.PetClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiAction.DismissGenericErrorDialog

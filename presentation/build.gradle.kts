@@ -17,6 +17,7 @@ plugins {
     )
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.plugin.serialization)
     id("kotlin-kapt")
 }
 
@@ -84,6 +85,7 @@ dependencies {
     implementation(libs.google.dagger.hiltAndroid)
     kapt(libs.google.dagger.hiltAndroidCompiler)
     implementation(libs.airbnb.android.lottieCompose)
+    implementation(libs.kotlinx.kotlinx.serialization.json)
 
     debugImplementation(libs.androidx.compose.ui.uiTooling)
     debugImplementation(libs.androidx.compose.ui.uiTestManifest)

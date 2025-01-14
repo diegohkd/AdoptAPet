@@ -4,8 +4,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.mobdao.adoptapet.domain.models.SearchFilter
+import com.mobdao.adoptapet.presentation.common.utils.factories.PagerFactory
 import com.mobdao.adoptapet.presentation.screens.home.HomeUiState.PetState
-import com.mobdao.adoptapet.presentation.utils.PagerFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

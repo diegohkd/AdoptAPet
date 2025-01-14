@@ -1,4 +1,4 @@
-package com.mobdao.adoptapet.presentation.common.extensions
+package com.mobdao.adoptapet.presentation.common.utils.extensions
 
 import androidx.paging.LoadState
 
