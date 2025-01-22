@@ -97,7 +97,8 @@ private fun UiContent(
             onClick = { onUiAction(NextClicked) },
             modifier =
                 Modifier
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 24.dp)
+                    .fillMaxWidth()
                     .constrainAs(nextButtonRef) {
                         centerHorizontallyTo(parent)
                         bottom.linkTo(parent.bottom)

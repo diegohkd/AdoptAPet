@@ -11,12 +11,15 @@ import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.screens.filter.FilterNavAction.FilterApplied
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.AddressSelected
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.ApplyClicked
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.BackClicked
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.FailedToGetAddress
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetGenderClicked
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeClicked
-import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeSelected
-import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeState
-import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypesState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.FilterProperty.PetGenderState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.FilterProperty.PetTypeState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetGenderNameState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeNameState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +33,7 @@ import javax.inject.Inject
 class FilterViewModel @Inject constructor(
     private val getSearchFilterUseCase: GetSearchFilterUseCase,
     private val saveSearchFilterUseCase: SaveSearchFilterUseCase,
+    private val filterMapper: FilterMapper,
 ) : ViewModel() {
     private val _navAction = MutableStateFlow<Event<FilterNavAction>?>(null)
     val navAction: StateFlow<Event<FilterNavAction>?> = _navAction.asStateFlow()
@@ -37,51 +41,22 @@ class FilterViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(FilterUiState())
     val uiState: StateFlow<FilterUiState> = _uiState.asStateFlow()
 
-    private var petType: String? = null
+    private var selectedPetType: PetTypeNameState? = null
     private val address = MutableStateFlow<Address?>(null)
-
-    private val petTypesNames =
-        listOf(
-            "Dog",
-            "Cat",
-            "Rabbit",
-            "Bird",
-            "Small & Furry",
-            "Horse",
-            "Barnyard",
-            "Scales, Fins & Other",
-        )
 
     init {
         handleApplyButtonEnabledState()
         loadSavedFilter()
-        _uiState.update {
-            it.copy(
-                petTypes =
-                    PetTypesState(
-                        types =
-                            petTypesNames.map { petTypeName ->
-                                PetTypeState(
-                                    name = petTypeName,
-                                    isSelected = false,
-                                )
-                            },
-                        longestTypeNamePlaceholder =
-                            petTypesNames.maxBy { petTypesName ->
-                                petTypesName.length
-                            },
-                    ),
-            )
-        }
     }
 
     fun onUiAction(action: FilterUiAction) {
         when (action) {
             is AddressSelected -> onAddressSelected(address = action.address)
             is FailedToGetAddress -> onFailedToGetAddress(throwable = action.throwable)
-            is PetTypeClicked -> onPetTypeClicked(type = action.petTypeState)
-            is PetTypeSelected -> onPetTypeSelected(type = action.petType)
+            is PetTypeClicked -> onPetTypeClicked(type = action.petTypeFilter)
+            is PetGenderClicked -> onPetGenderClicked(gender = action.gender)
             ApplyClicked -> onApplyClicked()
+            BackClicked -> onBackClicked()
             DismissGenericErrorDialog -> onDismissGenericErrorDialog()
         }
     }
@@ -95,29 +70,31 @@ class FilterViewModel @Inject constructor(
         _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
     }
 
-    // TODO allow single selection
-    private fun onPetTypeClicked(type: PetTypeState) {
+    private fun onPetTypeClicked(type: PetTypeNameState) {
+        selectedPetType = if (type == selectedPetType) null else type
         _uiState.update {
-//            val type = it.petTypes.types.find { petType -> petType.name == type.name }
-//            val updatedType = type?.copy(isSelected = !type.isSelected)
             it.copy(
                 petTypes =
-                    it.petTypes.copy(
-                        it.petTypes.types.map {
-                            if (it == type) {
-                                it.copy(isSelected = !it.isSelected)
-                            } else {
-                                it
-                            }
-                        },
-                    ),
+                    it.petTypes.map {
+                        it.copy(isSelected = it.type == selectedPetType)
+                    },
             )
         }
     }
 
-    private fun onPetTypeSelected(type: String) {
-        _uiState.update { it.copy(petType = type) }
-        petType = type
+    private fun onPetGenderClicked(gender: PetGenderNameState) {
+        _uiState.update {
+            it.copy(
+                petGenders =
+                    it.petGenders.map {
+                        if (it.gender == gender) {
+                            it.copy(isSelected = !it.isSelected)
+                        } else {
+                            it
+                        }
+                    },
+            )
+        }
     }
 
     private fun onApplyClicked() {
@@ -129,7 +106,12 @@ class FilterViewModel @Inject constructor(
                     filter =
                         SearchFilter(
                             address = address,
-                            petType = petType,
+                            petType = selectedPetType?.let(filterMapper::toDomainModel),
+                            petGenders =
+                                _uiState.value.petGenders
+                                    .filter { it.isSelected }
+                                    .map { it.gender }
+                                    .map(filterMapper::toDomainModel),
                         ),
                 ).catchAndLogException {
                     _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
@@ -137,6 +119,10 @@ class FilterViewModel @Inject constructor(
                     _navAction.value = Event(FilterApplied)
                 }
         }
+    }
+
+    private fun onBackClicked() {
+        _navAction.value = Event(FilterNavAction.BackClicked)
     }
 
     private fun onDismissGenericErrorDialog() {
@@ -161,11 +147,27 @@ class FilterViewModel @Inject constructor(
                     _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
                 }.collect { searchFilter ->
                     address.value = searchFilter?.address
-                    petType = searchFilter?.petType
+                    selectedPetType = searchFilter?.petType?.let(filterMapper::toState)
+                    val selectedPetGenders: List<PetGenderNameState> =
+                        searchFilter?.petGenders?.map(filterMapper::toState).orEmpty()
+
                     _uiState.update {
                         it.copy(
                             initialAddress = searchFilter?.address?.addressLine.orEmpty(),
-                            petType = searchFilter?.petType.orEmpty(),
+                            petTypes =
+                                PetTypeNameState.entries.map { petType ->
+                                    PetTypeState(
+                                        type = petType,
+                                        isSelected = petType == selectedPetType,
+                                    )
+                                },
+                            petGenders =
+                                PetGenderNameState.entries.map { petGender ->
+                                    PetGenderState(
+                                        gender = petGender,
+                                        isSelected = selectedPetGenders.any { it == petGender },
+                                    )
+                                },
                         )
                     }
                 }

@@ -4,6 +4,8 @@ import com.mobdao.adoptapet.common.testutils.MainDispatcherRule
 import com.mobdao.adoptapet.common.testutils.domain.AddressMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.SearchFilterMockFactory
 import com.mobdao.adoptapet.domain.models.Address
+import com.mobdao.adoptapet.domain.models.PetGender.MALE
+import com.mobdao.adoptapet.domain.models.PetType.DOG
 import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.filter.GetSearchFilterUseCase
 import com.mobdao.adoptapet.domain.usecases.filter.SaveSearchFilterUseCase
@@ -11,7 +13,11 @@ import com.mobdao.adoptapet.presentation.screens.filter.FilterNavAction.FilterAp
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.ApplyClicked
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.FailedToGetAddress
-import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeSelected
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeClicked
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.FilterProperty.PetTypeState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetGenderNameState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeNameState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeNameState.CAT
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +39,8 @@ class FilterViewModelTest {
     private val searchFilter =
         SearchFilterMockFactory.create(
             address = address,
-            petType = "petType",
+            petType = DOG,
+            petGenders = listOf(MALE),
         )
 
     private val getSearchFilterUseCase: GetSearchFilterUseCase =
@@ -42,13 +49,30 @@ class FilterViewModelTest {
         }
     private val saveSearchFilterUseCase: SaveSearchFilterUseCase =
         mockk {
-            every { execute(SearchFilter(address, "petType")) } returns flowOf(Unit)
+            every {
+                execute(
+                    filter =
+                        SearchFilter(
+                            address = address,
+                            petType = DOG,
+                            petGenders = listOf(MALE),
+                        ),
+                )
+            } returns flowOf(Unit)
+        }
+    private val filterMapper: FilterMapper =
+        mockk {
+            every { toState(DOG) } returns PetTypeNameState.DOG
+            every { toState(MALE) } returns PetGenderNameState.MALE
+            every { toDomainModel(PetTypeNameState.DOG) } returns DOG
+            every { toDomainModel(PetGenderNameState.MALE) } returns MALE
         }
 
     private val tested by lazy {
         FilterViewModel(
             getSearchFilterUseCase = getSearchFilterUseCase,
             saveSearchFilterUseCase = saveSearchFilterUseCase,
+            filterMapper = filterMapper,
         )
     }
 
@@ -74,14 +98,19 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `given getting search filter returns null when initialized then empty pet type is set`() {
+    fun `given getting search filter returns null when initialized then pet type is selected`() {
         // given
         every { getSearchFilterUseCase.execute() } returns flowOf(null)
 
         // when / then
         assertEquals(
-            tested.uiState.value.petType,
-            "",
+            PetTypeNameState.entries.map { petType ->
+                PetTypeState(
+                    type = petType,
+                    isSelected = false,
+                )
+            },
+            tested.uiState.value.petTypes,
         )
     }
 
@@ -89,8 +118,8 @@ class FilterViewModelTest {
     fun `given getting search filter returns search filter when initialized then initial address is set with address line of filter`() {
         // given / when / then
         assertEquals(
-            tested.uiState.value.initialAddress,
             "addressLine",
+            tested.uiState.value.initialAddress,
         )
     }
 
@@ -98,21 +127,31 @@ class FilterViewModelTest {
     fun `given getting search filter returns search filter when initialized then pet type is set with pet type of filter`() {
         // given / when / then
         assertEquals(
-            tested.uiState.value.petType,
-            "petType",
+            PetTypeNameState.entries.map { petType ->
+                PetTypeState(
+                    type = petType,
+                    isSelected = petType == PetTypeNameState.DOG,
+                )
+            },
+            tested.uiState.value.petTypes,
         )
     }
 
     @Test
-    fun `given getting search filter returns search filter with null pet type when initialized then empty pet type is set`() {
+    fun `given getting search filter returns search filter with null pet type when initialized then no pet type is selected`() {
         // given
         val searchFilter = SearchFilterMockFactory.create(petType = null)
         every { getSearchFilterUseCase.execute() } returns flowOf(searchFilter)
 
         // then / then
         assertEquals(
-            tested.uiState.value.petType,
-            "",
+            PetTypeNameState.entries.map { petType ->
+                PetTypeState(
+                    type = petType,
+                    isSelected = false,
+                )
+            },
+            tested.uiState.value.petTypes,
         )
     }
 
@@ -126,14 +165,19 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `when pet type selected then UI is updated with selected pet type`() {
+    fun `when pet type clicked then UI is updated with selected pet type`() {
         // given / when
-        tested.onUiAction(PetTypeSelected(petType = "type"))
+        tested.onUiAction(PetTypeClicked(petTypeFilter = CAT))
 
         // then
         assertEquals(
-            tested.uiState.value.petType,
-            "type",
+            PetTypeNameState.entries.map { petType ->
+                PetTypeState(
+                    type = petType,
+                    isSelected = petType == CAT,
+                )
+            },
+            tested.uiState.value.petTypes,
         )
     }
 
@@ -145,7 +189,8 @@ class FilterViewModelTest {
             saveSearchFilterUseCase.execute(
                 SearchFilter(
                     address = address,
-                    petType = "petType",
+                    petType = DOG,
+                    petGenders = listOf(MALE),
                 ),
             )
         } returns savingSearchFilter
@@ -167,10 +212,11 @@ class FilterViewModelTest {
             saveSearchFilterUseCase.execute(
                 SearchFilter(
                     address = address,
-                    petType = "petType",
+                    petType = DOG,
+                    petGenders = listOf(MALE),
                 ),
             )
-        } returns flow { throw Exception() }
+        } returns flow { throw RuntimeException() }
 
         // when
         tested.onUiAction(ApplyClicked)
