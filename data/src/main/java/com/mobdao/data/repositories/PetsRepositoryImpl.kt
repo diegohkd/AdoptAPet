@@ -25,7 +25,8 @@ class PetsRepositoryImpl
                 animalRemoteDataSource.getPets(
                     pageNumber = pageNumber,
                     locationCoordinates = searchFilter.address.toLocationCoordinates(),
-                    animalType = searchFilter.petType,
+                    petType = searchFilter.petType,
+                    petGenders = searchFilter.petGenders,
                 )
             saveToDatabase(pets)
             return pets

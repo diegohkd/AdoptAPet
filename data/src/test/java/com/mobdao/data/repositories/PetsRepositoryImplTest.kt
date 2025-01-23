@@ -3,6 +3,8 @@ package com.mobdao.data.repositories
 import com.mobdao.adoptapet.common.testutils.domain.entities.AddressEntityMockFactory
 import com.mobdao.adoptapet.common.testutils.domain.entities.SearchFilterEntityMockFactory
 import com.mobdao.adoptapet.domain.entities.PetEntity
+import com.mobdao.adoptapet.domain.entities.PetGenderEntity.MALE
+import com.mobdao.adoptapet.domain.entities.PetTypeEntity.DOG
 import com.mobdao.adoptapet.domain.entities.SearchFilterEntity
 import com.mobdao.local.AnimalLocalDataSource
 import com.mobdao.remote.AnimalRemoteDataSource
@@ -25,7 +27,8 @@ class PetsRepositoryImplTest {
     private val searchFilter: SearchFilterEntity =
         SearchFilterEntityMockFactory.create(
             address = address,
-            petType = "petType",
+            petType = DOG,
+            petGenders = listOf(MALE),
         )
     private val pet1: PetEntity = mockk()
     private val pet2: PetEntity = mockk()
@@ -41,7 +44,8 @@ class PetsRepositoryImplTest {
                             latitude = 123.0,
                             longitude = 123.0,
                         ),
-                    animalType = "petType",
+                    petType = DOG,
+                    petGenders = listOf(MALE),
                 )
             } returns pets
         }

@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -134,6 +135,12 @@ private fun UiContent(
         modifier = modifier.fillMaxWidth(),
         placeholder = {
             Text(text = stringResource(R.string.location))
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.location_ic),
+                contentDescription = "",
+            )
         },
         trailingIcon = {
             if (searchQuery.isNotEmpty()) {

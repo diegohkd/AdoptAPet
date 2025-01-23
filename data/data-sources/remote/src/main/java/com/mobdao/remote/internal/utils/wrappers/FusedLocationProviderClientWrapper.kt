@@ -8,24 +8,22 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-internal class FusedLocationProviderClientWrapper
-    @Inject
-    constructor(
-        context: Context,
-    ) {
-        private val fusedLocationClient =
-            LocationServices.getFusedLocationProviderClient(context)
+internal class FusedLocationProviderClientWrapper @Inject constructor(
+    context: Context,
+) {
+    private val fusedLocationClient =
+        LocationServices.getFusedLocationProviderClient(context)
 
-        @RequiresPermission(
-            anyOf = [
-                "android.permission.ACCESS_COARSE_LOCATION",
-                "android.permission.ACCESS_FINE_LOCATION",
-            ],
-        )
-        suspend fun getCurrentLocation(priority: Int): Location =
-            fusedLocationClient
-                .getCurrentLocation(
-                    priority,
-                    CancellationTokenSource().token,
-                ).await()
-    }
+    @RequiresPermission(
+        anyOf = [
+            "android.permission.ACCESS_COARSE_LOCATION",
+            "android.permission.ACCESS_FINE_LOCATION",
+        ],
+    )
+    suspend fun getCurrentLocation(priority: Int): Location =
+        fusedLocationClient
+            .getCurrentLocation(
+                priority,
+                CancellationTokenSource().token,
+            ).await()
+}

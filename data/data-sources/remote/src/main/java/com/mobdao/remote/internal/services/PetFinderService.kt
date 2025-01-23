@@ -13,5 +13,7 @@ internal interface PetFinderService {
         location: String? = null,
         @Query("type")
         type: String? = null,
+        @Query("gender")
+        gender: String? = null,
     ): AnimalsResponse
 }

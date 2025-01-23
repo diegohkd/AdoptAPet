@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -188,7 +187,8 @@ private fun ToolBar(
         modifier =
             modifier
                 .fillMaxWidth()
-                .height(56.dp),
+                .height(56.dp)
+                .clickable { onFilterClicked() },
     ) {
         val (locationIconRef, locationTextRef, filterRef) = createRefs()
         Icon(
@@ -214,20 +214,17 @@ private fun ToolBar(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        IconButton(
-            onClick = onFilterClicked,
+
+        Icon(
+            painter = painterResource(id = R.drawable.filter_ic),
+            contentDescription = "",
             modifier =
                 Modifier
                     .constrainAs(filterRef) {
                         centerVerticallyTo(parent)
                         end.linkTo(parent.end)
                     }.padding(end = 8.dp),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.filter_ic),
-                contentDescription = "",
-            )
-        }
+        )
     }
 }
 

@@ -16,11 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -47,6 +43,7 @@ import com.mobdao.adoptapet.presentation.common.theme.AdoptAPetTheme
 import com.mobdao.adoptapet.presentation.common.theme.color.ColorSchema
 import com.mobdao.adoptapet.presentation.common.utils.extensions.toColorSchema
 import com.mobdao.adoptapet.presentation.common.widgets.AdoptAPetAsyncImage
+import com.mobdao.adoptapet.presentation.common.widgets.BackButton
 import com.mobdao.adoptapet.presentation.common.widgets.DetailCard
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.presentation.common.widgets.PetBackgroundCard
@@ -89,12 +86,7 @@ private fun UiContent(
                     TopAppBar(
                         title = { },
                         navigationIcon = {
-                            IconButton(onClick = { onUiAction(BackButtonClicked) }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Back",
-                                )
-                            }
+                            BackButton(onClicked = { onUiAction(BackButtonClicked) })
                         },
                     )
                 },

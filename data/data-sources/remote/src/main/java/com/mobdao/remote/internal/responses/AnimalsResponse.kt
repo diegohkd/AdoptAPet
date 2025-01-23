@@ -31,6 +31,13 @@ internal enum class AnimalType(
     BARNYARD(rawValue = "Barnyard"),
 }
 
+internal enum class Gender(
+    val rawValue: String,
+) {
+    MALE(rawValue = "male"),
+    FEMALE(rawValue = "female"),
+}
+
 internal data class Breeds(
     val primary: String?,
     val secondary: String?,

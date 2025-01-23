@@ -1,7 +1,8 @@
 package com.mobdao.adoptapet.presentation.screens.filter
 
 import com.mobdao.adoptapet.domain.models.Address
-import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetGenderNameState
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeNameState
 
 sealed interface FilterUiAction {
     data class AddressSelected(
@@ -13,14 +14,16 @@ sealed interface FilterUiAction {
     ) : FilterUiAction
 
     data class PetTypeClicked(
-        val petTypeState: PetTypeState,
+        val petTypeFilter: PetTypeNameState,
     ) : FilterUiAction
 
-    data class PetTypeSelected(
-        val petType: String,
+    data class PetGenderClicked(
+        val gender: PetGenderNameState,
     ) : FilterUiAction
 
     data object ApplyClicked : FilterUiAction
+
+    data object BackClicked : FilterUiAction
 
     data object DismissGenericErrorDialog : FilterUiAction
 }

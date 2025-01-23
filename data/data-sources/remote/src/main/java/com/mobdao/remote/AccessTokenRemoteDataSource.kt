@@ -7,19 +7,17 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccessTokenRemoteDataSource
-    @Inject
-    internal constructor(
-        appConfig: AppConfig,
-        private val authService: AuthService,
-    ) {
-        private val petFinderConfig: PetFinderConfig = appConfig.petFinderConfig
+class AccessTokenRemoteDataSource @Inject internal constructor(
+    appConfig: AppConfig,
+    private val authService: AuthService,
+) {
+    private val petFinderConfig: PetFinderConfig = appConfig.petFinderConfig
 
-        suspend fun getNewAccessToken(): String =
-            authService
-                .getAccessToken(
-                    grantType = petFinderConfig.grantType,
-                    clientId = petFinderConfig.clientId,
-                    clientSecret = petFinderConfig.clientSecret,
-                ).accessToken
-    }
+    suspend fun getNewAccessToken(): String =
+        authService
+            .getAccessToken(
+                grantType = petFinderConfig.grantType,
+                clientId = petFinderConfig.clientId,
+                clientSecret = petFinderConfig.clientSecret,
+            ).accessToken
+}

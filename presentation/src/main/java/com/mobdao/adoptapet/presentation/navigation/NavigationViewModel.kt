@@ -114,6 +114,9 @@ class NavigationViewModel @Inject constructor(
 
     fun onNavAction(navAction: FilterNavAction) {
         when (navAction) {
+            FilterNavAction.BackClicked -> {
+                _navAction.value = Event(PreviousScreen)
+            }
             FilterNavAction.FilterApplied -> {
                 _navAction.value = Event(PreviousScreen)
             }
