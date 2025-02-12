@@ -140,7 +140,7 @@ private fun PetHeader(petHeader: PetHeaderState) {
     }
     Text(
         text = petHeader.name,
-        modifier = Modifier.padding(start = 8.dp, top = 16.dp),
+        modifier = Modifier.padding(start = 16.dp, top = 16.dp),
         fontSize = 32.sp,
     )
 }
