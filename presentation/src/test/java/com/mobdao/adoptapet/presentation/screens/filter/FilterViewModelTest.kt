@@ -10,10 +10,14 @@ import com.mobdao.adoptapet.domain.models.SearchFilter
 import com.mobdao.adoptapet.domain.usecases.filter.GetSearchFilterUseCase
 import com.mobdao.adoptapet.domain.usecases.filter.SaveSearchFilterUseCase
 import com.mobdao.adoptapet.presentation.screens.filter.FilterNavAction.FilterApplied
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.AddressSelected
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.ApplyClicked
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.BackClicked
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.DismissGenericErrorDialog
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.FailedToGetAddress
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetGenderClicked
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiAction.PetTypeClicked
+import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.FilterProperty.PetGenderState
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.FilterProperty.PetTypeState
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetGenderNameState
 import com.mobdao.adoptapet.presentation.screens.filter.FilterUiState.PetTypeNameState
@@ -77,6 +81,21 @@ class FilterViewModelTest {
     }
 
     @Test
+    fun `given no address selected when initialized then apply button is disabled`() {
+        // given
+        every { getSearchFilterUseCase.execute() } returns flowOf()
+
+        // when / then
+        assertFalse(tested.uiState.value.isApplyButtonEnabled)
+    }
+
+    @Test
+    fun `given address selected when initialized then apply button is disabled`() {
+        // given / when / then
+        assertTrue(tested.uiState.value.isApplyButtonEnabled)
+    }
+
+    @Test
     fun `given getting search filter throws an exception when initialized then generic error dialog is visible`() {
         // given
         every { getSearchFilterUseCase.execute() } returns flow { throw Exception() }
@@ -98,7 +117,7 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `given getting search filter returns null when initialized then pet type is selected`() {
+    fun `given getting search filter returns null when initialized then no pet type is selected`() {
         // given
         every { getSearchFilterUseCase.execute() } returns flowOf(null)
 
@@ -111,6 +130,23 @@ class FilterViewModelTest {
                 )
             },
             tested.uiState.value.petTypes,
+        )
+    }
+
+    @Test
+    fun `given getting search filter returns null when initialized then no gender is selected`() {
+        // given
+        every { getSearchFilterUseCase.execute() } returns flowOf(null)
+
+        // when / then
+        assertEquals(
+            PetGenderNameState.entries.map { petGender ->
+                PetGenderState(
+                    gender = petGender,
+                    isSelected = false,
+                )
+            },
+            tested.uiState.value.petGenders,
         )
     }
 
@@ -156,6 +192,50 @@ class FilterViewModelTest {
     }
 
     @Test
+    fun `given getting search filter returns search filter when initialized then pet gender is set with filter's pet gender`() {
+        // given / when / then
+        assertEquals(
+            PetGenderNameState.entries.map { petGender ->
+                PetGenderState(
+                    gender = petGender,
+                    isSelected = petGender == PetGenderNameState.MALE,
+                )
+            },
+            tested.uiState.value.petGenders,
+        )
+    }
+
+    @Test
+    fun `given getting search filter returns search filter with empty list of pet gender when initialized then no pet gender is selected`() {
+        // given
+        val searchFilter = SearchFilterMockFactory.create(petGenders = emptyList())
+        every { getSearchFilterUseCase.execute() } returns flowOf(searchFilter)
+
+        // then / then
+        assertEquals(
+            PetGenderNameState.entries.map { petGender ->
+                PetGenderState(
+                    gender = petGender,
+                    isSelected = false,
+                )
+            },
+            tested.uiState.value.petGenders,
+        )
+    }
+
+    @Test
+    fun `given filter is loaded without address selected when address is selected then apply button is enabled`() {
+        // given
+        every { getSearchFilterUseCase.execute() } returns flowOf(null)
+
+        // when
+        tested.onUiAction(AddressSelected(address = address))
+
+        // then
+        assertTrue(tested.uiState.value.isApplyButtonEnabled)
+    }
+
+    @Test
     fun `when failed to search address then generic error dialog is visible`() {
         // when
         tested.onUiAction(FailedToGetAddress(throwable = null))
@@ -178,6 +258,23 @@ class FilterViewModelTest {
                 )
             },
             tested.uiState.value.petTypes,
+        )
+    }
+
+    @Test
+    fun `when pet gender clicked then UI is updated with selected pet gender`() {
+        // given / when
+        tested.onUiAction(PetGenderClicked(gender = PetGenderNameState.FEMALE))
+
+        // then
+        assertEquals(
+            PetGenderNameState.entries.map { petGender ->
+                PetGenderState(
+                    gender = petGender,
+                    isSelected = petGender == PetGenderNameState.FEMALE || petGender == PetGenderNameState.MALE,
+                )
+            },
+            tested.uiState.value.petGenders,
         )
     }
 
@@ -238,6 +335,18 @@ class FilterViewModelTest {
     }
 
     @Test
+    fun `when back button clicked then BackClicked nav action is emitted`() {
+        // when
+        tested.onUiAction(BackClicked)
+
+        // then
+        assertEquals(
+            FilterNavAction.BackClicked,
+            tested.navAction.value!!.peekContent(),
+        )
+    }
+
+    @Test
     fun `given generic error dialog is visible when it is dismissed then it is hidden`() {
         // given
         every { saveSearchFilterUseCase.execute(any()) } returns flow { throw Exception() }
@@ -248,20 +357,5 @@ class FilterViewModelTest {
 
         // then
         assertFalse(tested.uiState.value.genericErrorDialogIsVisible)
-    }
-
-    @Test
-    fun `given no address selected when init then apply button is disabled`() {
-        // given
-        every { getSearchFilterUseCase.execute() } returns flowOf()
-
-        // when / then
-        assertFalse(tested.uiState.value.isApplyButtonEnabled)
-    }
-
-    @Test
-    fun `given address selected when init then apply button is disabled`() {
-        // given / when / then
-        assertTrue(tested.uiState.value.isApplyButtonEnabled)
     }
 }

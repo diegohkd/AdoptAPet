@@ -61,6 +61,16 @@ class FilterViewModel @Inject constructor(
         }
     }
 
+    private fun handleApplyButtonEnabledState() {
+        viewModelScope.launch {
+            address.collect { address ->
+                _uiState.update {
+                    it.copy(isApplyButtonEnabled = address != null)
+                }
+            }
+        }
+    }
+
     private fun onAddressSelected(address: Address?) {
         this.address.value = address
     }
@@ -127,16 +137,6 @@ class FilterViewModel @Inject constructor(
 
     private fun onDismissGenericErrorDialog() {
         _uiState.update { it.copy(genericErrorDialogIsVisible = false) }
-    }
-
-    private fun handleApplyButtonEnabledState() {
-        viewModelScope.launch {
-            address.collect { address ->
-                _uiState.update {
-                    it.copy(isApplyButtonEnabled = address != null)
-                }
-            }
-        }
     }
 
     private fun loadSavedFilter() {
