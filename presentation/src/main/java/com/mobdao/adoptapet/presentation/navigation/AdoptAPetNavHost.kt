@@ -15,42 +15,24 @@ import com.mobdao.adoptapet.presentation.common.utils.extensions.composableHoriz
 import com.mobdao.adoptapet.presentation.common.widgets.GenericErrorDialog
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.FilterScreen
-import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingToHomeScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.PetDetailsScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.PreviousScreen
-import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.SplashToHomeScreen
 import com.mobdao.adoptapet.presentation.screens.filter.FilterScreen
 import com.mobdao.adoptapet.presentation.screens.home.HomeScreen
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingScreen
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsScreen
-import com.mobdao.adoptapet.presentation.screens.splash.SplashScreen
 
 @Composable
 fun AdoptAPetNavHost(
     viewModel: NavigationViewModel = hiltViewModel(),
+    startDestination: Destination,
     navController: NavHostController,
 ) {
     val navActionEvent: Event<NavAction>? by viewModel.navAction.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     when (val navDestination = navActionEvent?.getContentIfNotHandled()) {
-        SplashToHomeScreen -> {
-            val navOptions =
-                NavOptions
-                    .Builder()
-                    .setPopUpTo(route = Destination.Splash, inclusive = true)
-                    .build()
-            navController.navigate(route = Destination.Home, navOptions = navOptions)
-        }
-        OnboardingScreen -> {
-            val navOptions =
-                NavOptions
-                    .Builder()
-                    .setPopUpTo(route = Destination.Splash, inclusive = true)
-                    .build()
-            navController.navigate(route = Destination.Onboarding, navOptions = navOptions)
-        }
         OnboardingToHomeScreen -> {
             val navOptions =
                 NavOptions
@@ -74,11 +56,8 @@ fun AdoptAPetNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = Destination.Splash,
+        startDestination = startDestination,
     ) {
-        composable<Destination.Splash> {
-            SplashScreen(onNavAction = viewModel::onNavAction)
-        }
         composable<Destination.Onboarding> {
             OnboardingScreen(onNavAction = viewModel::onNavAction)
         }

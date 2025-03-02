@@ -1,42 +1,28 @@
 package com.mobdao.adoptapet.presentation.navigation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.mobdao.adoptapet.common.kotlin.catchAndLogException
 import com.mobdao.adoptapet.domain.models.AnimalType
-import com.mobdao.adoptapet.domain.usecases.onboarding.HasCompletedOnboardingUseCase
 import com.mobdao.adoptapet.presentation.common.Event
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.FilterScreen
-import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.OnboardingToHomeScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.PetDetailsScreen
 import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.PreviousScreen
-import com.mobdao.adoptapet.presentation.navigation.NavigationViewModel.NavAction.SplashToHomeScreen
 import com.mobdao.adoptapet.presentation.screens.filter.FilterNavAction
 import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction
 import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction.FilterClicked
 import com.mobdao.adoptapet.presentation.screens.home.HomeNavAction.PetClicked
 import com.mobdao.adoptapet.presentation.screens.onboarding.OnboardingNavAction
 import com.mobdao.adoptapet.presentation.screens.petdetails.PetDetailsNavAction
-import com.mobdao.adoptapet.presentation.screens.splash.SplashViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NavigationViewModel @Inject constructor(
-    private val hasCompletedOnboardingUseCase: HasCompletedOnboardingUseCase,
-) : ViewModel() {
+class NavigationViewModel @Inject constructor() : ViewModel() {
     sealed interface NavAction {
-        data object OnboardingScreen : NavAction
-
-        data object SplashToHomeScreen : NavAction
-
         data object OnboardingToHomeScreen : NavAction
 
         data object FilterScreen : NavAction
@@ -58,28 +44,6 @@ class NavigationViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    fun onNavAction(navAction: SplashViewModel.NavAction) {
-        when (navAction) {
-            SplashViewModel.NavAction.Completed -> {
-                viewModelScope.launch {
-                    val hasCompletedOnboarding =
-                        hasCompletedOnboardingUseCase
-                            .execute()
-                            .catchAndLogException {
-                                _uiState.update { it.copy(genericErrorDialogIsVisible = true) }
-                            }.firstOrNull()
-                            ?: return@launch
-                    _navAction.value =
-                        if (hasCompletedOnboarding) {
-                            Event(SplashToHomeScreen)
-                        } else {
-                            Event(OnboardingScreen)
-                        }
-                }
-            }
-        }
-    }
 
     fun onNavAction(navAction: OnboardingNavAction) {
         when (navAction) {
