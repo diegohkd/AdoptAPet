@@ -86,6 +86,7 @@ dependencies {
     kapt(libs.google.dagger.hiltAndroidCompiler)
     implementation(libs.airbnb.android.lottieCompose)
     implementation(libs.kotlinx.kotlinx.serialization.json)
+    implementation(libs.androidx.core.coreSplashScreen)
 
     debugImplementation(libs.androidx.compose.ui.uiTooling)
     debugImplementation(libs.androidx.compose.ui.uiTestManifest)
